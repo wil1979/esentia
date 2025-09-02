@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catálogo Esentia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="catalogo.css" />
+ 
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="images/logo.png" alt="Logo de Esentia" class="logo" />
+    </div>
+
+    <h1>🌿 Catálogo de Productos Esentia</h1>
+  </header>
+
+  <main class="contenedor">
+    <div id="productos-hogar"></div>
+  </main>
+
+  <!-- Modal de Producto -->
+  <div id="modalProducto" class="modal-carrito">
+    <div class="modal-contenido">
+      <span onclick="cerrarModalProducto()" style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:22px;">&times;</span>
+      <h2 id="modalProductoNombre"></h2>
+      <img id="modalProductoImagen" src="" alt="Producto">
+      <p id="modalProductoInfo"></p>
+      <p id="modalProductoUso"></p>
+      <p id="modalProductoPrecio" style="font-size:1.2rem; font-weight:bold; color:#6c4ba3;"></p>
+      <div id="modalProductoCalificacion"></div>
+      <div id="selectorVariante"></div>
+      <!-- Stock en modal -->
+      <p id="modalProductoStock" style="font-weight:bold; margin-top:5px;"></p>
+      <button id="botonAgregarDesdeModal" class="btn-agregar" onclick="agregarDesdeModal()">🛒 Agregar al carrito</button>
+    </div>
+  </div>
+
+  <!-- Modal Carrito -->
+  <div id="modalCarrito" class="modal-carrito">
+    <div class="modal-contenido">
+      <span onclick="cerrarModalCarrito()" style="position:absolute; top:10px; right:15px; font-size:22px; cursor:pointer;">&times;</span>
+      <h2>🛒 Tu Carrito</h2>
+      <ul id="listaCarritoModal"></ul>
+      <p id="totalModal"><strong>Total:</strong> ₡0</p>
+      <button onclick="finalizarPedido()" style="background:#25D366; color:white; width:100%; padding:10px; margin-top:10px; border-radius:6px;">📲 Enviar Pedido por WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- Botón flotante del carrito -->
+  <button id="botonCarrito" onclick="document.getElementById('modalCarrito').style.display='flex'">
+    🛒 <span id="contadorCarrito">0</span>
+  </button>
+
+  <!-- Toast -->
+  <div id="toast" style="position:fixed; bottom:20px; right:20px; background:#4caf50; color:white; padding:12px 16px; border-radius:6px; display:none; z-index:10000;"></div>
+
+  <!-- Scripts -->
+  <script src="catalogo.js"></script>
+
+  <!-- Bloque Firebase (para inventario) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+      authDomain: "esentiacreditos-8345f.firebaseapp.com",
+      projectId: "esentiacreditos-8345f",
+      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+      messagingSenderId: "888658236080",
+      appId: "1:888658236080:web:506e5e2085b5a452dba175"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const stockCollection = collection(db, "stock");
+
+    let inventario = {};
+
+    async function cargarInventario() {
+      try {
+        const snapshot = await getDocs(stockCollection);
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          inventario[data.nombre] = data.cantidad;
+        });
+        actualizarCatalogoConStock();
+      } catch (error) {
+        console.error("Error cargando inventario:", error);
+      }
+    }
+
+    window.actualizarCatalogoConStock = function() {
+      document.querySelectorAll(".producto-card").forEach(card => {
+        const nombre = card.dataset.nombre;
+        const stock = inventario[nombre] ?? 0;
+
+        const stockLabel = card.querySelector(".stock-label");
+        const boton = card.querySelector(".btn-agregar");
+
+        if (stock > 0) {
+            stockLabel.innerHTML = `<span style="color:green;">✅ Disponible: ${stock}</span>`;
+          if (boton) boton.disabled = false;
+        } else {
+          stockLabel.textContent = `❌ Agotado`;
+          if (boton) boton.disabled = true;
+        }
+      });
+    };
+
+    window.actualizarModalConStock = function(nombre) {
+      const stock = inventario[nombre] ?? 0;
+      const stockEl = document.getElementById("modalProductoStock");
+      const botonModal = document.getElementById("botonAgregarDesdeModal");
+
+      if (stock > 0) {
+        stockEl.textContent = `Disponible: ${stock} unidades`;
+        botonModal.disabled = false;
+      } else {
+        stockEl.textContent = `Agotado`;
+        botonModal.disabled = true;
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", cargarInventario);
+  </script>
+</body>
+</html>

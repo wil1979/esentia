@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Esentia Créditos</title>
+  <style>
+    .scroll-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 999;
+    }
+    .scroll-btn {
+      padding: 15px 20px;
+      border: none;
+      border-radius: 25px;
+      background: #2196F3;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .scroll-btn:hover {
+      background: #1976D2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+      background-color: #f3f2f7;
+      color: #333;
+    }
+    h1 {
+      color: #6c4ba3;
+      text-align: center;
+    }
+    .cliente {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    .cliente:hover {
+      transform: scale(1.01);
+    }
+    .cliente-no-deudor {
+      opacity: 0.65;
+      background: #f8f8f8;
+      border-color: #e0e0e0;
+    }
+    .cliente-no-deudor .botones-derecha {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .cliente-no-deudor:hover {
+      transform: none;
+    }
+    .botones-derecha {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+    }
+    .boton-accion {
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      border: none;
+      background: #6c4ba3;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex: 1 1 auto;
+      min-width: fit-content;
+    }
+    .boton-accion:hover {
+      background-color: #573993;
+    }
+    /* Historial de compras */
+    .historial-compras {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      border: 1px dashed #ccc;
+    }
+    .historial-compras h4 {
+      margin: 0 0 10px 0;
+      color: #555;
+    }
+    .historial-compras ul {
+      list-style: none;
+      padding: 0;
+    }
+    .historial-compras li {
+      margin-bottom: 12px;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    /* Sección de reportes */
+    #seccion-reportes {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .filtros-reportes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: end;
+    }
+    .filtro-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .filtro-item label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #6c4ba3;
+    }
+    .tabla-reportes {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .tabla-reportes th, .tabla-reportes td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    .tabla-reportes th {
+      background-color: #6c4ba3;
+      color: white;
+    }
+    .tabla-reportes tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .tabla-reportes tr:hover {
+      background-color: #f5f5f5;
+    }
+    .deuda-alta {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+    .deuda-media {
+      color: #f57c00;
+      font-weight: bold;
+    }
+    .deuda-baja {
+      color: #388e3c;
+      font-weight: bold;
+    }
+    /* Modal de productos */
+    #modal-productos {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #modal-productos > div {
+      background: white;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .producto-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 5px;
+    }
+    .producto-info {
+      flex: 1;
+    }
+    .producto-cantidad {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 20px;
+    }
+    .cantidad-control {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-cantidad {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .cantidad-display {
+      width: 50px;
+      text-align: center;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .resumen-total {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .acciones-modal {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .precio-personalizado {
+      width: 100px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+    /* Modal de impresión */
+    #modal-impresion, #modal-historial {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #modal-impresion > div, #modal-historial > div {
+      background: white;
+      width: 90%;
+      max-width: 1000px;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      .botones-derecha {
+        flex-direction: column;
+      }
+      .boton-accion {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 5px;
+      }
+      .editar-cliente {
+        flex-direction: column;
+      }
+      .filtros-reportes {
+        flex-direction: column;
+      }
+      .producto-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .producto-cantidad {
+        margin-top: 10px;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-buttons">
+    <div class="nueva-venta-btn">
+  <button class="scroll-btn" style="background: #4CAF50;" onclick="abrirModalNuevaVenta()">
+    ➕ Nueva Venta
+  </button>
+</div>
+
+<style>
+  .nueva-venta-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+  }
+</style>
+    <button class="scroll-btn" onclick="scrollToTop()">↑</button>
+    <button class="scroll-btn" onclick="scrollToBottom()">↓</button>
+  </div>
+  <h1>📋 Esentia - Registro de Créditos</h1>
+  <h2>👥 Clientes</h2>
+
+  <!-- Filtros de visualización -->
+  <div style="margin-bottom: 10px;">
+    <input type="text" id="filtro-clientes" placeholder="🔎 Buscar cliente por nombre..." style="width: 60%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+    <!--<button class="boton-accion" style="background: #4CAF50; margin-left: 10px;" onclick="cargarClientes(true)">
+      💳 Solo Deudores
+    </button>
+    <button class="boton-accion" style="background: #2196F3; margin-left: 10px;" onclick="cargarClientes(false)">
+      👥 Mostrar Todos-->
+    </button>
+  </div>
+
+  <div id="clientes"></div>
+
+  <h2>➕ Nuevo Cliente</h2>
+  <input id="nombre" placeholder="Nombre completo">
+  <input id="telefono" placeholder="Teléfono con código (ej: 88889999)">
+  <button onclick="agregarCliente()">Agregar Cliente</button>
+
+  <hr>
+  <!-- Sección de Reportes -->
+  <div id="seccion-reportes">
+    <h2>📊 Reporte General de Clientes</h2>
+    <div class="filtros-reportes">
+      <div class="filtro-item">
+        <label for="filtro-nombre">Nombre:</label>
+        <input type="text" id="filtro-nombre" placeholder="Buscar por nombre">
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-deuda-min">Deuda Mínima:</label>
+        <input type="number" id="filtro-deuda-min" placeholder="₡0" min="0">
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-deuda-max">Deuda Máxima:</label>
+        <input type="number" id="filtro-deuda-max" placeholder="Sin límite" min="0">
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-orden">Ordenar por:</label>
+        <select id="filtro-orden">
+          <option value="nombre-asc">Nombre (A-Z)</option>
+          <option value="nombre-desc">Nombre (Z-A)</option>
+          <option value="deuda-desc">Deuda (Mayor a Menor)</option>
+          <option value="deuda-asc">Deuda (Menor a Mayor)</option>
+        </select>
+      </div>
+      <div class="filtro-item">
+        <button class="boton-accion" onclick="generarReporte()" style="margin-top: 22px;">🔍 Filtrar</button>
+      </div>
+      <div class="filtro-item">
+        <button class="boton-accion" onclick="abrirModalImpresion()" style="margin-top: 22px;">🖨️ Imprimir</button>
+      </div>
+    </div>
+    <div id="resultados-reportes">
+      <p>Haz clic en "Filtrar" para generar el reporte.</p>
+    </div>
+  </div>
+
+  <!-- Modal de productos -->
+  <div id="modal-productos">
+    <div>
+      <h2>🛍️ Agregar Productos al Cliente</h2>
+      <div style="margin-bottom: 20px;">
+        <label for="select-producto">Seleccionar producto:</label>
+        <select id="select-producto"></select>
+        <button onclick="agregarAlCarritoModal()" style="margin-left: 10px;">Agregar</button>
+      </div>
+      <div id="carrito-modal"></div>
+      <div style="margin: 15px 0;">
+        <label for="descuento">Descuento: ₡</label>
+        <input type="number" id="descuento" value="0" min="0">
+      </div>
+      <div class="resumen-total">
+        <span>Total:</span>
+        <span>₡<span id="total-compra">0</span></span>
+      </div>
+      <div class="acciones-modal">
+        <button class="boton-accion" onclick="cerrarModalProductos()" style="background: #666;">❌ Cancelar</button>
+        <button class="boton-accion" onclick="guardarCompraDesdeCarrito()">Guardar Compra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de impresión del reporte -->
+  <div id="modal-impresion">
+    <div>
+      <h2>🖨️ Imprimir Reporte</h2>
+      <div class="filtros-reportes" style="margin-bottom: 20px;">
+        <div class="filtro-item">
+          <label for="filtro-nombre-modal">Nombre:</label>
+          <input type="text" id="filtro-nombre-modal" placeholder="Buscar por nombre">
+        </div>
+        <div class="filtro-item">
+          <label for="filtro-deuda-min-modal">Deuda Mínima:</label>
+          <input type="number" id="filtro-deuda-min-modal" placeholder="₡0" min="0">
+        </div>
+        <div class="filtro-item">
+          <label for="filtro-deuda-max-modal">Deuda Máxima:</label>
+          <input type="number" id="filtro-deuda-max-modal" placeholder="Sin límite" min="0">
+        </div>
+        <div class="filtro-item">
+          <label for="filtro-orden-modal">Ordenar por:</label>
+          <select id="filtro-orden-modal">
+            <option value="nombre-asc">Nombre (A-Z)</option>
+            <option value="nombre-desc">Nombre (Z-A)</option>
+            <option value="deuda-desc">Deuda (Mayor a Menor)</option>
+            <option value="deuda-asc">Deuda (Menor a Mayor)</option>
+          </select>
+        </div>
+        <div class="filtro-item">
+          <button class="boton-accion" onclick="generarReporteModal()">🔍 Filtrar</button>
+        </div>
+      </div>
+      <div id="resultado-modal" style="margin-top: 20px;">
+        <p>Haz clic en "Filtrar" para ver los resultados.</p>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+        <button class="boton-accion" onclick="cerrarModalImpresion()">❌ Cerrar</button>
+        <button class="boton-accion" onclick="imprimirModal()">🖨️ Imprimir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de historial individual -->
+  <div id="modal-historial">
+    <div>
+      <h2>📋 Historial de Compras</h2>
+      <div id="contenido-historial"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+        <button class="boton-accion" onclick="cerrarModalHistorial()">❌ Cerrar</button>
+        <button class="boton-accion" onclick="imprimirModalHistorial()">🖨️ Imprimir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase y lógica -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+      authDomain: "esentiacreditos-8345f.firebaseapp.com",
+      projectId: "esentiacreditos-8345f",
+      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+      messagingSenderId: "888658236080",
+      appId: "1:888658236080:web:506e5e2085b5a452dba175"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const clientesRef = collection(db, "clientes");
+
+
+    // ✅ Abrir modal para seleccionar cliente
+async function abrirModalNuevaVenta() {
+  const modal = document.getElementById("modal-seleccionar-cliente");
+  const lista = document.getElementById("lista-clientes-modal");
+  const filtro = document.getElementById("filtro-cliente-modal");
+  lista.innerHTML = "<p>Cargando clientes...</p>";
+
+  const snapshot = await getDocs(clientesRef);
+  const clientes = [];
+
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    clientes.push({
+      id: docSnap.id,
+      nombre: data.nombre,
+      telefono: data.telefono
+    });
+  });
+
+  const renderizar = () => {
+    lista.innerHTML = "";
+    const filtroTexto = filtro.value.toLowerCase().trim();
+    const filtrados = clientes.filter(c => c.nombre.toLowerCase().includes(filtroTexto));
+
+    if (filtrados.length === 0) {
+      lista.innerHTML = "<p>No se encontraron clientes.</p>";
+      return;
+    }
+
+    filtrados.forEach(cliente => {
+      const div = document.createElement("div");
+      div.style.padding = "10px";
+      div.style.margin = "5px 0";
+      div.style.border = "1px solid #eee";
+      div.style.borderRadius = "6px";
+      div.style.cursor = "pointer";
+      div.style.backgroundColor = "#f9f9f9";
+      div.onmouseover = () => div.style.backgroundColor = "#f0f0f0";
+      div.onmouseout = () => div.style.backgroundColor = "#f9f9f9";
+      div.innerHTML = `<strong>${cliente.nombre}</strong><br><small>${ocultarTelefono(cliente.telefono)}</small>`;
+      div.onclick = () => {
+        cerrarModalSeleccionarCliente();
+        abrirModalProductos(cliente.id); // Abre el modal de productos
+      };
+      lista.appendChild(div);
+    });
+  };
+
+  renderizar();
+  filtro.addEventListener("input", renderizar);
+  modal.style.display = "flex";
+}
+
+// ✅ Cerrar modal
+function cerrarModalSeleccionarCliente() {
+  document.getElementById("modal-seleccionar-cliente").style.display = "none";
+}
+
+// Hacer funciones globales
+window.abrirModalNuevaVenta = abrirModalNuevaVenta;
+window.cerrarModalSeleccionarCliente = cerrarModalSeleccionarCliente;
+
+    // ✅ Agregar cliente
+    async function agregarCliente() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      if (!nombre || !telefono) {
+        alert("⚠️ Completa ambos campos.");
+        return;
+      }
+      try {
+        await addDoc(clientesRef, {
+          nombre,
+          telefono,
+          compras: []
+        });
+        alert("✅ Cliente agregado exitosamente.");
+        document.getElementById("nombre").value = "";
+        document.getElementById("telefono").value = "";
+        await cargarClientes(false); // Recargar con todos visibles
+      } catch (error) {
+        alert("❌ Error al agregar cliente: " + error.message);
+        console.error("Error al agregar cliente:", error);
+      }
+    }
+
+    // ✅ Cargar clientes con filtro
+    async function cargarClientes(filtrarDeudores = true) {
+      const cont = document.getElementById("clientes");
+      const filtroInput = document.getElementById("filtro-clientes");
+
+      const renderizarClientes = async () => {
+        cont.innerHTML = "";
+        const snapshot = await getDocs(clientesRef);
+        const filtroTexto = filtroInput.value.toLowerCase().trim();
+
+        snapshot.forEach(docSnap => {
+          const cliente = docSnap.data();
+          const id = docSnap.id;
+
+          // Filtrar por nombre
+          if (!cliente.nombre.toLowerCase().includes(filtroTexto)) return;
+
+          // Calcular saldo pendiente
+          let totalPendiente = 0;
+          const compras = cliente.compras || [];
+          compras.forEach(c => {
+            const totalCompra = (c.monto || 0) - (c.descuento || 0);
+            totalPendiente += totalCompra - (c.pagado || 0);
+          });
+
+          // Filtrar por deuda si se solicita
+          if (filtrarDeudores && totalPendiente <= 0) return;
+
+          // Clase para deshabilitado
+          const esDeudor = totalPendiente > 0;
+          const claseCliente = esDeudor ? "" : "cliente-no-deudor";
+
+          const div = document.createElement("div");
+          div.className = `cliente ${claseCliente}`.trim();
+          div.innerHTML = `
+            <strong>${cliente.nombre}</strong><br>
+            📞 <a href="https://wa.me/${cliente.telefono}" target="_blank" title="${cliente.telefono}">${ocultarTelefono(cliente.telefono)}</a><br>
+            💸 Pendiente: ₡${totalPendiente.toLocaleString()}<br>
+            <div class="editar-cliente" id="editar-${id}" style="display:none;">
+              <input type="text" id="edit-nombre-${id}" value="${cliente.nombre}">
+              <input type="text" id="edit-telefono-${id}" value="${cliente.telefono}">
+              <button class="boton-accion" onclick="guardarEdicion('${id}')">💾 Guardar</button>
+              <button class="boton-accion" onclick="cancelarEdicion('${id}')">❌ Cancelar</button>
+            </div>
+            <div class="botones-derecha">
+              <button class="boton-accion" onclick="editarCliente('${id}')">✏️ Editar</button>
+              <button class="boton-accion" onclick="abrirModalProductos('${id}')">➕ Productos</button>
+              <button class="boton-accion" onclick="registrarPago('${id}', '${cliente.nombre}')">💰 Pago</button>
+              <button class="boton-accion" onclick="abrirModalHistorial('${id}', '${cliente.nombre}')">🖨️ Imprimir</button>
+              <button class="boton-accion" onclick="enviarWhatsApp('${cliente.telefono}', '${cliente.nombre}', ${totalPendiente})">📲 WhatsApp</button>
+              <button class="boton-accion" onclick="eliminarCliente('${id}', '${cliente.nombre}')">🗑️ Eliminar</button>
+            </div>
+          `;
+          cont.appendChild(div);
+
+          if (compras.length > 0) {
+            const historial = document.createElement("div");
+            historial.className = "historial-compras";
+            let html = "<h4>🛒 Historial de Compras:</h4><ul>";
+            compras.forEach((compra, index) => {
+              const total = (compra.monto || 0) - (compra.descuento || 0);
+              const saldo = total - (compra.pagado || 0);
+              const estadoInv = compra.inventarioActualizado ? 
+                `<small style="color: green;">✅ Inventario actualizado</small>` : 
+                `<small style="color: orange;">🔸 Pendiente</small>`;
+              html += `
+                <li>
+                  <strong>📅 ${compra.fecha}</strong> | 
+                  Total: ₡${total.toLocaleString()} | 
+                  Pagado: ₡${(compra.pagado || 0).toLocaleString()} | 
+                  Saldo: ₡${saldo.toLocaleString()}
+                  <br>
+                  <small><strong>Productos:</strong> 
+                    ${compra.productos?.map(p => `${p.cantidad}x ${p.nombre} (${p.presentacion || ''}${p.aroma ? ' - ' + p.aroma : ''})`).join(', ') || 'Sin productos'}
+                  </small><br>
+                  ${estadoInv}
+                  <br>
+                  <button class="boton-accion" style="padding: 3px 6px; font-size: 0.75rem; margin-top: 5px;" 
+                          onclick="editarCompra('${id}', ${index})">
+                    ✏️ Editar
+                  </button>
+                  <button class="boton-accion" style="padding: 3px 6px; font-size: 0.75rem; margin-top: 5px; background: #d32f2f;" 
+                          onclick="eliminarCompra('${id}', ${index})">
+                    🗑️ Eliminar
+                  </button>
+                  <button class="boton-accion" style="padding: 3px 6px; font-size: 0.75rem; margin-top: 5px; background: #6c4ba3;"
+                          onclick="actualizarInventario('${id}', ${index})">
+                    📦 Actualizar Inventario
+                  </button>
+                  ${compra.inventarioActualizado ? `
+                  <button class="boton-accion" style="padding: 3px 6px; font-size: 0.75rem; margin-top: 5px; background: #757575;"
+                          onclick="revertirInventario('${id}', ${index})">
+                    🔁 Revertir Inventario
+                  </button>
+                  ` : ''}
+                </li>`;
+            });
+            html += "</ul>";
+            historial.innerHTML = html;
+            div.appendChild(historial);
+          }
+        });
+      };
+
+      await renderizarClientes();
+      filtroInput.addEventListener("input", renderizarClientes);
+    }
+
+    // ✅ Actualizar inventario
+    async function actualizarInventario(clienteId, compraIndex) {
+      try {
+        const clienteDoc = doc(db, "clientes", clienteId);
+        const docSnap = await getDoc(clienteDoc);
+        if (!docSnap.exists()) {
+          alert("Cliente no encontrado.");
+          return;
+        }
+
+        const cliente = docSnap.data();
+        const compras = cliente.compras || [];
+        const compra = compras[compraIndex];
+        if (!compra || !compra.productos) {
+          alert("Compra o productos no encontrados.");
+          return;
+        }
+
+        if (compra.inventarioActualizado) {
+          alert("⚠️ El inventario ya fue actualizado para esta compra.");
+          return;
+        }
+
+        const productos = compra.productos;
+        for (const prod of productos) {
+          const nombreProducto = prod.nombre;
+          const cantidadVendida = prod.cantidad;
+
+          const q = query(
+            collection(db, "stock"),
+            where("nombre", "==", nombreProducto)
+          );
+          const stockSnap = await getDocs(q);
+
+          if (stockSnap.empty) {
+            console.warn(`⚠️ Producto "${nombreProducto}" no existe en inventario.`);
+            continue;
+          }
+
+          const stockDoc = stockSnap.docs[0];
+          const stockData = stockDoc.data();
+          const nuevaCantidad = Math.max(0, (stockData.cantidad || 0) - cantidadVendida);
+
+          await updateDoc(doc(db, "stock", stockDoc.id), {
+            cantidad: nuevaCantidad,
+            ultimaActualizacion: new Date().toISOString()
+          });
+        }
+
+        // Marcar como actualizado
+        compras[compraIndex].inventarioActualizado = true;
+        await updateDoc(clienteDoc, { compras });
+
+        alert("✅ Inventario actualizado correctamente.");
+        await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]').style.background === 'rgb(76, 175, 80)');
+      } catch (error) {
+        console.error("Error al actualizar inventario:", error);
+        alert("❌ Hubo un error al actualizar el inventario.");
+      }
+    }
+
+    // ✅ Revertir inventario
+    async function revertirInventario(clienteId, compraIndex) {
+      try {
+        const clienteDoc = doc(db, "clientes", clienteId);
+        const docSnap = await getDoc(clienteDoc);
+        if (!docSnap.exists()) {
+          alert("Cliente no encontrado.");
+          return;
+        }
+
+        const cliente = docSnap.data();
+        const compras = cliente.compras || [];
+        const compra = compras[compraIndex];
+        if (!compra || !compra.productos) {
+          alert("Compra o productos no encontrados.");
+          return;
+        }
+
+        if (!compra.inventarioActualizado) {
+          alert("⚠️ Esta compra no ha actualizado el inventario.");
+          return;
+        }
+
+        if (!confirm("¿Revertir el inventario? Se devolverán las cantidades al stock.")) return;
+
+        const productos = compra.productos;
+        for (const prod of productos) {
+          const nombreProducto = prod.nombre;
+          const cantidadVendida = prod.cantidad;
+
+          const q = query(
+            collection(db, "stock"),
+            where("nombre", "==", nombreProducto)
+          );
+          const stockSnap = await getDocs(q);
+
+          if (stockSnap.empty) {
+            console.warn(`⚠️ Producto "${nombreProducto}" no existe en inventario.`);
+            continue;
+          }
+
+          const stockDoc = stockSnap.docs[0];
+          const stockData = stockDoc.data();
+          const nuevaCantidad = (stockData.cantidad || 0) + cantidadVendida;
+
+          await updateDoc(doc(db, "stock", stockDoc.id), {
+            cantidad: nuevaCantidad,
+            ultimaActualizacion: new Date().toISOString()
+          });
+        }
+
+        // Desmarcar como actualizado
+        compras[compraIndex].inventarioActualizado = false;
+        await updateDoc(clienteDoc, { compras });
+
+        alert("✅ Inventario revertido correctamente.");
+        await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+      } catch (error) {
+        console.error("Error al revertir inventario:", error);
+        alert("❌ Hubo un error al revertir el inventario.");
+      }
+    }
+
+    // ✅ Editar cliente
+    function editarCliente(clienteId) {
+      document.querySelectorAll('.editar-cliente').forEach(div => div.style.display = 'none');
+      document.getElementById(`editar-${clienteId}`).style.display = 'flex';
+    }
+
+    async function guardarEdicion(clienteId) {
+      const nuevoNombre = document.getElementById(`edit-nombre-${clienteId}`).value.trim();
+      let nuevoTelefono = document.getElementById(`edit-telefono-${clienteId}`).value.trim();
+      if (!nuevoNombre) {
+        alert("⚠️ Completa el nombre.");
+        return;
+      }
+      const telefonoLimpio = nuevoTelefono.replace(/\D/g, '');
+      if (!telefonoLimpio || telefonoLimpio === "00000000" || telefonoLimpio.length < 8) {
+        const nuevo = prompt("El número no es válido. Ingresa un número de teléfono válido (8 dígitos):");
+        if (!nuevo) {
+          alert("Se requiere un número válido.");
+          return;
+        }
+        nuevoTelefono = nuevo;
+      }
+      try {
+        const clienteDoc = doc(db, "clientes", clienteId);
+        await updateDoc(clienteDoc, { nombre: nuevoNombre, telefono: nuevoTelefono });
+        alert("✅ Cliente actualizado.");
+        await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+      } catch (error) {
+        alert("❌ Error al actualizar: " + error.message);
+        console.error("Error:", error);
+      }
+    }
+
+    function cancelarEdicion(clienteId) {
+      document.getElementById(`editar-${clienteId}`).style.display = 'none';
+    }
+
+    // ✅ Eliminar cliente
+    async function eliminarCliente(clienteId, nombre) {
+      if (!confirm(`¿Eliminar a ${nombre}? Esta acción no se puede deshacer.`)) return;
+      try {
+        await deleteDoc(doc(db, "clientes", clienteId));
+        alert(`✅ ${nombre} eliminado.`);
+        await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+      } catch (error) {
+        alert("❌ Error al eliminar.");
+        console.error(error);
+      }
+    }
+
+    // ✅ Editar compra
+    window.editarCompra = async function(clienteId, index) {
+      const clienteDoc = doc(db, "clientes", clienteId);
+      const docSnap = await getDoc(clienteDoc);
+      if (!docSnap.exists()) return;
+      const cliente = docSnap.data();
+      const compras = cliente.compras || [];
+      const compra = compras[index];
+      if (!compra) return;
+      const nuevoMonto = prompt("Editar monto total:", compra.monto);
+      const nuevoDescuento = prompt("Editar descuento:", compra.descuento || 0);
+      const nuevoPagado = prompt("Editar pago:", compra.pagado || 0);
+      if ([nuevoMonto, nuevoDescuento, nuevoPagado].some(v => v === null)) return;
+      const monto = parseFloat(nuevoMonto);
+      const descuento = parseFloat(nuevoDescuento);
+      const pagado = parseFloat(nuevoPagado);
+      if (isNaN(monto) || isNaN(descuento) || isNaN(pagado)) {
+        alert("⚠️ Todos los valores deben ser números.");
+        return;
+      }
+      if (pagado > monto - descuento) {
+        alert("⚠️ El pago no puede superar el total.");
+        return;
+      }
+      compras[index] = { ...compra, monto, descuento, pagado };
+      await updateDoc(clienteDoc, { compras });
+      alert("✅ Compra actualizada.");
+      await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+    };
+
+    // ✅ Eliminar compra
+    window.eliminarCompra = async function(clienteId, index) {
+      if (!confirm("¿Eliminar esta compra?")) return;
+      const clienteDoc = doc(db, "clientes", clienteId);
+      const docSnap = await getDoc(clienteDoc);
+      const cliente = docSnap.data();
+      const compras = cliente.compras || [];
+      compras.splice(index, 1);
+      await updateDoc(clienteDoc, { compras });
+      alert("✅ Compra eliminada.");
+      await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+    };
+
+    // ✅ Registrar pago
+    window.registrarPago = async function(clienteId, nombre) {
+      const snap = await getDocs(clientesRef);
+      let clienteData = null;
+      snap.forEach(docSnap => {
+        if (docSnap.id === clienteId) {
+          clienteData = docSnap.data();
+        }
+      });
+      if (!clienteData) return;
+      const compras = clienteData.compras || [];
+      const ultimaPendienteIndex = [...compras].reverse().findIndex(c => {
+        const total = (c.monto || 0) - (c.descuento || 0);
+        return total > (c.pagado || 0);
+      });
+      if (ultimaPendienteIndex === -1) {
+        alert("🎉 No hay pagos pendientes.");
+        return;
+      }
+      const indexReal = compras.length - 1 - ultimaPendienteIndex;
+      const compra = compras[indexReal];
+      const total = (compra.monto || 0) - (compra.descuento || 0);
+      const saldo = total - (compra.pagado || 0);
+      const pago = prompt(`Saldo: ₡${saldo}\nMonto a pagar:`);
+      if (!pago) return;
+      const pagoNum = parseFloat(pago);
+      if (isNaN(pagoNum) || pagoNum <= 0) {
+        alert("⚠️ Monto inválido.");
+        return;
+      }
+      compra.pagado = Math.min((compra.pagado || 0) + pagoNum, total);
+      compras[indexReal] = compra;
+      await updateDoc(doc(db, "clientes", clienteId), { compras });
+      alert("✅ Pago registrado.");
+      await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+    };
+
+    // ✅ Enviar WhatsApp
+    function enviarWhatsApp(telefono, nombre, deuda) {
+      const limpio = telefono.replace(/\D/g, '');
+      const mensaje = `Hola ${nombre}, Agradecemos tu preferencia y queremos comentarte que tienes un saldo pendiente de ₡${deuda.toLocaleString()}. Gracias por confiar en Esentia llenando tu vida de fragancias que enamoran. 💜`;
+      const url = `https://wa.me/506${limpio}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
+    }
+
+    // ✅ Reportes
+    async function generarReporte() {
+      const cont = document.getElementById("resultados-reportes");
+      cont.innerHTML = "<p>Generando...</p>";
+      const snapshot = await getDocs(clientesRef);
+      let clientes = [];
+      snapshot.forEach(docSnap => {
+        const c = docSnap.data();
+        let totalCompras = 0, totalPagado = 0, totalPendiente = 0, totalDescuentos = 0;
+        (c.compras || []).forEach(compra => {
+          const neto = (compra.monto || 0) - (compra.descuento || 0);
+          totalCompras += neto;
+          totalPagado += compra.pagado || 0;
+          totalDescuentos += compra.descuento || 0;
+          totalPendiente += neto - (compra.pagado || 0);
+        });
+        clientes.push({
+          id: docSnap.id,
+          nombre: c.nombre,
+          telefono: c.telefono,
+          totalCompras,
+          totalPagado,
+          totalDescuentos,
+          totalPendiente
+        });
+      });
+
+      const filtroNombre = document.getElementById("filtro-nombre").value.toLowerCase();
+      const min = parseFloat(document.getElementById("filtro-deuda-min").value) || 0;
+      const max = parseFloat(document.getElementById("filtro-deuda-max").value) || Infinity;
+      const orden = document.getElementById("filtro-orden").value;
+
+      clientes = clientes.filter(cli => 
+        cli.nombre.toLowerCase().includes(filtroNombre) &&
+        cli.totalPendiente >= min &&
+        cli.totalPendiente <= max
+      );
+
+      if (orden === "nombre-asc") clientes.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      if (orden === "nombre-desc") clientes.sort((a, b) => b.nombre.localeCompare(a.nombre));
+      if (orden === "deuda-desc") clientes.sort((a, b) => b.totalPendiente - a.totalPendiente);
+      if (orden === "deuda-asc") clientes.sort((a, b) => a.totalPendiente - b.totalPendiente);
+
+      if (clientes.length === 0) {
+        cont.innerHTML = "<p>No se encontraron clientes.</p>";
+        return;
+      }
+
+      let totalGeneral = 0, totalPagadoGen = 0, totalPendienteGen = 0;
+      let tabla = `
+        <table class="tabla-reportes">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Total Compras</th>
+              <th>Total Pagado</th>
+              <th>Descuentos</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      clientes.forEach(cli => {
+        totalGeneral += cli.totalCompras;
+        totalPagadoGen += cli.totalPagado;
+        totalPendienteGen += cli.totalPendiente;
+        const clase = cli.totalPendiente > 5000 ? "deuda-alta" : cli.totalPendiente > 2000 ? "deuda-media" : "deuda-baja";
+        tabla += `
+          <tr>
+            <td>${cli.nombre}</td>
+            <td>${cli.telefono}</td>
+            <td>₡${cli.totalCompras.toLocaleString()}</td>
+            <td>₡${cli.totalPagado.toLocaleString()}</td>
+            <td>₡${cli.totalDescuentos.toLocaleString()}</td>
+            <td class="${clase}">₡${cli.totalPendiente.toLocaleString()}</td>
+          </tr>
+        `;
+      });
+      tabla += `</tbody></table>
+        <div style="margin-top:20px; padding:15px; background:#f5f5f5; border-radius:5px;">
+          <h3>Resumen:</h3>
+          <p><strong>Total Compras:</strong> ₡${totalGeneral.toLocaleString()}</p>
+          <p><strong>Total Pagado:</strong> ₡${totalPagadoGen.toLocaleString()}</p>
+          <p><strong>Total Pendiente:</strong> ₡${totalPendienteGen.toLocaleString()}</p>
+        </div>`;
+      cont.innerHTML = tabla;
+    }
+
+    // === IMPRESIÓN MODAL DEL REPORTE ===
+    function abrirModalImpresion() {
+      document.getElementById("modal-impresion").style.display = "flex";
+      document.getElementById("filtro-nombre-modal").value = document.getElementById("filtro-nombre").value;
+      document.getElementById("filtro-deuda-min-modal").value = document.getElementById("filtro-deuda-min").value;
+      document.getElementById("filtro-deuda-max-modal").value = document.getElementById("filtro-deuda-max").value;
+      document.getElementById("filtro-orden-modal").value = document.getElementById("filtro-orden").value;
+    }
+
+    function cerrarModalImpresion() {
+      document.getElementById("modal-impresion").style.display = "none";
+    }
+
+    async function generarReporteModal() {
+      const cont = document.getElementById("resultado-modal");
+      cont.innerHTML = "<p>Generando...</p>";
+      const snapshot = await getDocs(clientesRef);
+      let clientes = [];
+      snapshot.forEach(docSnap => {
+        const c = docSnap.data();
+        let totalCompras = 0, totalPagado = 0, totalPendiente = 0, totalDescuentos = 0;
+        (c.compras || []).forEach(compra => {
+          const neto = (compra.monto || 0) - (compra.descuento || 0);
+          totalCompras += neto;
+          totalPagado += compra.pagado || 0;
+          totalDescuentos += compra.descuento || 0;
+          totalPendiente += neto - (compra.pagado || 0);
+        });
+        clientes.push({
+          id: docSnap.id,
+          nombre: c.nombre,
+          telefono: c.telefono,
+          totalCompras,
+          totalPagado,
+          totalDescuentos,
+          totalPendiente
+        });
+      });
+
+      const filtroNombre = document.getElementById("filtro-nombre-modal").value.toLowerCase();
+      const min = parseFloat(document.getElementById("filtro-deuda-min-modal").value) || 0;
+      const max = parseFloat(document.getElementById("filtro-deuda-max-modal").value) || Infinity;
+      const orden = document.getElementById("filtro-orden-modal").value;
+
+      clientes = clientes.filter(cli => 
+        cli.nombre.toLowerCase().includes(filtroNombre) &&
+        cli.totalPendiente >= min &&
+        cli.totalPendiente <= max
+      );
+
+      if (orden === "nombre-asc") clientes.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      if (orden === "nombre-desc") clientes.sort((a, b) => b.nombre.localeCompare(a.nombre));
+      if (orden === "deuda-desc") clientes.sort((a, b) => b.totalPendiente - a.totalPendiente);
+      if (orden === "deuda-asc") clientes.sort((a, b) => a.totalPendiente - b.totalPendiente);
+
+      if (clientes.length === 0) {
+        cont.innerHTML = "<p>No se encontraron clientes.</p>";
+        return;
+      }
+
+      let totalGeneral = 0, totalPagadoGen = 0, totalPendienteGen = 0;
+      let tabla = `
+        <table class="tabla-reportes">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Total Compras</th>
+              <th>Total Pagado</th>
+              <th>Descuentos</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      clientes.forEach(cli => {
+        totalGeneral += cli.totalCompras;
+        totalPagadoGen += cli.totalPagado;
+        totalPendienteGen += cli.totalPendiente;
+        const clase = cli.totalPendiente > 5000 ? "deuda-alta" : cli.totalPendiente > 2000 ? "deuda-media" : "deuda-baja";
+        tabla += `
+          <tr>
+            <td>${cli.nombre}</td>
+            <td>${cli.telefono}</td>
+            <td>₡${cli.totalCompras.toLocaleString()}</td>
+            <td>₡${cli.totalPagado.toLocaleString()}</td>
+            <td>₡${cli.totalDescuentos.toLocaleString()}</td>
+            <td class="${clase}">₡${cli.totalPendiente.toLocaleString()}</td>
+          </tr>
+        `;
+      });
+      tabla += `</tbody></table>
+        <div style="margin-top:20px; padding:15px; background:#f5f5f5; border-radius:5px;">
+          <h3>Resumen:</h3>
+          <p><strong>Total Compras:</strong> ₡${totalGeneral.toLocaleString()}</p>
+          <p><strong>Total Pagado:</strong> ₡${totalPagadoGen.toLocaleString()}</p>
+          <p><strong>Total Pendiente:</strong> ₡${totalPendienteGen.toLocaleString()}</p>
+        </div>`;
+      cont.innerHTML = tabla;
+    }
+
+    function imprimirModal() {
+      const contenido = document.getElementById("modal-impresion").querySelector("div").innerHTML;
+      const ventana = window.open('', '_blank', 'width=800,height=600');
+      ventana.document.write(`
+        <html>
+          <head>
+            <title>Reporte General de Clientes</title>
+            <style>
+              body { 
+                font-family: Arial, sans-serif; 
+                padding: 20px; 
+                color: #333; 
+              }
+              table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin: 20px 0; 
+              }
+              th, td { 
+                border: 1px solid #ddd; 
+                padding: 12px; 
+                text-align: left; 
+              }
+              th { 
+                background-color: #6c4ba3; 
+                color: white; 
+              }
+              .deuda-alta { color: #d32f2f; font-weight: bold; }
+              .deuda-media { color: #f57c00; font-weight: bold; }
+              .deuda-baja { color: #388e3c; font-weight: bold; }
+              @media print {
+                button { display: none; }
+              }
+            </style>
+          </head>
+          <body>
+            <h2>📊 Reporte General de Clientes</h2>
+            <p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
+            ${contenido}
+            <button onclick="window.print()" style="padding: 10px; background: #6c4ba3; color: white; border: none; border-radius: 5px; margin-top: 20px;">🖨️ Imprimir</button>
+          </body>
+        </html>
+      `);
+      ventana.document.close();
+    }
+
+    // === IMPRESIÓN MODAL DEL HISTORIAL INDIVIDUAL ===
+    window.abrirModalHistorial = async function(clienteId, nombre) {
+      const clienteDoc = doc(db, "clientes", clienteId);
+      const docSnap = await getDoc(clienteDoc);
+      if (!docSnap.exists()) {
+        alert("Cliente no encontrado.");
+        return;
+      }
+      const cliente = docSnap.data();
+      const compras = cliente.compras || [];
+      let totalCompras = 0, totalPagado = 0, totalPendiente = 0;
+      let html = "";
+      if (compras.length === 0) {
+        html = '<p>No hay compras registradas.</p>';
+      } else {
+        compras.forEach((compra, index) => {
+          const total = (compra.monto || 0) - (compra.descuento || 0);
+          const saldo = total - (compra.pagado || 0);
+          totalCompras += total;
+          totalPagado += compra.pagado || 0;
+          totalPendiente += saldo;
+          html += `
+            <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #eee; border-radius: 6px;">
+              <h4>📅 Compra #${index+1} - ${compra.fecha}</h4>
+              <ul style="margin-left: 20px;">
+                ${compra.productos?.map(p => `<li>${p.cantidad}x ${p.nombre} - ${p.presentacion || ''} ${p.aroma ? '('+p.aroma+')' : ''} - ₡${p.precio} (Total: ₡${p.precio * p.cantidad})</li>`).join('') || '<li>Sin productos</li>'}
+              </ul>
+              <p><strong>Total:</strong> ₡${total} | <strong>Pagado:</strong> ₡${compra.pagado || 0} | <strong>Saldo:</strong> ₡${saldo}</p>
+              ${compra.inventarioActualizado ? '<p style="color: green;">✅ Inventario actualizado</p>' : ''}
+            </div>
+          `;
+        });
+      }
+      const contenido = document.getElementById("contenido-historial");
+      contenido.innerHTML = `
+        <p><strong>Cliente:</strong> ${cliente.nombre}</p>
+        <p><strong>Teléfono:</strong> ${ocultarTelefono(cliente.telefono)}</p>
+        <p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
+        <hr>
+        ${html}
+        <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 5px;">
+          <h3>Resumen</h3>
+          <p><strong>Total Compras:</strong> ₡${totalCompras.toLocaleString()}</p>
+          <p><strong>Total Pagado:</strong> ₡${totalPagado.toLocaleString()}</p>
+          <p style="color: ${totalPendiente > 0 ? 'red' : 'green'}; font-weight: bold;">
+            <strong>Saldo Pendiente:</strong> ₡${totalPendiente.toLocaleString()}
+          </p>
+        </div>
+      `;
+      document.getElementById("modal-historial").style.display = "flex";
+    };
+
+    function cerrarModalHistorial() {
+      document.getElementById("modal-historial").style.display = "none";
+    }
+
+    function imprimirModalHistorial() {
+      const contenido = document.getElementById("contenido-historial").innerHTML;
+      const ventana = window.open('', '_blank', 'width:800,height:600');
+      ventana.document.write(`
+        <html>
+          <head>
+            <title>Historial de Compras - ${document.getElementById("contenido-historial").querySelector("p").textContent}</title>
+            <style>
+              body { 
+                font-family: Arial, sans-serif; 
+                padding: 20px; 
+                color: #333; 
+              }
+              h2, h3 { 
+                color: #6c4ba3; 
+              }
+              .resumen { 
+                margin-top: 20px; 
+                padding: 15px; 
+                background: #f5f5f5; 
+                border-radius: 6px; 
+                font-weight: bold; 
+              }
+              @media print {
+                button { display: none; }
+              }
+            </style>
+          </head>
+          <body>
+            <h2>📋 Historial de Compras</h2>
+            ${contenido}
+            <button onclick="window.print()" style="padding: 10px; margin-top: 20px; background: #6c4ba3; color: white; border: none; border-radius: 5px;">🖨️ Imprimir</button>
+          </body>
+        </html>
+      `);
+      ventana.document.close();
+    }
+
+    // ✅ Ocultar teléfono
+    function ocultarTelefono(telefono) {
+      if (!telefono || telefono === "00000000" || telefono === "0") {
+        return "<span style='color: red;'>Número no válido</span>";
+      }
+      const limpio = telefono.replace(/\D/g, '');
+      return limpio.length < 4 ? telefono : `****${limpio.slice(-4)}`;
+    }
+
+    // Cargar productos desde JSON
+    const URL_ESENCIA = "https://wil1979.github.io/esentia-factura/productos_esentia.json";
+    const URL_LIMPIEZA = "https://wil1979.github.io/esentia-factura/productos_limpieza_completo.json";
+    let todosLosProductos = [];
+    let carrito = [];
+    let clienteSeleccionadoId = null;
+
+    async function cargarProductosJSON() {
+      const [res1, res2] = await Promise.all([fetch(URL_ESENCIA), fetch(URL_LIMPIEZA)]);
+      const [aromas, limpieza] = await Promise.all([res1.json(), res2.json()]);
+      todosLosProductos = [...aromas, ...limpieza].filter(p => p.disponible);
+      const select = document.getElementById("select-producto");
+      select.innerHTML = "";
+      todosLosProductos.forEach((p, i) => {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = p.nombre;
+        select.appendChild(opt);
+      });
+    }
+
+    function abrirModalProductos(idCliente) {
+      clienteSeleccionadoId = idCliente;
+      carrito = [];
+      document.getElementById("carrito-modal").innerHTML = "";
+      document.getElementById("total-compra").textContent = "0";
+      document.getElementById("descuento").value = "0";
+      document.getElementById("modal-productos").style.display = "flex";
+    }
+
+    function cerrarModalProductos() {
+      document.getElementById("modal-productos").style.display = "none";
+    }
+
+    function agregarAlCarritoModal() {
+      const index = parseInt(document.getElementById("select-producto").value);
+      const producto = todosLosProductos[index];
+      if (carrito.some(item => item.index === index)) {
+        alert("Este producto ya está en el carrito.");
+        return;
+      }
+      const precioSugerido = producto.precioPublico || 0;
+      const item = {
+        index: index,
+        producto: producto,
+        cantidad: 1,
+        precioUnitario: precioSugerido
+      };
+      carrito.push(item);
+      renderizarCarrito();
+    }
+
+    function renderizarCarrito() {
+      const contenedor = document.getElementById("carrito-modal");
+      contenedor.innerHTML = "";
+      if (carrito.length === 0) {
+        contenedor.innerHTML = "<p>No hay productos en el carrito.</p>";
+        actualizarTotal();
+        return;
+      }
+      carrito.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "producto-item";
+        div.innerHTML = `
+          <div class="producto-info">
+            <strong>${item.producto.nombre}</strong>
+            <div>
+              <label>Precio unitario: ₡</label>
+              <input type="number" class="precio-personalizado" value="${item.precioUnitario}" 
+                     onchange="actualizarPrecio(${i}, this.value)">
+            </div>
+          </div>
+          <div class="producto-cantidad">
+            <div class="cantidad-control">
+              <button class="btn-cantidad" onclick="cambiarCantidad(${i}, -1)">−</button>
+              <input type="text" class="cantidad-display" value="${item.cantidad}" readonly>
+              <button class="btn-cantidad" onclick="cambiarCantidad(${i}, 1)">+</button>
+            </div>
+            <button class="boton-accion" onclick="quitarDelCarrito(${i})" style="background: #d32f2f; padding: 5px 10px;">Eliminar</button>
+          </div>
+        `;
+        contenedor.appendChild(div);
+      });
+      actualizarTotal();
+    }
+
+    window.actualizarPrecio = function(index, nuevoPrecio) {
+      const precio = parseFloat(nuevoPrecio);
+      if (!isNaN(precio) && precio >= 0) {
+        carrito[index].precioUnitario = precio;
+        renderizarCarrito();
+      }
+    };
+
+    window.cambiarCantidad = function(index, delta) {
+      const nuevoValor = carrito[index].cantidad + delta;
+      if (nuevoValor > 0) {
+        carrito[index].cantidad = nuevoValor;
+        renderizarCarrito();
+      }
+    };
+
+    window.quitarDelCarrito = function(index) {
+      carrito.splice(index, 1);
+      renderizarCarrito();
+    };
+
+    function actualizarTotal() {
+      let total = 0;
+      carrito.forEach(item => {
+        total += item.precioUnitario * item.cantidad;
+      });
+      const descuento = parseFloat(document.getElementById("descuento").value) || 0;
+      const totalConDescuento = Math.max(0, total - descuento);
+      document.getElementById("total-compra").textContent = totalConDescuento.toLocaleString();
+    }
+
+    document.getElementById("descuento").addEventListener("input", actualizarTotal);
+
+    async function guardarCompraDesdeCarrito() {
+      if (!clienteSeleccionadoId) return;
+      if (carrito.length === 0) {
+        alert("No hay productos en el carrito.");
+        return;
+      }
+      const clienteDoc = doc(db, "clientes", clienteSeleccionadoId);
+      const snap = await getDocs(clientesRef);
+      let comprasActuales = [];
+      snap.forEach(s => {
+        if (s.id === clienteSeleccionadoId) {
+          comprasActuales = s.data().compras || [];
+        }
+      });
+      const productos = [];
+      let total = 0;
+      carrito.forEach(item => {
+        const producto = item.producto;
+        const cantidad = item.cantidad;
+        const precio = item.precioUnitario;
+        const totalProducto = precio * cantidad;
+        productos.push({ 
+          nombre: producto.nombre,
+          presentacion: producto.presentacion || '',
+          aroma: producto.aroma || null,
+          precio: precio,
+          cantidad: cantidad,
+          total: totalProducto
+        });
+        total += totalProducto;
+      });
+      const descuento = parseFloat(document.getElementById("descuento").value) || 0;
+      comprasActuales.push({
+        fecha: new Date().toISOString().slice(0, 10),
+        productos,
+        monto: total,
+        descuento,
+        pagado: 0,
+        inventarioActualizado: false
+      });
+      await updateDoc(clienteDoc, { compras: comprasActuales });
+      document.getElementById("modal-productos").style.display = "none";
+      await cargarClientes(document.querySelector('#seccion-reportes button[onclick="cargarClientes(true)"]')?.style.background === 'rgb(76, 175, 80)');
+      alert("✅ Compra guardada exitosamente.");
+    }
+
+    // Hacer funciones globales
+    window.agregarCliente = agregarCliente;
+    window.abrirModalProductos = abrirModalProductos;
+    window.cerrarModalProductos = cerrarModalProductos;
+    window.agregarAlCarritoModal = agregarAlCarritoModal;
+    window.guardarCompraDesdeCarrito = guardarCompraDesdeCarrito;
+    window.cambiarCantidad = cambiarCantidad;
+    window.quitarDelCarrito = quitarDelCarrito;
+    window.actualizarPrecio = actualizarPrecio;
+    window.enviarWhatsApp = enviarWhatsApp;
+    window.editarCliente = editarCliente;
+    window.guardarEdicion = guardarEdicion;
+    window.cancelarEdicion = cancelarEdicion;
+    window.registrarPago = registrarPago;
+    window.generarReporte = generarReporte;
+    window.abrirModalImpresion = abrirModalImpresion;
+    window.cerrarModalImpresion = cerrarModalImpresion;
+    window.generarReporteModal = generarReporteModal;
+    window.imprimirModal = imprimirModal;
+    window.eliminarCliente = eliminarCliente;
+    window.abrirModalHistorial = abrirModalHistorial;
+    window.cerrarModalHistorial = cerrarModalHistorial;
+    window.imprimirModalHistorial = imprimirModalHistorial;
+    window.actualizarInventario = actualizarInventario;
+    window.revertirInventario = revertirInventario;
+
+    // Inicializar: cargar solo deudores al inicio
+    await cargarClientes(false);
+    await cargarProductosJSON();
+  </script>
+  <script>
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+    function scrollToBottom() {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    
+  </script>
+
+<!-- Modal para seleccionar cliente -->
+<div id="modal-seleccionar-cliente" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+  <div style="background: white; width: 90%; max-width: 600px; border-radius: 10px; padding: 20px; max-height: 80vh; overflow-y: auto;">
+    <h2>➕ Seleccionar Cliente</h2>
+    <input type="text" id="filtro-cliente-modal" placeholder="Buscar cliente..." style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ddd;">
+    <div id="lista-clientes-modal" style="max-height: 400px; overflow-y: auto;">
+      <!-- Se llenará dinámicamente -->
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+      <button class="boton-accion" onclick="cerrarModalSeleccionarCliente()" style="background: #666;">❌ Cerrar</button>
+    </div>
+  </div>
+</div>
+
+
+
+  <p>✨ Esentia ofrece productos que mejoran la experiencia diaria a través de aromas que evocan sensaciones positivas y placenteras. 
+  🌟 Beneficios de los Aromas La aromaterapia puede contribuir a disminuir el estrés y mejorar el bienestar general. 
+  💡 Consejos de Uso Para maximizar la efectividad de los aromas, es recomendable utilizarlos en ambientes tranquilos y ventilados.</p>
+</body>
+</html>

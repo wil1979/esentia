@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promocionales Esentia</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background-color: #f7f7f7;
+    }
+    #opciones {
+      margin-bottom: 1rem;
+    }
+    .etiqueta {
+      width: 7cm;
+      height: 10cm;
+      position: relative;
+      
+      background-size: cover;
+      background-position: center;
+      margin-top: 1rem;
+    }
+    .etiqueta img.producto {
+      position: absolute;
+      width: 34%;
+      top: 53%;
+      left: 30%;
+    }
+    .etiqueta img.logo {
+      position: absolute;
+      top: 68%;
+      left: 31%;
+      width: 28%;
+    }
+    .etiqueta .nombre {
+      position: absolute;
+      bottom: 45%;
+      width: 85%;
+      text-align: center;
+      font-size: 0.5rem;
+      font-weight: bold;
+      color: #b3acbe;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Generador de Promocionales Esentia</h1>
+
+<div id="opciones">
+  <label for="producto">Selecciona producto:</label>
+  <select id="producto"></select>
+  <br><br>
+  <label><input type="checkbox" id="mostrarLogo" checked> Mostrar logo</label>
+  <label><input type="checkbox" id="mostrarImagen" checked> Mostrar imagen del producto</label>
+  <label><input type="checkbox" id="mostrarNombre" checked> Mostrar nombre</label>
+  <br><br>
+  <button id="generarTodos">Generar todas las etiquetas</button>
+  <button id="guardarTodas">Guardar todas en PNG</button>
+</div>
+
+<div id="contenedorEtiquetas"></div>
+
+<!-- Librería html2canvas -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script>
+  const selectProducto = document.getElementById('producto');
+  const contenedor = document.getElementById('contenedorEtiquetas');
+  const botonGenerarTodos = document.getElementById('generarTodos');
+  const botonGuardarTodas = document.getElementById('guardarTodas');
+
+  let productos = [];
+
+  fetch('productos_esentia.json')
+    .then(res => res.json())
+    .then(data => {
+      productos = data;
+      productos.forEach((producto, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = producto.nombre;
+        selectProducto.appendChild(option);
+      });
+      mostrarProducto(0);
+    });
+
+  selectProducto.addEventListener('change', () => {
+    mostrarProducto(selectProducto.value);
+  });
+
+  document.querySelectorAll('#opciones input[type=checkbox]').forEach(input => {
+    input.addEventListener('change', () => mostrarProducto(selectProducto.value));
+  });
+
+  botonGenerarTodos.addEventListener('click', () => {
+    contenedor.innerHTML = ''; // limpiar contenedor
+    productos.forEach((producto, i) => {
+      contenedor.appendChild(crearEtiqueta(producto));
+    });
+  });
+
+  botonGuardarTodas.addEventListener('click', () => {
+    const etiquetas = document.querySelectorAll('.etiqueta');
+    etiquetas.forEach((etiqueta, index) => {
+      html2canvas(etiqueta).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `etiqueta_${index + 1}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    });
+  });
+
+  function mostrarProducto(index) {
+    contenedor.innerHTML = ''; // Limpiar
+    const prod = productos[index];
+    contenedor.appendChild(crearEtiqueta(prod));
+  }
+
+  function crearEtiqueta(prod) {
+    const etiqueta = document.createElement('div');
+    etiqueta.className = 'etiqueta';
+    etiqueta.style.backgroundImage = "url('../etiqueta/defaul.png')";
+
+    if (document.getElementById('mostrarImagen').checked) {
+      const img = document.createElement('img');
+      img.src = prod.imagen;
+      img.className = 'producto';
+      etiqueta.appendChild(img);
+    }
+
+    if (document.getElementById('mostrarLogo').checked) {
+      const logo = document.createElement('img');
+      logo.src = 'images/logo.png';
+      logo.className = 'logo';
+      etiqueta.appendChild(logo);
+    }
+
+    if (document.getElementById('mostrarNombre').checked) {
+      const nombre = document.createElement('div');
+      nombre.className = 'nombre';
+      nombre.textContent = prod.nombre;
+      etiqueta.appendChild(nombre);
+    }
+
+    return etiqueta;
+  }
+</script>
+</body>
+</html>

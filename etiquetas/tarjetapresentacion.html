@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tarjetas de Presentación - con Facebook y QR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background: #f4f4f4;
+      display: flex;
+      gap: 15px;
+    }
+
+    .formulario {
+      flex: 1;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 420px;
+      height: fit-content;
+    }
+
+    .formulario label {
+      font-weight: bold;
+      margin-top: 12px;
+    }
+
+    .formulario input,
+    .formulario textarea,
+    .formulario select,
+    .formulario button {
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 6px 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .tarjeta-container {
+      flex: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: white;
+      padding: 15px;
+      margin: 0;
+    }
+
+    .tarjeta {
+      width: var(--tarjeta-ancho, 8.5cm);
+      height: var(--tarjeta-alto, 5.5cm);
+      background: var(--fondo-tarjeta, #ffffff);
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tarjeta-izq {
+      width: 30%;
+      background: var(--color-secundario,#e2ecc5);
+      color: white;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      font-size: 9px;
+    }
+
+    .tarjeta-der {
+      width: 70%;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 10px;
+      color: #333;
+    }
+
+    .nombre {
+      font-size: 14px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .cargo {
+      font-size: 10px;
+      color: #1a3a5f;
+      margin: 5px 0;
+    }
+
+    .empresa {
+      font-size: 10px;
+      font-weight: bold;
+      color: #dac938;
+      margin: 5px 0;
+    }
+
+    .contacto {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+
+    .logo-tarjeta {
+      max-width: 100%;
+      margin: 0 auto 6px;
+      display: block;
+    }
+
+    .qr {
+      max-width: 60px;
+      max-height: 60px;
+    }
+
+    /* Estilos de impresión */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .tarjeta-container, .tarjeta-container * {
+        visibility: visible;
+      }
+      .tarjeta-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .tarjeta {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        border: none;
+        box-shadow: none;
+      }
+      .formulario {
+        display: none;
+      }
+      @page {
+        size: var(--tamano-pagina, A4);
+        margin: 0.8cm;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="formulario">
+    <h3>Generador de Tarjetas</h3>
+
+    <label>Tamaño de hoja:</label>
+    <select id="tamanoHoja" onchange="actualizarTamanoHoja()">
+      <option value="a4">A4 (21x29.7 cm)</option>
+      <option value="carta">Carta (8.5x11")</option>
+      <option value="personalizado">Personalizado</option>
+    </select>
+
+    <div id="camposPersonalizados" style="display: none;">
+      <label>Ancho hoja (cm):</label>
+      <input type="number" id="anchoHojaCm" value="21" step="0.1" oninput="generarTarjetas()">
+
+      <label>Alto hoja (cm):</label>
+      <input type="number" id="altoHojaCm" value="29.7" step="0.1" oninput="generarTarjetas()">
+    </div>
+
+    <label>Empresa (común):</label>
+    <input id="empresaComun" value="Esentia creando espacios únicos. " oninput="generarTarjetas()">
+
+    <label>Logo (URL común):</label>
+    <input id="logoUrl" value="https://wil1979.github.io/esentia-factura/images/logo.png" oninput="generarTarjetas()">
+
+    <label>Enlace base del QR (ej: sitio web o contacto):</label>
+    <input id="qrBase" value="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://www.facebook.com/profile.php?id=61579078480913" oninput="generarTarjetas()">
+
+    <hr>
+
+    <label>Color lateral:</label>
+    <input type="color" id="colorSecundario" value="#1a3a5f" oninput="actualizarEstilos()">
+
+    <label>Fondo tarjeta:</label>
+    <input type="color" id="fondoTarjeta" value="#ffffff" oninput="actualizarEstilos()">
+
+    <label>Ancho tarjeta (cm):</label>
+    <input type="number" id="anchoCm" value="8.5" step="0.1" oninput="actualizarEstilos(); generarTarjetas();">
+
+    <label>Alto tarjeta (cm):</label>
+    <input type="number" id="altoCm" value="5.5" step="0.1" oninput="actualizarEstilos(); generarTarjetas();">
+
+    <hr>
+
+    <label>Lista de empleados (uno por línea):</label>
+    <textarea id="listaEmpleados" rows="6" oninput="generarTarjetas()">
+Wilber Calderon M,Administrador,+506 72952454,eweesentia@gmail.com,https://www.facebook.com/profile.php?id=61579078480913
+Elena  Gutierrez S.,Administradora,+506 60840204,eweesentia@gmail.com,https://www.facebook.com/profile.php?id=61579078480913
+</textarea>
+
+    <p><small>Formato: Nombre,Cargo,Teléfono,Email,Facebook</small></p>
+
+    <label>Cantidad por empleado:</label>
+    <input type="number" id="cantidadPorEmpleado" value="5" min="5" oninput="generarTarjetas()">
+
+    <button onclick="generarTarjetas()">Actualizar Vista Previa</button>
+    <button onclick="window.print()">🖨️ Imprimir Tarjetas</button>
+  </div>
+
+  <div class="tarjeta-container" id="tarjetas"></div>
+
+  <script>
+    const tamanosHoja = {
+      a4: { w: 21, h: 29.7, name: "A4" },
+      carta: { w: 21.6, h: 27.9, name: "letter" },
+      personalizado: { w: 21, h: 29.7, name: "21cm 29.7cm" }
+    };
+
+    function actualizarTamanoHoja() {
+      const tipo = document.getElementById("tamanoHoja").value;
+      document.getElementById("camposPersonalizados").style.display = tipo === "personalizado" ? "block" : "none";
+      generarTarjetas();
+    }
+
+    function actualizarEstilos() {
+      document.documentElement.style.setProperty('--color-secundario', document.getElementById('colorSecundario').value);
+      document.documentElement.style.setProperty('--fondo-tarjeta', document.getElementById('fondoTarjeta').value);
+      document.documentElement.style.setProperty('--tarjeta-ancho', document.getElementById('anchoCm').value + 'cm');
+      document.documentElement.style.setProperty('--tarjeta-alto', document.getElementById('altoCm').value + 'cm');
+    }
+
+    function generarTarjetas() {
+      actualizarEstilos();
+
+      const tipo = document.getElementById("tamanoHoja").value;
+      let anchoHojaCm, altoHojaCm;
+
+      if (tipo === "personalizado") {
+        anchoHojaCm = parseFloat(document.getElementById('anchoHojaCm').value) || 21;
+        altoHojaCm = parseFloat(document.getElementById('altoHojaCm').value) || 29.7;
+        document.documentElement.style.setProperty('--tamano-pagina', `${anchoHojaCm}cm ${altoHojaCm}cm`);
+      } else {
+        const tam = tamanosHoja[tipo];
+        anchoHojaCm = tam.w;
+        altoHojaCm = tam.h;
+        document.documentElement.style.setProperty('--tamano-pagina', tam.name);
+      }
+
+      const empresaComun = document.getElementById("empresaComun").value.trim();
+      const logoUrl = document.getElementById("logoUrl").value.trim();
+      const qrBase = document.getElementById("qrBase").value.trim().replace(/\/$/, ""); // quita barra final
+      const cantidad = parseInt(document.getElementById("cantidadPorEmpleado").value) || 1;
+
+      const listaTexto = document.getElementById("listaEmpleados").value.trim();
+      const filas = listaTexto.split('\n').filter(linea => linea.trim() !== '');
+      const contenedor = document.getElementById("tarjetas");
+      contenedor.innerHTML = "";
+
+      filas.forEach(linea => {
+        const datos = linea.split(',').map(d => d.trim());
+        if (datos.length < 5) return; // Necesita al menos 5 campos
+
+        const [nombre, cargo, telefono, email, facebook] = datos;
+
+        for (let i = 0; i < cantidad; i++) {
+          const tarjeta = document.createElement("div");
+          tarjeta.className = "tarjeta";
+
+          // Generar URL del QR (puedes cambiar por vCard, sitio web, etc.)
+          const datosQR = encodeURIComponent(`Nombre: ${nombre}\nCargo: ${cargo}\nEmpresa: ${empresaComun}\nTel: ${telefono}\nEmail: ${email}\nFacebook: ${facebook}`);
+          const qrUrl = `${qrBase}`;
+
+          tarjeta.innerHTML = `
+            <div class="tarjeta-izq">
+              <img src="${logoUrl}" alt="Logo" class="logo-tarjeta">
+              <img src="${qrUrl}" alt="QR Contacto" class="qr">
+            </div>
+            <div class="tarjeta-der">
+              <h3 class="nombre">${nombre}</h3>
+              <div class="cargo">${cargo}</div>
+              <div class="empresa">${empresaComun}</div>
+              <div class="contacto">
+                📱 ${telefono}<br>
+                ✉️ ${email}<br>
+                📘 <a href="${facebook}" target="_blank" style="color:#1a77f2; text-decoration: none;">Facebook: Esentia-fragancias que enamoran</a>
+              </div>
+            </div>
+          `;
+          contenedor.appendChild(tarjeta);
+        }
+      });
+    }
+
+    // Inicializar
+    window.onload = () => {
+      actualizarTamanoHoja();
+      generarTarjetas();
+    };
+  </script>
+</body>
+</html>

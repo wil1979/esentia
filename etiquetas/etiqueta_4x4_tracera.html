@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Etiquetas Esentia</title>
+  <style>
+    :root {
+      --ancho-etiqueta: 4cm;
+      --alto-etiqueta: 4cm;
+      --tamano-fuente: 7px;
+      --ancho-logo: 80px;
+      --tamano-qr: 45px;
+    }
+
+    @page {
+      size: letter;
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: #fff;
+    }
+
+    .hoja {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      gap: 0;
+      box-sizing: border-box;
+      padding: 0.5cm;
+    }
+
+    .etiqueta {
+      box-sizing: border-box;
+      padding: 4px;
+      border: 0.5px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      width: var(--ancho-etiqueta);
+      height: var(--alto-etiqueta);
+      font-size: var(--tamano-fuente);
+    }
+
+    .logo-qr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .logo {
+      width: var(--ancho-logo);
+      height: auto;
+    }
+
+    .qr {
+      width: var(--tamano-qr);
+      height: var(--tamano-qr);
+    }
+
+    .config-modal {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      width: 300px;
+      transition: all 0.3s ease;
+    }
+
+    .config-modal.hidden {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+
+    .config-group {
+      margin-bottom: 10px;
+    }
+
+    .config-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .config-group input,
+    .config-group select,
+    .config-group textarea {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    @media print {
+      .config-modal {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="config-modal">
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <h3>Configuración de Etiquetas</h3>
+    <button onclick="toggleConfig()" style="padding: 3px 8px; font-size: 12px">
+      Ocultar
+    </button>
+  </div>
+  
+  <div class="config-group">
+    <label>Tamaño de hoja:</label>
+    <select id="tamanoHoja" onchange="actualizarHoja()">
+      <option value="13x19">13x19 pulgadas</option>
+      <option value="letter">Carta (8.5x11")</option>
+      <option value="a4">A4 (21x29.7 cm)</option>
+      
+    </select>
+  </div>
+
+  <div class="config-group">
+    <label>Dimensiones etiqueta (cm):</label>
+    <input type="number" id="anchoEtiqueta" step="0.1" value="4" placeholder="Ancho">
+    <input type="number" id="altoEtiqueta" step="0.1" value="3" placeholder="Alto">
+  </div>
+
+  <div class="config-group">
+    <label>Tamaño de fuente (px):</label>
+    <input type="number" id="tamanoFuente" value="7">
+  </div>
+
+  <div class="config-group">
+    <label>Logo (URL):</label>
+    <input type="text" id="logoUrl" value="https://wil1979.github.io/esentia-factura/images/logo.png">
+  </div>
+
+  <div class="config-group">
+    <label>Ancho logo (px):</label>
+    <input type="number" id="anchoLogo" value="80">
+  </div>
+
+  <div class="config-group">
+    <label>Tamaño QR (px):</label>
+    <input type="number" id="tamanoQR" value="45">
+  </div>
+
+  <div class="config-group">
+    <label>Datos QR:</label>
+    <input type="text" id="qrData" value="https://wil1979.github.io/esentia-factura/catalogo.html">
+  </div>
+
+  <div class="config-group">
+    <label>Mensaje de agradecimiento:</label>
+    <textarea id="mensajeAgradecimiento" rows="3" style="width: 100%; padding: 5px; font-size: 12px;">
+Gracias por preferir nuestros aromatizantes. ¡Disfrute de fragancias que enamoran!
+    </textarea>
+  </div>
+
+  <div class="config-group">
+    <label>Tamaños disponibles (ml):</label>
+    <div style="display: flex; gap: 10px; font-size: 12px;">
+      <label><input type="checkbox" id="tamano20ml" checked> 20ml</label>
+      <label><input type="checkbox" id="tamano30ml" checked> 30ml</label>
+      <label><input type="checkbox" id="tamano60ml" checked> 60ml</label>
+    </div>
+    <small style="color: #555;">Aparecerá en la etiqueta como presentación disponible</small>
+  </div>
+
+  <button onclick="generarEtiquetas()">Aplicar Cambios</button>
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="hoja"></div>
+
+<script>
+// Tamaños de hoja en cm (ancho, alto)
+const tamanosHoja = {
+  letter: { ancho: 21.59, alto: 27.94 }, // 8.5 x 11 pulgadas
+  a4: { ancho: 21.0, alto: 29.7 },
+  '13x19': { ancho: 33.02, alto: 48.26 } // 13 x 19 pulgadas → cm
+};
+
+function actualizarHoja() {
+  const tipo = document.getElementById('tamanoHoja').value;
+  const tamano = tamanosHoja[tipo];
+  const style = document.getElementById('page-size-style') || document.createElement('style');
+  style.id = 'page-size-style';
+  style.innerHTML = `@page { size: ${tamano.ancho}cm ${tamano.alto}cm; margin: 0; }`;
+  if (!document.getElementById('page-size-style')) {
+    document.head.appendChild(style);
+  }
+}
+
+function generarEtiquetas() {
+  const tipoHoja = document.getElementById('tamanoHoja').value;
+  const tamanoHoja = tamanosHoja[tipoHoja];
+  const anchoHojaUsable = tamanoHoja.ancho - 1.0; // 0.5cm de padding
+
+  const config = {
+    ancho: parseFloat(document.getElementById('anchoEtiqueta').value) || 4,
+    alto: parseFloat(document.getElementById('altoEtiqueta').value) || 4,
+    fuente: parseInt(document.getElementById('tamanoFuente').value) || 7,
+    logo: document.getElementById('logoUrl').value,
+    anchoLogo: parseInt(document.getElementById('anchoLogo').value) || 65,
+    qrSize: parseInt(document.getElementById('tamanoQR').value) || 45,
+    qrData: encodeURIComponent(document.getElementById('qrData').value.trim()),
+    mensaje: document.getElementById('mensajeAgradecimiento').value || 'Gracias por su preferencia.'
+  };
+
+  // Leer tamaños seleccionados
+  const tamanos = [];
+  if (document.getElementById('tamano20ml').checked) tamanos.push('20ml');
+  if (document.getElementById('tamano30ml').checked) tamanos.push('30ml');
+  if (document.getElementById('tamano60ml').checked) tamanos.push('60ml');
+
+  const tamanosHtml = tamanos.length
+    ? `<div class="tamanos-disponibles" style="font-size: calc(var(--tamano-fuente) + 0.5px); text-align: center;">
+        ${tamanos.map(t => `<span style="margin: 0 3px;">□ ${t}</span>`).join('')}
+      </div>`
+    : '';
+
+  // Aplicar estilos dinámicos
+  document.documentElement.style.setProperty('--ancho-etiqueta', `${config.ancho}cm`);
+  document.documentElement.style.setProperty('--alto-etiqueta', `${config.alto}cm`);
+  document.documentElement.style.setProperty('--tamano-fuente', `${config.fuente}px`);
+  document.documentElement.style.setProperty('--ancho-logo', `${config.anchoLogo}px`);
+  document.documentElement.style.setProperty('--tamano-qr', `${config.qrSize}px`);
+
+  const contenedor = document.querySelector('.hoja');
+  contenedor.innerHTML = '';
+
+  // Calcular columnas y filas
+  const columnas = Math.floor(anchoHojaUsable / config.ancho);
+  const filas = Math.floor((tamanoHoja.alto - 1.0) / config.alto);
+  const totalEtiquetas = columnas * filas;
+
+  contenedor.style.gridTemplateColumns = `repeat(${columnas}, ${config.ancho}cm)`;
+
+  for (let i = 0; i < totalEtiquetas; i++) {
+    const etiqueta = document.createElement('div');
+    etiqueta.className = 'etiqueta';
+    etiqueta.innerHTML = `
+      <div style="text-align: center; font-size: calc(var(--tamano-fuente) + 0.5px); line-height: 1.4;">
+        ${config.mensaje.replace(/\n/g, '<br>')}
+      </div>
+      <div>
+        <div class="logo-qr">
+          <img src="${config.logo}" alt="Logo" class="logo">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=${config.qrSize}x${config.qrSize}&data=${config.qrData}" 
+               alt="QR" class="qr">
+        </div>
+        ${tamanosHtml}
+      </div>
+    `;
+    contenedor.appendChild(etiqueta);
+  }
+
+  // Ajustar tamaño de página
+  actualizarHoja();
+}
+
+function toggleConfig() {
+  const modal = document.querySelector('.config-modal');
+  modal.classList.toggle('hidden');
+  localStorage.setItem('configVisible', !modal.classList.contains('hidden'));
+}
+
+window.addEventListener('load', () => {
+  const visible = localStorage.getItem('configVisible') !== 'false';
+  document.querySelector('.config-modal').classList.toggle('hidden', !visible);
+  actualizarHoja();
+  generarEtiquetas();
+});
+
+window.addEventListener('beforeprint', () => {
+  document.querySelector('.config-modal').classList.add('hidden');
+});
+
+window.addEventListener('afterprint', () => {
+  document.querySelector('.config-modal').classList.remove('hidden');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+    toggleConfig();
+    e.preventDefault();
+  }
+});
+</script>
+
+</body>
+</html>

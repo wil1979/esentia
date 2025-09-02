@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ <div class="logo-container">
+      <img src="images/logodistribuidor.png" alt="Logo de Esentia" class="logo" />
+    </div>
+      <style>
+    :root {
+      --verde: #4CAF50;
+      --naranja: #FF9800;
+      --gris: #ccc;
+      --fondo: #f9f9f9;
+      --texto: #333;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+    }
+
+    header {
+      background: var(--verde);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    main {
+      padding: 1rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .producto {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .producto img {
+      width: 189px; /* ~5 cm */
+      height: 189px; /* ~5 cm */
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+    }
+
+    .btn-verde {
+      background: var(--verde);
+    }
+
+    .btn-naranja {
+      background: var(--naranja);
+    }
+
+    .boton-carrito {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--naranja);
+      color: white;
+      border: none;
+      padding: 1rem 1.2rem;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .modal-carrito {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+    }
+
+    .modal-contenido {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      position: relative;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .btn-regresar {
+  position: fixed;
+  bottom: 120px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  z-index: 9999;
+  transition: background 0.3s;
+}
+
+.btn-regresar:hover {
+  background: #388e3c;
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Catálogo de Productos de Limpieza</h1>
+  </header>
+
+  <main>
+    <input type="text" id="buscador" placeholder="🔍 Buscar producto..." oninput="filtrarProductos()" />
+
+    <div id="productos-limpieza"></div>
+  </main>
+
+  <!-- Botón flotante del carrito -->
+  <button class="boton-carrito" onclick="abrirModalCarrito()">🛒<span id="contadorCarrito">0</span></button>
+
+  <!-- Modal Aroma -->
+  <div id="modalAroma" class="modal-carrito" style="display:none;">
+    <div class="modal-contenido">
+      <span onclick="cerrarModalAroma()" style="position: absolute; top: 10px; right: 15px; font-size: 24px;">&times;</span>
+      <h3>Selecciona un aroma</h3>
+      <div id="selectorAromas"></div>
+      <button onclick="confirmarAroma()" class="btn-naranja" style="width:100%">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <!-- Modal Carrito -->
+  <div id="modalCarrito" class="modal-carrito">
+    <div class="modal-contenido">
+      <span onclick="cerrarModalCarrito()" style="position: absolute; top: 10px; right: 15px; font-size: 24px;">&times;</span>
+      <h2>🛒 Tu Carrito</h2>
+      <ul id="listaCarritoModal"></ul>
+      <p id="totalModal"><strong>Total:</strong> ₡0</p>
+      <button onclick="finalizarPedido()" class="btn-verde" style="width:100%">Enviar Pedido</button>
+      <button onclick="vaciarCarrito()" class="btn-naranja" style="width:100%; margin-top:1rem;">🗑️ Vaciar carrito</button>
+    </div>
+  </div>
+
+  <script>
+    let carrito = [];
+    let productoSeleccionado = null;    
+    let modoAdmin = false;
+    let todosLosProductos = [];
+    let carritoPedido = [];
+
+function iniciarSesionAdmin() {
+  const usuario = document.getElementById("usuarioAdmin").value;
+  const clave = document.getElementById("claveAdmin").value;
+  const mensaje = document.getElementById("mensajeLogin");
+
+  if (usuario === "admin" && clave === "esentia2025") {
+    modoAdmin = true;
+    mensaje.textContent = "Sesión iniciada correctamente.";
+    mensaje.style.color = "green";
+    document.getElementById("btnAbrirPedido").disabled = false;
+  } else {
+    mensaje.textContent = "Credenciales incorrectas.";
+    mensaje.style.color = "red";
+  }
+}
+
+function abrirModalPedido() {
+  fetch('../productos_limpieza_completo.json')
+      .then(response => response.json())
+  .then(data => {
+      todosLosProductos = productos;
+      renderizarProductosAdmin(productos);
+      document.getElementById("modalPedido").style.display = "flex";
+    });
+}
+
+function cerrarModalPedido() {
+  document.getElementById("modalPedido").style.display = "none";
+}
+
+function filtrarProductosAdmin() {
+  const texto = document.getElementById("buscadorAdmin").value.toLowerCase();
+  const filtrados = todosLosProductos.filter(p => p.nombre.toLowerCase().includes(texto));
+  renderizarProductosAdmin(filtrados);
+}
+
+function renderizarProductosAdmin(productos) {
+  const contenedor = document.getElementById("listaProductosAdmin");
+  contenedor.innerHTML = "";
+
+  productos.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "producto";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = p.nombre;
+
+    const pPrecio = document.createElement("p");
+    pPrecio.textContent = `Costo Interno: ₡${p.precioCompra}`;
+
+    // Campo cantidad
+    const inputCantidad = document.createElement("input");
+    inputCantidad.type = "number";
+    inputCantidad.min = "0";
+    inputCantidad.placeholder = "Unidades";
+    inputCantidad.dataset.nombre = p.nombre;
+    inputCantidad.dataset.aromas = JSON.stringify(p.aromas || []);
+    inputCantidad.onchange = () => actualizarCarritoPedido(inputCantidad, p);
+
+    // Selector de aromas
+    const selectorAromas = document.createElement("div");
+    selectorAromas.id = `aromas-${p.nombre.replace(/\s+/g, "_")}`;
+    selectorAromas.style.marginLeft = "1rem";
+
+    if (p.aromas?.length > 0) {
+      p.aromas.forEach(aroma => {
+        const label = document.createElement("label");
+        label.innerHTML = `
+          <input type="checkbox" name="aroma-${p.nombre}" value="${aroma}">${aroma}
+        `;
+        label.style.marginRight = "1rem";
+        selectorAromas.appendChild(label);
+      });
+    }
+
+    div.appendChild(h3);
+    div.appendChild(pPrecio);
+    div.appendChild(inputCantidad);
+    if (p.aromas?.length > 0) div.appendChild(selectorAromas);
+
+    contenedor.appendChild(div);
+  });
+}
+
+function actualizarCarritoPedido(input, producto) {
+  const cantidad = parseInt(input.value);
+  const nombre = input.dataset.nombre;
+  const aromas = JSON.parse(input.dataset.aromas);
+  const selector = document.querySelector(`input[name='aroma-${nombre}]`);
+  let aromasSeleccionados = [];
+
+  if (aromas.length > 0) {
+    aromasSeleccionados = Array.from(document.querySelectorAll(`input[name='aroma-${nombre}']:checked`))
+                              .map(el => el.value);
+  }
+
+  // Actualizar carrito
+  const index = carritoPedido.findIndex(p => p.nombre === nombre);
+  if (index > -1) {
+    carritoPedido.splice(index, 1); // Eliminar si ya existe
+  }
+
+  if (cantidad > 0) {
+    carritoPedido.push({
+      nombre,
+      cantidad,
+      aromas: aromasSeleccionados
+    });
+  }
+}
+
+// Generar PDF
+async function generarPDFPedido() {
+  if (!carritoPedido.length) {
+    alert("El carrito está vacío.");
+    return;
+  }
+
+  let html = `
+    <h1 style="text-align:center;">Pedido al Proveedor</h1>
+    <table width="100%" border="1" cellspacing="0" cellpadding="10">
+      <thead><tr><th>Producto</th><th>Cantidad</th><th>Aromas</th></tr></thead>
+      <tbody>
+  `;
+
+  let totalUnidades = 0;
+
+  carritoPedido.forEach(pedido => {
+    const { nombre, cantidad, aromas } = pedido;
+    html += `<tr>
+      <td>${nombre}</td>
+      <td>${cantidad}</td>
+      <td>${aromas.length ? aromas.join(", ") : "N/A"}</td>
+    </tr>`;
+    totalUnidades += cantidad;
+  });
+
+  html += `</tbody></table><p><strong>Total de unidades:</strong> ${totalUnidades}</p>`;
+
+  // Crear contenedor temporal
+  const container = document.createElement("div");
+  container.innerHTML = html;
+  container.style.position = "absolute";
+  container.style.left = "-9999px";
+  document.body.appendChild(container);
+
+  const canvas = await html2canvas(container);
+  document.body.removeChild(container);
+
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jspdf.jsPDF();
+  const imgProps = pdf.getImageProperties(imgData);
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  pdf.save("pedido_proveedor.pdf");
+}
+
+    async function cargarProductos() {
+      try {
+        const res = await fetch("../productos_limpieza_completo.json");
+        const productos = await res.json();
+        renderizarProductos(productos.filter(p => p.disponible));
+      } catch (error) {
+        console.error("Error cargando productos:", error);
+        document.getElementById("productos-limpieza").innerHTML = "<p>Error al cargar productos.</p>";
+      }
+    }
+
+    function filtrarProductos() {
+      const texto = document.getElementById("buscador").value.toLowerCase();
+      const contenedor = document.getElementById("productos-limpieza");
+      contenedor.innerHTML = "";
+      fetch('../productos_limpieza_completo.json')
+  .then(response => response.json())
+  .then(data => {
+          const disponibles = productos.filter(p => p.disponible && p.nombre.toLowerCase().includes(texto));
+          renderizarProductos(disponibles);
+        });
+    }
+
+    function nombreToImagen(nombre) {
+      // Limpia el nombre para usar como nombre de archivo
+      return "images/limpieza/" + nombre.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, "_") + ".png";
+    }
+
+    function renderizarProductos(productos) {
+      const contenedor = document.getElementById("productos-limpieza");
+      contenedor.innerHTML = "";
+      productos.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "producto";
+
+        const img = document.createElement("img");
+img.src = p.imagen || "images/defaul.png "; // Usa la imagen del producto o un placeholder
+img.alt = p.nombre;
+img.onerror = () => { img.src = "https://placehold.co/189x189 "; }; // fallback
+
+        const h3 = document.createElement("h3");
+        h3.textContent = p.nombre;
+
+        const pPrecio = document.createElement("p");
+        pPrecio.textContent = `₡${p.precioPublico}`;
+
+        const btn = document.createElement("button");
+        btn.textContent = "Agregar al carrito";
+        btn.className = "btn-verde";
+        btn.onclick = () => verificarAroma(p);
+
+        div.appendChild(img);
+        div.appendChild(h3);
+        div.appendChild(pPrecio);
+        div.appendChild(btn);
+
+        contenedor.appendChild(div);
+      });
+    }
+
+    function verificarAroma(producto) {
+      productoSeleccionado = producto;
+      const selector = document.getElementById("selectorAromas");
+      selector.innerHTML = "";
+      if (producto.aromas?.length > 0) {
+        producto.aromas.forEach(aroma => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="radio" name="aroma" value="${aroma}"> ${aroma}<br>`;
+          selector.appendChild(label);
+        });
+        document.getElementById("modalAroma").style.display = "flex";
+      } else {
+        agregarAlCarrito(producto.nombre, producto.precioPublico);
+      }
+    }
+
+    function confirmarAroma() {
+      const aroma = document.querySelector("input[name='aroma']:checked")?.value;
+      if (!aroma) return alert("Selecciona un aroma");
+      agregarAlCarrito(`${productoSeleccionado.nombre} (${aroma})`, productoSeleccionado.precioPublico);
+      document.getElementById("modalAroma").style.display = "none";
+    }
+
+    function cerrarModalAroma() {
+      document.getElementById("modalAroma").style.display = "none";
+    }
+
+    function agregarAlCarrito(nombre, precio) {
+      const item = carrito.find(i => i.nombre === nombre);
+      if (item) {
+        item.cantidad += 1;
+      } else {
+        carrito.push({ nombre, precio, cantidad: 1 });
+      }
+      renderCarrito();
+    }
+
+    function renderCarrito() {
+      const lista = document.getElementById("listaCarritoModal");
+      const totalEl = document.getElementById("totalModal");
+      lista.innerHTML = "";
+
+      let total = 0;
+
+      carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        const li = document.createElement("li");
+        li.innerHTML = `${item.nombre} x${item.cantidad} - ₡${subtotal.toLocaleString()}`;
+        lista.appendChild(li);
+      });
+
+      totalEl.textContent = `Total: ₡${Math.round(total).toLocaleString()}`;
+      document.getElementById("contadorCarrito").textContent = carrito.reduce((s, i) => s + i.cantidad, 0);
+    }
+
+    function abrirModalCarrito() {
+      renderCarrito();
+      document.getElementById("modalCarrito").style.display = "flex";
+    }
+
+    function cerrarModalCarrito() {
+      document.getElementById("modalCarrito").style.display = "none";
+    }
+
+    function vaciarCarrito() {
+      if (confirm("¿Estás seguro de querer vaciar el carrito?")) {
+        carrito = [];
+        renderCarrito();
+      }
+    }
+
+    function finalizarPedido() {
+      if (!carrito.length) return alert("El carrito está vacío");
+
+      let mensaje = "Hola 👋%0AQuiero hacer el siguiente pedido:%0A%0A";
+      let total = 0;
+
+      carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        mensaje += `${item.nombre} x${item.cantidad} - ₡${subtotal.toLocaleString()}%0A`;
+        total += subtotal;
+      });
+
+      mensaje += `%0A%0ATotal: ₡${Math.round(total).toLocaleString()}%0A%0AGracias por tu compra 🌿`;
+
+      window.open(`https://wa.me/50672952454?text=${mensaje}`, "_blank");
+    }
+
+    // Iniciar app
+    window.addEventListener("DOMContentLoaded", cargarProductos);
+  </script>
+
+
+<!-- Botón para generar PDF 
+<button onclick="generarPDF()" style="margin-top: 20px; padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer;">📄 Exportar a PDF</button>
+-->
+<!-- Scripts para generar PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
+
+<script>
+async function generarPDF() {
+  const productos = await fetch('../productos_limpieza_completo.json').then(res => res.json());
+  const disponibles = productos.filter(p => p.disponible);
+
+  let html = `
+    <h1 style="text-align:center;">Catálogo Limpieza - Esentia</h1>
+    <table width="100%" border="1" cellspacing="0" cellpadding="10">
+      <thead><tr><th>Producto</th><th>Precio</th><th>Aromas</th></tr></thead>
+      <tbody>
+  `;
+
+  disponibles.forEach(p => {
+    html += `<tr>
+      <td>${p.nombre}</td>
+      <td>₡${p.precioPublico}</td>
+      <td>${p.aromas?.join(", ") || "N/A"}</td>
+    </tr>`;
+  });
+
+  html += "</tbody></table>";
+
+  // Crear contenedor temporal
+  const container = document.createElement("div");
+  container.innerHTML = html;
+  container.style.position = "absolute";
+  container.style.left = "-9999px";
+  document.body.appendChild(container);
+
+  const canvas = await html2canvas(container);
+  document.body.removeChild(container);
+
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jspdf.jsPDF();
+  const imgProps = pdf.getImageProperties(imgData);
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  pdf.save("Catalogo_Limpieza.pdf");
+}
+</script>
+
+<!-- Botón para modo administrador 
+<div class="modo-admin" style="text-align:center; margin-top: 1rem;">
+  <h3>Acceso Administrador</h3>
+  <input type="text" id="usuarioAdmin" placeholder="Usuario"><br><br>
+  <input type="password" id="claveAdmin" placeholder="Contraseña"><br><br>
+  <button onclick="iniciarSesionAdmin()">Ingresar</button>
+  <p id="mensajeLogin" style="color: red;"></p>
+  <button onclick="abrirModalPedido()" disabled id="btnAbrirPedido">📄 Nuevo Pedido Proveedor</button>
+</div>
+-->
+<!-- Modal de Pedido Proveedor 
+<div id="modalPedido" class="modal-carrito" style="display:none;">
+  <div class="modal-contenido">
+    <span onclick="cerrarModalPedido()" style="position: absolute; top: 10px; right: 15px; font-size: 24px;">&times;</span>
+    <h2>📦 Nuevo Pedido al Proveedor</h2>
+    <input type="text" id="buscadorAdmin" oninput="filtrarProductosAdmin()" placeholder="🔍 Buscar producto..." style="width:100%; padding: 10px; margin-bottom: 1rem;" />
+    
+    <div id="listaProductosAdmin"></div>
+    
+    <button onclick="generarPDFPedido()" class="btn-verde" style="width:100%; margin-top:1rem;">📄 Generar PDF</button>
+  </div>
+</div>
+-->
+<a href="https://wil1979.github.io/esentia-factura/catalogo.html" class="btn-regresar" title="Volver al inicio">🏠</a>
+</body>
+</html>

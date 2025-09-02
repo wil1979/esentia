@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Etiqueta Aceite de Masaje</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 1px;
+      background: #f0f0f0;
+      display: flex;
+      gap: 0.5px;
+    }
+
+    .formulario {
+      flex: 1;
+      background: white;
+      padding: 2px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      max-width: 400px;
+      height: fit-content;
+    }
+
+    .formulario input,
+    .formulario textarea,
+    .formulario select,
+    .formulario button {
+      width: 100%;
+      margin-bottom: 2px;
+      padding: 2x 2px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .etiqueta-container {
+      flex: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      background: white;
+      padding: 2px;
+      margin: 0;
+    }
+
+    .etiqueta {
+      display: flex;
+      flex-direction: row;
+      width: var(--etiqueta-width, 10cm);
+      height: var(--etiqueta-height, 6.8cm);
+      background: var(--bg-color, #f3f3f0);
+      border: 1px solid #e6e4e4;
+      box-sizing: border-box;
+      font-size: var(--font-size, 7.4px);
+      overflow: hidden;
+      color: #000;
+    }
+
+    .lateral {
+      width: 35%;
+      padding: 1%;
+      box-sizing: border-box;
+      text-align: right;
+      font-size: var(--font-size, 7.4px);
+    }
+
+    .central {
+      width: 30%;
+      text-align: center;
+      padding: 5px;
+      box-sizing: border-box;
+      font-size: var(--font-size, 18px);
+    }
+    .central .adicional {
+  font-size: 8px;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+      .logo {
+      width: var(--logo-width, 139%);
+      margin-bottom: 0px;
+      }
+
+
+    .nombre-producto {
+      font-size: 6px;
+      font-weight: bold;
+      margin: 4px;
+    }
+
+     .producto {
+      height: var(--img-height, 145px);
+      width: var(--img-width, auto);
+      margin-top: 0;
+    }
+
+    /* Estilos de impresión */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      .etiqueta-container, .etiqueta-container * {
+        visibility: visible;
+      }
+
+      .etiqueta-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 21cm;
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+
+      .formulario {
+        display: none;
+      }
+
+      @page {
+        size: auto;
+        margin: 0;
+      }
+
+      /* Forzar impresión de fondos */
+      .etiqueta {
+        -webkit-print-color-adjust: exact; /* Chrome, Safari */
+        color-adjust: exact;               /* Firefox */
+        background-color: var(--bg-color, #f6f7f4) !important;
+        background: var(--bg-color, #f6f7f4) !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="formulario">
+    <h3>Crear etiquetas</h3>
+
+    <label>Selecciona productos (separados por comas):</label>
+    <input id="productos" value="kiwi" oninput="generarEtiquetas()">
+
+    <label>Cantidad por producto:</label>
+    <input id="cantidadPorProducto" type="number" min="1" value="8" oninput="generarEtiquetas()">
+
+    <label>Texto central:</label>
+    <textarea id="textoCentral" oninput="generarEtiquetas()"><b>Controlador de Olores</b></textarea>
+
+    <label>Texto adicional:</label>
+<textarea id="textoAdicional" rows="3" oninput="generarEtiquetas()">
+* Elimina malos olores  * Biodegradable  * Fragancia que perdura  * No daña superficies
+</textarea>
+
+
+    <label>Información izquierda:</label>
+    <textarea id="infoIzquierda" rows="4" oninput="generarEtiquetas()"><b>Controlador de Olores</b>
+                        Aromatizante ambiental, biodegradable que elimina los malos olores y perdura la fragancia. INGREDIENTES: Agua,
+Propilenglicol (0.1-1.0%), Nonil fenol (0.1-1.0%), fragancia y colorante. <b>MODO DE USO:</b> Rociar en el ambiente con spray.
+Para obtener mayor resultado aplicar 1/2 onza de producto en las esquinas del lugar a tratar. Puede ser utilizado para limpieza de pisos, baños o cualquier superficie que desee limpiar y aromatizar. RIESGOS PARA LA SALUD: El contacto con los ojos causa irritación. El contacto prolongado con la piel puede causar irritación en personas sensibles. En caso de contacto con los ojos enjuagar con abundante agua. Si hay ingestión no induzca el vómito. En caso de intoxicación consulte al médico y presente esta etiqueta, llamar al centro nacional de intoxicaciones 2223-1028. <b>Mantenga
+fuera del alcance de los niños.</b></textarea>
+
+
+
+ <label>Recomendaciones:</label>
+ <textarea id="recomendaciones" rows="6" oninput="generarEtiquetas()">https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=https://wil1979.github.io/esentia-factura/catalogo.html</textarea>
+
+    <hr>
+
+   <hr>
+    
+    <label>Color de fondo:</label>
+    <input type="color" id="bgColor" value="#f0f0f0" onchange="actualizarEstilos()">
+
+    <label>Ancho etiqueta (cm):</label>
+    <input type="number" id="anchoCm" value="10" step="0.1" onchange="actualizarEstilos()">
+
+    <label>Alto etiqueta (cm):</label>
+    <input type="number" id="altoCm" value="6.8" step="0.1" onchange="actualizarEstilos()">
+
+    <label>Tamaño de fuente (px):</label>
+    <input type="number" id="fontSize" value="7.4" onchange="actualizarEstilos()">
+
+    <label>Ancho logo (%):</label>
+    <input type="number" id="logoWidth" value="139" min="1" max="300" onchange="actualizarEstilos()">
+
+    <label>Altura imagen (px):</label>
+    <input type="number" id="imgHeight" value="86" onchange="actualizarEstilos()">
+
+    <label>Ancho imagen (px):</label>
+    <input type="text" id="imgWidth" value="auto" onchange="actualizarEstilos()" placeholder="Ej: 100px, 50% o auto">
+
+    <button onclick="generarEtiquetas()">Generar Etiquetas</button>
+    <button onclick="window.print()">Imprimir etiquetas</button>
+  </div>
+
+  <div class="etiqueta-container" id="etiquetas"></div>
+
+  <script>
+    function actualizarEstilos() {
+      document.documentElement.style.setProperty('--bg-color', document.getElementById('bgColor').value);
+      document.documentElement.style.setProperty('--etiqueta-width', document.getElementById('anchoCm').value + 'cm');
+      document.documentElement.style.setProperty('--etiqueta-height', document.getElementById('altoCm').value + 'cm');
+      document.documentElement.style.setProperty('--font-size', document.getElementById('fontSize').value + 'px');
+      document.documentElement.style.setProperty('--logo-width', document.getElementById('logoWidth').value + '%');
+      document.documentElement.style.setProperty('--img-height', document.getElementById('imgHeight').value + 'px');
+      document.documentElement.style.setProperty('--img-width', document.getElementById('imgWidth').value);
+    }
+    function isURL(str) {
+    return /^(https?:\/\/)/.test(str);
+  }
+
+    function generarEtiquetas() {
+      // Obtener valores de los inputs
+      const anchoCm = parseFloat(document.getElementById('anchoCm').value) || 8;
+      const altoCm = parseFloat(document.getElementById('altoCm').value) || 4;
+      const anchoPx = anchoCm * 37.8;
+      const altoPx = altoCm * 37.8;
+      const productos = document.getElementById("productos").value.split(',').map(p => p.trim());
+      const cantidadPorProducto = parseInt(document.getElementById("cantidadPorProducto").value) || 1;
+      const textoCentral = document.getElementById("textoCentral").value.trim();
+      const textoAdicional = document.getElementById("textoAdicional").value.trim();
+      const infoIzquierda = document.getElementById("infoIzquierda").value.trim();
+      const recomendaciones = document.getElementById("recomendaciones").value.trim();
+
+      
+
+      const contenedor = document.getElementById("etiquetas");
+      contenedor.innerHTML = "";
+
+      productos.forEach(producto => {
+        for (let i = 0; i < cantidadPorProducto; i++) {
+          const etiqueta = document.createElement("div");
+          etiqueta.className = "etiqueta";
+          etiqueta.style.width = anchoPx + "px";
+          etiqueta.style.height = altoPx + "px";
+
+          etiqueta.innerHTML = `
+      <div class="lateral"><div>${infoIzquierda}</div></div>
+      <div class="central">
+        <img class="logo" src="images/logo.png" alt="Logo">
+        <div class="nombre-producto">${producto}</div>
+        <div>${textoCentral}</div>
+        <div class="adicional">${textoAdicional}</div>
+       
+      </div>
+      <div class="lateral">
+        <div>
+          
+          ${isURL(recomendaciones) 
+          
+            ? `<img src="${recomendaciones}" alt="Código QR" 
+                 style="max-width: 100%; height: auto; display: block; margin: 0 auto;">` 
+            : recomendaciones}
+
+             <img class="producto" src="etiqueta/${producto}.png" alt="${producto}">
+        </div>
+      </div>
+    `;
+          contenedor.appendChild(etiqueta);
+        }
+      });
+    }
+
+    // Inicial
+    window.onload = () => {
+      generarEtiquetas();
+    };
+  </script>
+</body>
+</html>

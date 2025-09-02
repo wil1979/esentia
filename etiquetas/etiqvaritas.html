@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Etiquetas Esentia</title>
+  <style>
+    :root {
+      --ancho-etiqueta: 2cm;
+      --alto-etiqueta: 4cm;
+      --tamano-fuente: 8px;
+      --ancho-logo: 65px;
+      --tamano-qr: 45px;
+      --page-size: letter;
+      --border-radius: 2;
+    }
+
+    @page {
+      size: var(--page-size);
+      margin: 0.5cm;
+    }
+
+    body {
+      margin: 0;
+      padding: 4;
+      font-family: 'Open Sans', sans-serif;
+      background: #fff;
+    }
+
+    .hoja {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      gap: 2mm;
+      box-sizing: border-box;
+      padding: 1.5cm;
+    }
+
+    .etiqueta {
+      box-sizing: border-box;
+      padding: 2ch;
+      border: 0.5px solid #f7f4f4;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      width: var(--ancho-etiqueta);
+      height: var(--alto-etiqueta);
+      font-size: var(--tamano-fuente);
+      border-radius: var(--border-radius, 2);
+      background: rgb(244, 231, 245);
+      text-align: center;
+    }
+
+    .logo {
+      width: var(--ancho-logo);
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .precio {
+      font-weight: bold;
+      margin-top: 1px;
+      font-size: calc(var(--tamano-fuente) + 0.5px);
+    }
+
+    .config-modal {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      width: 320px;
+      transition: all 0.3s ease;
+    }
+
+    .config-modal.hidden {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+
+    .config-group {
+      margin-bottom: 12px;
+    }
+
+    .config-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .config-group input,
+    .config-group select {
+      width: 100%;
+      padding: 5px;
+      font-size: 12px;
+    }
+    
+    @media print {
+  .hoja {
+    gap: 5mm;
+    padding: 1.5cm;
+  }
+  .etiqueta {
+    break-inside: avoid; /* Evita que se corte una etiqueta en página */
+  }
+}
+   
+  </style>
+</head>
+<body>
+
+<div class="config-modal">
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <h3>Configuración de Etiquetas</h3>
+    <button onclick="toggleConfig()" style="padding: 3px 8px; font-size: 12px">
+      Ocultar
+    </button>
+  </div>
+
+  <!-- Selección de tamaño de hoja -->
+  <div class="config-group">
+    <label>Tamaño de hoja:</label>
+    <select id="tamanoHoja" onchange="actualizarTamanoHoja()">
+      <option value="carta">Carta (8.5x11")</option>
+      <option value="13x19" selected>13x19 pulgadas (33x48 cm)</option>
+      <option value="a4">A4 (21x29.7 cm)</option>
+      <option value="personalizado">Personalizado</option>
+    </select>
+  </div>
+
+  <!-- Campos personalizados -->
+  <div id="camposPersonalizados" style="display: none;">
+    <div class="config-group">
+      <label>Ancho hoja (cm):</label>
+      <input type="number" id="anchoHojaCm" value="33" step="0.1" oninput="generarEtiquetas()">
+    </div>
+    <div class="config-group">
+      <label>Alto hoja (cm):</label>
+      <input type="number" id="altoHojaCm" value="48" step="0.1" oninput="generarEtiquetas()">
+    </div>
+  </div>
+
+  <!-- Forma de la etiqueta -->
+  <div class="config-group">
+    <label>Forma de la etiqueta:</label>
+    <select id="formaEtiqueta" onchange="generarEtiquetas()">
+      <option value="rectangular">Rectangular</option>
+      <option value="redonda">Redonda (círculo)</option>      
+      <option value="redondeada">Con esquinas redondeadas</option>
+      
+    </select>
+  </div>
+
+  <!-- Dimensiones de etiqueta -->
+  <div class="config-group">
+    <label>Dimensiones etiqueta (cm):</label>
+    <input type="number" id="anchoEtiqueta" step="0.1" value="2" placeholder="Ancho" oninput="generarEtiquetas()">
+    <input type="number" id="altoEtiqueta" step="0.1" value="4" placeholder="Alto" oninput="generarEtiquetas()">
+  </div>
+
+  <div class="config-group">
+    <label>Tamaño de fuente (px):</label>
+    <input type="number" id="tamanoFuente" value="7" oninput="generarEtiquetas()">
+  </div>
+
+  <div class="config-group">
+    <label>Logo (URL):</label>
+    <input type="text" id="logoUrl" value="https://wil1979.github.io/esentia-factura/images/logo.png" oninput="generarEtiquetas()">
+  </div>
+
+  <div class="config-group">
+    <label>Ancho logo (px):</label>
+    <input type="number" id="anchoLogo" value="67" oninput="generarEtiquetas()">
+  </div>
+
+  <!-- Tamaño de la imagen del producto -->
+  <div class="config-group">
+    <label>Tamaño imagen producto (%):</label>
+    <input type="range" id="tamanoImagen" min="30" max="100" value="74" oninput="this.nextElementSibling.value = this.value + '%'; generarEtiquetas()">
+    <output>80%</output>
+  </div>
+
+  <div class="config-group">
+    <label>Precio común (ej: 30ml o ₡3500):</label>
+    <input type="text" id="precioProducto" value="¤20 ml ¤30 ml ¤60 ml" oninput="generarEtiquetas()"><!-- value=30ml entre copmillas -->
+  </div>
+
+  <div class="config-group">
+    <label>Productos (separados por comas):</label>
+    <input type="text" id="listaProductos" 
+      value="lavanda,menta,pino,cipres,navidad,magnolia,manzanaverde" 
+      oninput="generarEtiquetas()">
+  </div>
+
+  <div class="config-group">
+    <label>Cantidad por producto:</label>
+    <input type="number" id="cantidadPorProducto" value="20" min="1" step="1" oninput="generarEtiquetas()">
+  </div>
+
+  <button onclick="generarEtiquetas()">Aplicar Cambios</button>
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="hoja"></div>
+
+<script>
+  const tamanosHoja = {
+    carta: { w: 21.6, h: 27.9, name: "letter" },
+    "13x19": { w: 33, h: 48, name: "330mm 480mm" },
+    a4: { w: 21, h: 29.7, name: "A4" },
+    personalizado: { w: 33, h: 48, name: "custom" }
+  };
+
+  function actualizarTamanoHoja() {
+    const tipo = document.getElementById("tamanoHoja").value;
+    const div = document.getElementById("camposPersonalizados");
+    div.style.display = tipo === "personalizado" ? "block" : "none";
+
+    const tam = tamanosHoja[tipo];
+    if (tipo === "personalizado") {
+      const w = parseFloat(document.getElementById("anchoHojaCm").value) || 33;
+      const h = parseFloat(document.getElementById("altoHojaCm").value) || 48;
+      document.documentElement.style.setProperty('--page-size', `${w}cm ${h}cm`);
+    } else {
+      document.documentElement.style.setProperty('--page-size', tam.name);
+    }
+    generarEtiquetas();
+  }
+
+  function generarEtiquetas() {
+    const tipoHoja = document.getElementById("tamanoHoja").value;
+    let anchoHojaCm;
+
+    if (tipoHoja === "personalizado") {
+      anchoHojaCm = parseFloat(document.getElementById('anchoHojaCm').value) || 33;
+    } else {
+      anchoHojaCm = tamanosHoja[tipoHoja].w;
+    }
+
+    const config = {
+      ancho: parseFloat(document.getElementById('anchoEtiqueta').value) || 2,
+      alto: parseFloat(document.getElementById('altoEtiqueta').value) || 2,
+      fuente: parseInt(document.getElementById('tamanoFuente').value) || 7,
+      logo: document.getElementById('logoUrl').value,
+      anchoLogo: parseInt(document.getElementById('anchoLogo').value) || 65,
+      precio: document.getElementById('precioProducto').value,
+      productos: document.getElementById('listaProductos').value.split(',').map(p => p.trim()).filter(p => p),
+      cantidad: parseInt(document.getElementById('cantidadPorProducto').value) || 1,
+      forma: document.getElementById('formaEtiqueta').value,
+      tamanoImagen: parseInt(document.getElementById('tamanoImagen').value) || 92 // Nuevo: tamaño imagen
+    };
+
+    // Validar forma redonda
+    if (config.forma === "redonda" && Math.abs(config.ancho - config.alto) > 0.1) {
+      alert("⚠️ Para forma redonda, se recomienda usar ancho igual a alto (ej: 2x2 cm).");
+    }
+
+    // Aplicar estilos CSS
+    document.documentElement.style.setProperty('--ancho-etiqueta', `${config.ancho}cm`);
+    document.documentElement.style.setProperty('--alto-etiqueta', `${config.alto}cm`);
+    document.documentElement.style.setProperty('--tamano-fuente', `${config.fuente}px`);
+    document.documentElement.style.setProperty('--ancho-logo', `${config.anchoLogo}px`);
+    document.documentElement.style.setProperty('--border-radius',
+      config.forma === "redonda" ? "50%" :
+      config.forma === "redondeada" ? "10px" : "0");
+
+    const contenedor = document.querySelector('.hoja');
+    contenedor.innerHTML = '';
+
+    // Ajustar tamaño si es redonda
+    const gridWidth = config.forma === "redonda" ? Math.min(config.ancho, config.alto) : config.ancho;
+    const columnas = Math.floor(anchoHojaCm / gridWidth);
+    contenedor.style.gridTemplateColumns = `repeat(${columnas}, ${gridWidth}cm)`;
+
+    config.productos.forEach(nombre => {
+      for (let i = 0; i < config.cantidad; i++) {
+        const etiqueta = document.createElement('div');
+        etiqueta.className = 'etiqueta';
+
+        const nombreLimpio = nombre
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/\s+/g, '');
+
+        const imagenSrc = `https://wil1979.github.io/esentia-factura/etiqueta/${nombreLimpio}.png`;
+
+        // Estilo de imagen con tamaño ajustable
+        const imagenStyle = config.forma === "redonda"
+          ? `max-width: ${config.tamanoImagen}%; max-height: ${config.tamanoImagen}%; object-fit: contain; border-radius: 50%;`
+          : `max-width: ${config.tamanoImagen}%; max-height: 1.5cm; object-fit: contain;`;
+
+        etiqueta.innerHTML = `
+          <div style="text-align: center;">
+            <img src="${config.logo}" class="logo" alt="Logo">
+          </div>
+          <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+            <img src="${imagenSrc}" alt="${nombre}" style="${imagenStyle}">
+          </div>
+          <div class="precio">${config.precio}</div>
+        `;
+
+        // Si es redonda, forzar tamaño cuadrado
+        if (config.forma === "redonda") {
+          etiqueta.style.width = etiqueta.style.height = `${Math.min(config.ancho, config.alto)}cm`;
+        }
+
+        contenedor.appendChild(etiqueta);
+      }
+    });
+  }
+
+  function toggleConfig() {
+    const modal = document.querySelector('.config-modal');
+    modal.classList.toggle('hidden');
+    localStorage.setItem('configVisible', !modal.classList.contains('hidden'));
+  }
+
+  window.addEventListener('load', () => {
+    actualizarTamanoHoja();
+    generarEtiquetas();
+  });
+
+  window.addEventListener('beforeprint', () => {
+    document.querySelector('.config-modal').classList.add('hidden');
+  });
+
+  window.addEventListener('afterprint', () => {
+    document.querySelector('.config-modal').classList.remove('hidden');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+      toggleConfig();
+      e.preventDefault();
+    }
+  });
+</script>
+</body>
+</html>

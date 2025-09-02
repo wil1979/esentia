@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <!-- Manifest -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#4caf50" />
+<link rel="icon" href="images/logo.png" sizes="192x192" />
+
+<!-- Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker registrado'))
+      .catch(err => console.error('Error al registrar Service Worker:', err));
+  }
+</script>
+
+  <meta charset="UTF-8" />
+  <title>Esentia - Facturación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="catalogo.css" />
+  
+  <!-- Select2 (opcional) -->
+  <link href="https://cdn.jsdelivr.net/npm/select2 @4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  
+  <!-- jsPDF para generar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js "></script>
+  
+  <!-- jQuery (requerido por Select2) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js "></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2 @4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body class="modo-claro">
+
+  <header>
+    <div class="logo-container">
+      <img src="images/logo.png" alt="Logo de Esentia" class="logo" />
+    </div>
+    <h1>🧾 Sistema de Facturación - Esentia</h1>
+  </header>
+
+  <main class="container">
+    <form id="facturaForm">
+      <label for="idCliente">Cédula Cliente (9 o 12 dígitos):</label>
+      <input type="text" id="idCliente" placeholder="Ej: 102030405" />
+
+      <label for="cliente">Nombre del Cliente:</label>
+      <input type="text" id="cliente" placeholder="Nombre completo" required />
+
+      <label for="factura">Número de Factura:</label>
+      <input type="text" id="factura" readonly />
+
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" value="2025-04-05" readonly />
+   
+      <hr>
+<h3>🧼 Agregar Productos de Aromatizantes</h3>
+      <label for="productoSelect">Buscar Producto:</label>
+      <select id="productoSelect" style="width: 100%;"></select>
+
+      <label for="cantidadSelect">Cantidad:</label>
+      <input type="number" id="cantidadSelect" value="1" min="1" style="width: 60px;" />
+
+      <button type="button" onclick="agregarProducto()">➕ Agregar al carrito</button>
+
+      <ul id="listaProductos" style="margin-top: 1rem;"></ul>
+
+<hr/>
+
+
+      <hr>
+<h3>🧼 Agregar Productos de Limpieza</h3>
+
+<label for="productoLimpiezaSelect">Buscar Producto de Limpieza:</label>
+<select id="productoLimpiezaSelect" style="width: 100%;"></select>
+
+<label for="cantidadLimpieza">Cantidad:</label>
+<input type="number" id="cantidadLimpieza" value="1" min="1" style="width: 60px;" />
+
+<button type="button" onclick="agregarProductoLimpieza()">➕ Agregar producto de limpieza</button>
+
+
+      <label for="descuentoCantidad">Descuento fijo (₡):</label>
+      <input type="number" id="descuentoCantidad" value="0" min="0" />
+
+      <label for="descuentoPorcentaje">Descuento (%)</label>
+      <input type="number" id="descuentoPorcentaje" value="0" min="0" max="100" />
+
+      <label for="numeroWhatsApp">Enviar por WhatsApp (8 dígitos):</label>
+      <input type="tel" id="numeroWhatsApp" placeholder="88889999" />
+
+      <p id="totalDisplay" style="font-weight: bold; margin-top: 1rem;"></p>
+
+      <button type="button" onclick="generarFacturaPDF()">📄 Generar PDF</button>
+      <button type="button" onclick="enviarFacturaPorWhatsApp()">📲 Enviar por WhatsApp</button>
+
+    </form>
+
+    <hr />
+
+    <h3>📁 Historial de Facturas</h3>
+    <button type="button" onclick="mostrarHistorial()">Mostrar</button>
+    <button type="button" onclick="borrarHistorial()">🗑️ Borrar</button>
+    <div id="historial" style="margin-top: 1rem;"></div>
+  </main>
+
+  <footer style="text-align: center; font-size: 0.9rem; color: #888; margin-top: 2rem;">
+
+    
+    &copy; 2025 Esentia - Desarrollado por Wilber Calderón M.
+  </footer>
+  <a href="https://wil1979.github.io/esentia-factura/" class="btn-regresar" title="Volver al inicio">🏠</a>
+
+  <script src="catalogo.js"></script>
+  <script src="factura.js"></script>
+</body>
+</html>

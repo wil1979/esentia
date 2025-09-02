@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Etiquetas Profesional</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-color: #F4F4F5;
+      --font-size: 10px;
+      --img-height: 70px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2ch;
+      background: #f0f0f0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .formulario {
+      flex: 1;
+      background: white;
+      padding: 2px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 400px;
+      height: fit-content;
+      position: sticky;
+      top: 10px;
+    }
+
+    .formulario input, 
+    .formulario textarea, 
+    .formulario select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 2px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .formulario button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: 5px 0;
+    }
+
+    .formulario button:hover {
+      background: #45a049;
+    }
+
+    .etiqueta-container {
+      flex: 3;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9cm, 1fr));
+      gap: 2mm;
+      padding: 2mm;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .etiqueta {
+      display: flex;
+      background: var(--bg-color);
+      border: 1px solid #ccc;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: var(--font-size);
+      break-inside: avoid;
+      page-break-inside: avoid;
+      background: linear-gradient(90deg, var(--color-inicio), var(--color-fin));
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+}
+.etiqueta::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.05) 100%);
+}
+    
+
+    .lateral {
+      width: 33%;
+      padding: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(2px);
+
+    }
+
+    .central {
+      width: 34%;
+      padding: 1px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .central img.logo {
+      width: 90%;
+      margin-bottom: 5px;
+    }
+
+    .central img.producto {
+      width: 70%;
+      height: var(--img-height);
+      object-fit: contain;
+      margin: 5px 0;
+    }
+
+    .nombre-producto {
+      font-weight: bold;
+      margin: 5px 0;
+      font-size: 1.2em;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      
+      .formulario {
+        display: none;
+      }
+
+      .etiqueta-container {
+        grid-template-columns: repeat(3, 11);
+        gap: 0;
+        padding: 0;
+      }
+
+      .etiqueta {
+        border: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="formulario">
+    <h3>Configuración de Etiquetas</h3>
+
+    <div class="form-group">
+      <label>Nombre del producto:</label>
+      <input id="nombreProducto" value="Aceite para Masajes">
+    </div>
+
+    <div class="form-group">
+      <label>Nombre imagen (sin extensión):</label>
+      <input id="nombreImagen" value="lavanda">
+    </div>
+
+    <div class="form-group">
+      <label>Texto central:</label>
+      <textarea id="textoCentral">Con Aceite de Oliva y Vitamina E</textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Información izquierda:</label>
+      <textarea id="infoIzquierda" rows="6">Este delicioso aceite, especialmente formulado para cualquier tipo de masaje, humecta y acondiciona su piel.
+Gracias a las fragancias utilizadas se consiguen resultados vitales para el bienestar personal. Beneficios del masaje: Alivia el agotamiento del sistema nervioso y ayuda a controlar problemas de circulación, propiciando quietud y tranquilidad a su cuerpo. AROMATERAPIA: Aumenta los niveles de energía al mismo tiempo que tranquiliza el cuerpo y la mente.</textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Recomendaciones:</label>
+      <textarea id="recomendaciones" rows="6">Recomendado por especialistas
+Modo de empleo: Aplique una cantidad generosa sobre sus manos y distribuya uniformemente sobre el área a masajear.
+Mezclarlo con su crema para masajes o con materiales exfoliantes.
+Precauciones: Únicamente para uso externo. Manténgase fuera del alcance de los niños. Suspenda su uso si nota reacciones desfavorables.
+Ingredientes: Paraffnum Liquidum, Olea Europaea Oil, Tocopheryl Acetate, Parfum, BHT.</textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Cantidad:</label>
+        <input id="cantidad" type="number" min="1" value="12">
+      </div>
+      <div class="form-group">
+        <label>Nombre PDF:</label>
+        <input id="nombreArchivo" value="etiquetas_masaje">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Color fondo:</label>
+        <input type="color" id="bgColor" value="#F8D8F8">
+      </div>
+      <div class="form-group">
+        <label>Tamaño texto (px):</label>
+        <input type="number" id="fontSize" value="12">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Altura imagen (px):</label>
+        <input type="number" id="imgHeight" value="70">
+      </div>
+      <div class="form-group">
+        <label>Ancho etiqueta (cm):</label>
+        <input type="number" id="anchoEtiqueta" value="11" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Alto etiqueta (cm):</label>
+        <input type="number" id="altoEtiqueta" value="9" step="0.1">
+      </div>
+    </div>
+
+    <!-- Agregar en el formulario -->
+<div class="form-row">
+  <div class="form-group">
+    <label>Color inicial:</label>
+    <input type="color" id="colorInicio" value="#FFFFFF">
+  </div>
+  <div class="form-group">
+    <label>Color final:</label>
+    <input type="color" id="colorFin" value="#F8D8F8">
+  </div>
+</div>
+
+    <button onclick="generarEtiquetas()">Generar Vista Previa</button>
+    <button onclick="generarPDF()">Descargar PDF</button>
+    <button onclick="window.print()">Imprimir Directamente</button>
+  </div>
+
+  <div id="etiquetas" class="etiqueta-container"></div>
+
+  <script>
+    function actualizarEstilos() {
+      document.documentElement.style.setProperty('--bg-color', document.getElementById('bgColor').value);
+      document.documentElement.style.setProperty('--font-size', document.getElementById('fontSize').value + 'px');
+      document.documentElement.style.setProperty('--img-height', document.getElementById('imgHeight').value + 'px');
+       document.documentElement.style.setProperty('--color-inicio', document.getElementById('colorInicio').value);
+  document.documentElement.style.setProperty('--color-fin', document.getElementById('colorFin').value);
+    }
+
+    function generarEtiquetas() {
+      const config = {
+        nombreProducto: document.getElementById("nombreProducto").value.trim(),
+        nombreImagen: document.getElementById("nombreImagen").value.trim(),
+        textoCentral: document.getElementById("textoCentral").value.trim(),
+        infoIzquierda: document.getElementById("infoIzquierda").value.trim(),
+        recomendaciones: document.getElementById("recomendaciones").value.trim(),
+        cantidad: Math.max(1, parseInt(document.getElementById("cantidad").value)),
+        ancho: parseFloat(document.getElementById("anchoEtiqueta").value) * 37.8,
+        alto: parseFloat(document.getElementById("altoEtiqueta").value) * 37.8
+      };
+
+      const contenedor = document.getElementById("etiquetas");
+      contenedor.innerHTML = "";
+
+      for (let i = 0; i < config.cantidad; i++) {
+        const etiqueta = document.createElement("div");
+        etiqueta.className = "etiqueta";
+        etiqueta.style.width = `${config.ancho}px`;
+        etiqueta.style.height = `${config.alto}px`;
+
+        etiqueta.innerHTML = `
+          <div class="lateral"><div>${config.infoIzquierda}</div></div>
+          <div class="central">
+            <img class="logo" src="images/logo.png" alt="Logo">
+            <div class="nombre-producto">${config.nombreProducto}</div>
+            <div>${config.textoCentral}</div>
+            <img class="producto" src="etiqueta/${config.nombreImagen}.png" alt="${config.nombreProducto}">
+          </div>
+          <div class="lateral"><div>${config.recomendaciones}</div></div>
+        `;
+
+        contenedor.appendChild(etiqueta);
+      }
+      actualizarEstilos();
+    }
+
+    function generarPDF() {
+      const element = document.getElementById('etiquetas');
+      const options = {
+        margin: [5, 5],
+        filename: `${document.getElementById('nombreArchivo').value}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+          scale: 3,
+          useCORS: true,
+          logging: true 
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        }
+      };
+
+      html2pdf().set(options).from(element).save();
+    }
+
+    // Inicialización
+    document.querySelectorAll('.formulario input, .formulario textarea').forEach(el => {
+      el.addEventListener('input', generarEtiquetas);
+    });
+    generarEtiquetas();
+  </script>
+</body>
+</html>

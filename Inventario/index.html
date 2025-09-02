@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esentia - Gestión de Inventario</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Esentia - Gestión de Inventario</h1>
+    
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('inventario')">📦 Inventario</div>
+      <div class="tab" onclick="switchTab('agregar')">➕ Agregar Productos</div>
+      <div class="tab" onclick="switchTab('reportes')">📊 Reportes</div>
+    </div>
+    
+    <!-- Inventario Tab -->
+    <div id="inventario" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📦 Inventario de Productos</h2>
+          <button class="btn-primary" onclick="loadProducts()">↻ Actualizar</button>
+        </div>
+        
+        <div class="inventory-summary">
+          <div class="summary-card">
+            <h3 id="totalProducts">0</h3>
+            <p>Total Productos</p>
+          </div>
+          <div class="summary-card">
+            <h3 id="totalStock">0</h3>
+            <p>Total en Stock</p>
+          </div>
+        </div>
+        
+        <div class="search-container">
+          <div class="search-input">
+            <input type="text" id="searchProduct" placeholder="Buscar producto..." onkeyup="searchProducts()">
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table id="inventoryTable">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody">
+              <!-- Productos se cargarán aquí -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Agregar Productos Tab -->
+    <div id="agregar" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">➕ Agregar Productos al Inventario</h2>
+        </div>
+        
+        <div class="form-group">
+          <label for="sourceType">Fuente de Productos:</label>
+          <select id="sourceType" onchange="loadProductSources()">
+            <option value="esencia">Productos de Aromaterapia</option>
+            <option value="limpieza">Productos de Limpieza</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="productSelect">Seleccionar Producto:</label>
+          <select id="productSelect" size="10" style="height: auto; min-height: 200px;">
+            <option value="">Cargando productos...</option>
+          </select>
+        </div>
+        
+        <div class="form-row">
+          <div>
+            <label for="productQuantity">Cantidad a Agregar:</label>
+            <input type="number" id="productQuantity" min="1" value="1">
+          </div>
+          <div>
+            <label for="productNotes">Notas (Opcional):</label>
+            <input type="text" id="productNotes" placeholder="Ej: Lote especial, promoción, etc.">
+          </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+          <button class="btn-success" onclick="addSelectedProduct()">Agregar al Inventario</button>
+          <button class="btn-primary" style="margin-left: 10px;" onclick="openAddAllModal()">Agregar Todos los Productos</button>
+        </div>
+        
+        <div id="productPreview" style="margin-top: 20px; padding: 15px; background: var(--secondary); border-radius: 8px; display: none;">
+          <h3>Producto Seleccionado</h3>
+          <p><strong>Nombre:</strong> <span id="previewName"></span></p>
+          <p><strong>Categoría:</strong> <span id="previewCategory"></span></p>
+          <p><strong>Precio:</strong> ₡<span id="previewPrice"></span></p>
+          <p><strong>Presentación:</strong> <span id="previewPresentation"></span></p>
+          <p><strong>Aroma:</strong> <span id="previewScent"></span></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Reportes Tab -->
+    <div id="reportes" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">📊 Reportes de Inventario</h2>
+        
+        <div class="form-row" style="margin-bottom: 20px;">
+          <div>
+            <label for="reportType">Tipo de Reporte:</label>
+            <select id="reportType" onchange="generateReport()">
+              <option value="inventory">Inventario Actual</option>
+              <option value="low-stock">Productos con Bajo Stock</option>
+            </select>
+          </div>
+          <div style="display: flex; align-items: flex-end;">
+            <button class="btn-primary" onclick="generateReport()">Generar Reporte</button>
+          </div>
+        </div>
+        
+        <div id="reportContent">
+          <p style="text-align: center; color: var(--text-light); padding: 40px;">
+            Selecciona un tipo de reporte para generar.
+          </p>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+          <button class="btn-secondary" onclick="printReport()">🖨️ Imprimir Reporte</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="scroll-buttons">
+      <button class="scroll-btn" onclick="scrollToTop()">↑</button>
+      <button class="scroll-btn" onclick="scrollToBottom()">↓</button>
+    </div>
+  </div>
+  
+  <!-- Modal para agregar todos los productos -->
+  <div id="addAllModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">⚠️ Confirmar Agregar Todos</h2>
+        <span class="close" onclick="closeModal('addAllModal')">&times;</span>
+      </div>
+      <div>
+        <p>¿Estás seguro de que deseas agregar todos los productos de <strong id="confirmSource"></strong> al inventario?</p>
+        <p>Cantidad de productos: <strong id="confirmCount"></strong></p>
+        <p>Cantidad por producto: <strong id="confirmQuantity"></strong></p>
+        <p><em>Esta acción no se puede deshacer.</em></p>
+        
+        <div class="flex" style="margin-top: 20px;">
+          <button type="button" class="btn-secondary flex-1" onclick="closeModal('addAllModal')">Cancelar</button>
+          <button type="button" class="btn-danger flex-1" onclick="confirmAddAllProducts()">Sí, Agregar Todos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para editar stock -->
+  <div id="editStockModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="editStockTitle">✏️ Editar Stock</h2>
+        <span class="close" onclick="closeModal('editStockModal')">&times;</span>
+      </div>
+      <div>
+        <div class="form-group">
+          <label for="editQuantity">Cantidad Actual:</label>
+          <input type="number" id="editQuantity" min="0">
+        </div>
+        <div class="form-group">
+          <label for="editAction">Acción:</label>
+          <select id="editAction">
+            <option value="set">Establecer cantidad</option>
+            <option value="add">Agregar a cantidad existente</option>
+            <option value="subtract">Restar de cantidad existente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editNotes">Notas (Opcional):</label>
+          <input type="text" id="editNotes" placeholder="Motivo del cambio">
+        </div>
+        <div class="flex" style="margin-top: 20px;">
+          <button type="button" class="btn-secondary flex-1" onclick="closeModal('editStockModal')">Cancelar</button>
+          <button type="button" class="btn-primary flex-1" onclick="saveStockEdit()">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module">
+    // Importar Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+      authDomain: "esentiacreditos-8345f.firebaseapp.com",
+      projectId: "esentiacreditos-8345f",
+      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+      messagingSenderId: "888658236080",
+      appId: "1:888658236080:web:506e5e2085b5a452dba175"
+    };
+    
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    // Colección de inventario
+    const stockCollection = collection(db, "stock");
+    
+    // URLs de los JSON
+    const URL_ESENCIA = "https://wil1979.github.io/esentia-factura/productos_esentia.json";
+    const URL_LIMPIEZA = "https://wil1979.github.io/esentia-factura/productos_limpieza_completo.json";
+    
+    // Variables globales
+    let allProducts = [];
+    let currentSource = 'esencia';
+    let currentEditProductId = null;
+    
+    // Función para cambiar de pestaña
+    window.switchTab = function(tabName) {
+      // Ocultar todos los contenidos
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remover clase activa de todos los tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Mostrar el contenido seleccionado
+      document.getElementById(tabName).classList.add('active');
+      
+      // Añadir clase activa al tab seleccionado
+      const tabIndex = tabName === 'inventario' ? 1 : tabName === 'agregar' ? 2 : 3;
+      document.querySelector(`.tab:nth-child(${tabIndex})`).classList.add('active');
+      
+      // Cargar datos según la pestaña
+      if (tabName === 'inventario') {
+        loadProducts();
+      } else if (tabName === 'agregar') {
+        loadProductSources();
+      }
+    }
+    
+    // Función para desplazamiento suave
+    window.scrollToTop = function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+    
+    window.scrollToBottom = function() {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+    
+    // Cargar fuentes de productos
+    window.loadProductSources = async function() {
+      currentSource = document.getElementById('sourceType').value;
+      
+      try {
+        const response = await fetch(currentSource === 'esencia' ? URL_ESENCIA : URL_LIMPIEZA);
+        allProducts = await response.json();
+        
+        renderProductSelect();
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+        alert("Error al cargar los productos. Por favor, intenta de nuevo.");
+      }
+    }
+    
+    // Renderizar select de productos
+    function renderProductSelect() {
+      const select = document.getElementById('productSelect');
+      select.innerHTML = '';
+      
+      if (allProducts.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = 'No se encontraron productos';
+        option.disabled = true;
+        select.appendChild(option);
+        return;
+      }
+      
+      allProducts.forEach((product, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${product.nombre} ${product.presentacion ? `- ${product.presentacion}` : ''} ${product.aroma ? `- ${product.aroma}` : ''}`;
+        option.dataset.index = index;
+        select.appendChild(option);
+      });
+      
+      // Limpiar vista previa
+      document.getElementById('productPreview').style.display = 'none';
+    }
+    
+    // Mostrar vista previa del producto seleccionado
+    document.getElementById('productSelect').addEventListener('change', function() {
+      const selectedIndex = this.value;
+      if (selectedIndex === '') return;
+      
+      const product = allProducts[selectedIndex];
+      if (!product) return;
+      
+      document.getElementById('previewName').textContent = product.nombre;
+      document.getElementById('previewCategory').textContent = currentSource === 'esencia' ? 'Aromaterapia' : 'Limpieza';
+      document.getElementById('previewPrice').textContent = product.precioPublico?.toLocaleString() || 'No disponible';
+      document.getElementById('previewPresentation').textContent = product.presentacion || 'No especificada';
+      document.getElementById('previewScent').textContent = product.aroma || 'No aplica';
+      
+      document.getElementById('productPreview').style.display = 'block';
+    });
+    
+    // Buscar productos
+    window.searchProducts = function() {
+      const searchTerm = document.getElementById('searchProduct').value.toLowerCase();
+      
+      // Filtrar productos del inventario
+      const filteredProducts = Array.from(document.querySelectorAll('#inventoryBody tr')).filter(row => {
+        const text = row.textContent.toLowerCase();
+        return text.includes(searchTerm);
+      });
+      
+      // Ocultar todas las filas
+      document.querySelectorAll('#inventoryBody tr').forEach(row => {
+        row.style.display = 'none';
+      });
+      
+      // Mostrar filas filtradas
+      filteredProducts.forEach(row => {
+        row.style.display = 'table-row';
+      });
+      
+      // Si no hay resultados, mostrar mensaje
+      if (filteredProducts.length === 0 && document.getElementById('inventoryBody').children.length > 0) {
+        document.getElementById('inventoryBody').innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No se encontraron productos</td></tr>';
+      }
+    }
+    
+    // Cargar productos del inventario
+    window.loadProducts = async function() {
+      try {
+        const snapshot = await getDocs(stockCollection);
+        const products = [];
+        snapshot.forEach(doc => {
+          products.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        
+        renderInventory(products);
+        updateInventorySummary(products);
+      } catch (error) {
+        console.error("Error al cargar inventario:", error);
+        alert("Error al cargar el inventario. Por favor, intenta de nuevo.");
+      }
+    }
+    
+    // Renderizar inventario
+    function renderInventory(products) {
+      const tbody = document.getElementById('inventoryBody');
+      tbody.innerHTML = '';
+      
+      if (products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No hay productos en el inventario</td></tr>';
+        return;
+      }
+      
+      products.forEach(product => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${product.nombre}</td>
+          <td>${product.cantidad}</td>
+          <td class="actions">
+            <button class="btn-warning" onclick="openEditStockModal('${product.id}', '${product.nombre}', ${product.cantidad})">Editar</button>
+            <button class="btn-danger" onclick="deleteProduct('${product.id}', '${product.nombre}')">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    
+    // Actualizar resumen del inventario
+    function updateInventorySummary(products) {
+      const totalProducts = products.length;
+      const totalStock = products.reduce((sum, product) => sum + product.cantidad, 0);
+      
+      document.getElementById('totalProducts').textContent = totalProducts;
+      document.getElementById('totalStock').textContent = totalStock.toLocaleString();
+    }
+    
+    // Agregar producto seleccionado al inventario
+    window.addSelectedProduct = async function() {
+      const selectedIndex = document.getElementById('productSelect').value;
+      const quantity = parseInt(document.getElementById('productQuantity').value);
+      const notes = document.getElementById('productNotes').value.trim();
+      
+      if (selectedIndex === '') {
+        alert('Por favor, selecciona un producto.');
+        return;
+      }
+      
+      if (isNaN(quantity) || quantity <= 0) {
+        alert('Por favor, ingresa una cantidad válida.');
+        return;
+      }
+      
+      const product = allProducts[selectedIndex];
+      if (!product) {
+        alert('Producto no encontrado.');
+        return;
+      }
+      
+      // Verificar si el producto ya existe en el inventario
+      const snapshot = await getDocs(stockCollection);
+      let existingProduct = null;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.nombre === product.nombre) {
+          existingProduct = { id: doc.id, ...data };
+        }
+      });
+      
+      try {
+        if (existingProduct) {
+          // Actualizar cantidad existente
+          const newQuantity = existingProduct.cantidad + quantity;
+          const productDoc = doc(db, "stock", existingProduct.id);
+          await updateDoc(productDoc, {
+            cantidad: newQuantity,
+            ultimaActualizacion: new Date().toISOString(),
+            notas: notes || existingProduct.notas || ''
+          });
+          
+          alert(`Producto actualizado exitosamente.\nNuevo stock: ${newQuantity}`);
+        } else {
+          // Crear nuevo producto en el inventario
+          await addDoc(stockCollection, {
+            nombre: product.nombre,
+            cantidad: quantity,
+            categoria: currentSource === 'esencia' ? 'Aromaterapia' : 'Limpieza',
+            precio: product.precioPublico || 0,
+            presentacion: product.presentacion || '',
+            aroma: product.aroma || '',
+            fechaCreacion: new Date().toISOString(),
+            ultimaActualizacion: new Date().toISOString(),
+            notas: notes
+          });
+          
+          alert('Producto agregado al inventario exitosamente.');
+        }
+        
+        // Limpiar formulario y recargar inventario
+        document.getElementById('productQuantity').value = '1';
+        document.getElementById('productNotes').value = '';
+        document.getElementById('productPreview').style.display = 'none';
+        
+        // Cambiar a la pestaña de inventario y recargar
+        switchTab('inventario');
+        loadProducts();
+      } catch (error) {
+        console.error("Error al agregar producto:", error);
+        alert("Error al agregar el producto. Por favor, intenta de nuevo.");
+      }
+    }
+    
+    // Abrir modal para agregar todos
+    window.openAddAllModal = function() {
+      const quantity = parseInt(document.getElementById('productQuantity').value);
+      const source = currentSource === 'esencia' ? 'Aromaterapia' : 'Limpieza';
+      
+      if (isNaN(quantity) || quantity <= 0) {
+        alert('Por favor, ingresa una cantidad válida.');
+        return;
+      }
+      
+      if (allProducts.length === 0) {
+        alert('No hay productos disponibles para agregar.');
+        return;
+      }
+      
+      document.getElementById('confirmSource').textContent = source;
+      document.getElementById('confirmCount').textContent = allProducts.length;
+      document.getElementById('confirmQuantity').textContent = quantity;
+      
+      document.getElementById('addAllModal').style.display = 'flex';
+    }
+    
+    // Cerrar modal
+    window.closeModal = function(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+    
+    // Confirmar agregar todos los productos
+    window.confirmAddAllProducts = async function() {
+      const quantity = parseInt(document.getElementById('productQuantity').value);
+      
+      try {
+        // Obtener todos los productos actuales del inventario
+        const snapshot = await getDocs(stockCollection);
+        const currentInventory = {};
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          currentInventory[data.nombre] = { id: doc.id, ...data };
+        });
+        
+        let addedCount = 0;
+        let updatedCount = 0;
+        
+        // Procesar cada producto
+        for (const product of allProducts) {
+          if (currentInventory[product.nombre]) {
+            // Actualizar producto existente
+            const existing = currentInventory[product.nombre];
+            const newQuantity = existing.cantidad + quantity;
+            const productDoc = doc(db, "stock", existing.id);
+            await updateDoc(productDoc, {
+              cantidad: newQuantity,
+              ultimaActualizacion: new Date().toISOString()
+            });
+            updatedCount++;
+          } else {
+            // Agregar nuevo producto
+            await addDoc(stockCollection, {
+              nombre: product.nombre,
+              cantidad: quantity,
+              categoria: currentSource === 'esencia' ? 'Aromaterapia' : 'Limpieza',
+              precio: product.precioPublico || 0,
+              presentacion: product.presentacion || '',
+              aroma: product.aroma || '',
+              fechaCreacion: new Date().toISOString(),
+              ultimaActualizacion: new Date().toISOString()
+            });
+            addedCount++;
+          }
+        }
+        
+        alert(`Proceso completado exitosamente.\nProductos agregados: ${addedCount}\nProductos actualizados: ${updatedCount}`);
+        
+        // Cerrar modal y recargar inventario
+        closeModal('addAllModal');
+        switchTab('inventario');
+        loadProducts();
+      } catch (error) {
+        console.error("Error al agregar todos los productos:", error);
+        alert("Error al agregar los productos. Por favor, intenta de nuevo.");
+      }
+    }
+    
+    // Abrir modal para editar stock
+    window.openEditStockModal = function(productId, productName, currentQuantity) {
+      currentEditProductId = productId;
+      document.getElementById('editStockTitle').textContent = `✏️ Editar Stock: ${productName}`;
+      document.getElementById('editQuantity').value = currentQuantity;
+      document.getElementById('editAction').value = 'set';
+      document.getElementById('editNotes').value = '';
+      
+      document.getElementById('editStockModal').style.display = 'flex';
+    }
+    
+    // Guardar cambios en el stock
+    window.saveStockEdit = async function() {
+      const newQuantity = parseInt(document.getElementById('editQuantity').value);
+      const action = document.getElementById('editAction').value;
+      const notes = document.getElementById('editNotes').value.trim();
+      
+      if (isNaN(newQuantity) || newQuantity < 0) {
+        alert('Por favor, ingresa una cantidad válida.');
+        return;
+      }
+      
+      if (!currentEditProductId) {
+        alert('No se ha seleccionado ningún producto para editar.');
+        return;
+      }
+      
+      try {
+        const productDoc = doc(db, "stock", currentEditProductId);
+        const docSnap = await getDoc(productDoc);
+        
+        if (!docSnap.exists()) {
+          alert('Producto no encontrado.');
+          closeModal('editStockModal');
+          return;
+        }
+        
+        const currentData = docSnap.data();
+        let finalQuantity = newQuantity;
+        
+        if (action === 'add') {
+          finalQuantity = currentData.cantidad + newQuantity;
+        } else if (action === 'subtract') {
+          finalQuantity = Math.max(0, currentData.cantidad - newQuantity);
+        }
+        
+        await updateDoc(productDoc, {
+          cantidad: finalQuantity,
+          ultimaActualizacion: new Date().toISOString(),
+          notas: notes || currentData.notas || ''
+        });
+        
+        alert('Stock actualizado exitosamente.');
+        closeModal('editStockModal');
+        loadProducts();
+      } catch (error) {
+        console.error("Error al actualizar stock:", error);
+        alert("Error al actualizar el stock. Por favor, intenta de nuevo.");
+      }
+    }
+    
+    // Eliminar producto del inventario
+    window.deleteProduct = async function(productId, productName) {
+      if (!confirm(`¿Estás seguro de que deseas eliminar "${productName}" del inventario? Esta acción no se puede deshacer.`)) {
+        return;
+      }
+      
+      try {
+        await deleteDoc(doc(db, "stock", productId));
+        alert('Producto eliminado del inventario.');
+        loadProducts();
+      } catch (error) {
+        console.error("Error al eliminar producto:", error);
+        alert("Error al eliminar el producto. Por favor, intenta de nuevo.");
+      }
+    }
+    
+    // Generar reportes
+    window.generateReport = function() {
+      const reportType = document.getElementById('reportType').value;
+      
+      let content = '';
+      
+      switch (reportType) {
+        case 'inventory':
+          content = generateInventoryReport();
+          break;
+        case 'low-stock':
+          content = generateLowStockReport();
+          break;
+        default:
+          content = '<p>Seleccione un tipo de reporte.</p>';
+      }
+      
+      document.getElementById('reportContent').innerHTML = content;
+    }
+    
+    // Generar reporte de inventario
+    function generateInventoryReport() {
+      const products = Array.from(document.querySelectorAll('#inventoryBody tr')).map(row => {
+        const cells = row.querySelectorAll('td');
+        return {
+          nombre: cells[0].textContent,
+          cantidad: parseInt(cells[1].textContent)
+        };
+      }).filter(p => p.nombre && !p.nombre.includes('No hay productos'));
+      
+      if (products.length === 0) {
+        return '<p style="text-align: center; color: #d32f2f; font-weight: bold; padding: 40px;">No hay productos en el inventario</p>';
+      }
+      
+      let content = `
+        <h3>📊 Reporte de Inventario - ${new Date().toLocaleDateString()}</h3>
+        <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+          <h4>Resumen General</h4>
+          <p><strong>Total de Productos:</strong> ${products.length}</p>
+          <p><strong>Total en Stock:</strong> ${products.reduce((sum, p) => sum + p.cantidad, 0)}</p>
+        </div>
+        
+        <h4>Lista de Productos</h4>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+          <thead>
+            <tr style="background-color: #6c4ba3; color: white;">
+              <th style="padding: 10px; text-align: left;">Producto</th>
+              <th style="padding: 10px; text-align: center;">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      products.forEach(product => {
+        content += `
+          <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 10px;">${product.nombre}</td>
+            <td style="padding: 10px; text-align: center;">${product.cantidad}</td>
+          </tr>
+        `;
+      });
+      
+      content += `
+          </tbody>
+        </table>
+      `;
+      
+      return content;
+    }
+    
+    // Generar reporte de bajo stock
+    function generateLowStockReport() {
+      const products = Array.from(document.querySelectorAll('#inventoryBody tr')).map(row => {
+        const cells = row.querySelectorAll('td');
+        return {
+          nombre: cells[0].textContent,
+          cantidad: parseInt(cells[1].textContent)
+        };
+      }).filter(p => p.nombre && !p.nombre.includes('No hay productos'))
+        .filter(p => p.cantidad <= 5); // Considerar bajo stock si es 5 o menos
+      
+      if (products.length === 0) {
+        return '<p style="text-align: center; color: #388e3c; font-weight: bold; padding: 40px;">¡No hay productos con bajo stock!</p>';
+      }
+      
+      let content = `
+        <h3>⚠️ Reporte de Productos con Bajo Stock - ${new Date().toLocaleDateString()}</h3>
+        <p style="color: #d32f2f; font-weight: bold; margin: 15px 0;">Se encontraron ${products.length} productos que necesitan reabastecimiento.</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+          <thead>
+            <tr style="background-color: #d32f2f; color: white;">
+              <th style="padding: 10px; text-align: left;">Producto</th>
+              <th style="padding: 10px; text-align: center;">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      products.forEach(product => {
+        content += `
+          <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 10px;">${product.nombre}</td>
+            <td style="padding: 10px; text-align: center; color: #d32f2f; font-weight: bold;">${product.cantidad}</td>
+          </tr>
+        `;
+      });
+      
+      content += `
+          </tbody>
+        </table>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #fff8e1; border-radius: 8px; border: 1px solid #ffecb3;">
+          <h4>Recomendaciones</h4>
+          <ul>
+            <li>Revisar los productos con stock crítico (menos de 5 unidades)</li>
+            <li>Contactar a los proveedores para reabastecimiento</li>
+            <li>Considerar promociones para productos con stock alto</li>
+          </ul>
+        </div>
+      `;
+      
+      return content;
+    }
+    
+    // Imprimir reporte
+    window.printReport = function() {
+      const content = document.getElementById('reportContent').innerHTML;
+      if (!content || content.includes('Selecciona un tipo de reporte')) {
+        alert('Por favor, genera un reporte antes de imprimir.');
+        return;
+      }
+      
+      const reportType = document.getElementById('reportType').value;
+      
+      const reportTitle = {
+        'inventory': 'Reporte de Inventario',
+        'low-stock': 'Reporte de Productos con Bajo Stock'
+      };
+      
+      const printWindow = window.open('', '_blank', 'width=800,height=600');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${reportTitle[reportType]}</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                padding: 40px;
+                color: #333;
+                max-width: 1000px;
+                margin: 0 auto;
+              }
+              h1, h2, h3 {
+                color: #6c4ba3;
+              }
+              h1 {
+                text-align: center;
+                border-bottom: 3px solid #6c4ba3;
+                padding-bottom: 15px;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+              }
+              th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+              }
+              th {
+                background-color: #6c4ba3;
+                color: white;
+              }
+              tr:hover {
+                background-color: #f5f5f5;
+              }
+              .summary {
+                background: #f5f5f5;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 15px 0;
+              }
+              @media print {
+                body {
+                  padding: 20px;
+                }
+                .no-print {
+                  display: none;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${reportTitle[reportType]}</h1>
+            <p><strong>Fecha de generación:</strong> ${new Date().toLocaleDateString()}</p>
+            <hr>
+            ${content}
+            <div class="no-print" style="text-align: center; margin-top: 30px;">
+              <button onclick="window.print()" style="padding: 10px 20px; background: #6c4ba3; color: white; border: none; border-radius: 5px; font-size: 1rem;">🖨️ Imprimir</button>
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+    
+    // Inicializar la aplicación
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cargar datos iniciales
+      loadProducts();
+      loadProductSources();
+      
+      // Configurar eventos
+      document.getElementById('searchProduct').addEventListener('keyup', searchProducts);
+    });
+  </script>
+</body>
+</html>

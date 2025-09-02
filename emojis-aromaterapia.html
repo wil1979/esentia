@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Galería de Emojis — Aromaterapia</title>
+  <style>
+    :root{
+      --bg:#0f1722;
+      --card:#0b1220;
+      --muted:#9aa6b2;
+      --accent:#a7f3d0;
+      --glass: rgba(255,255,255,0.03);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071025 0%, #0b1520 100%);color:#e6eef6}
+    .wrap{max-width:1100px;margin:28px auto;padding:20px}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:12px;align-items:center;margin:18px 0}
+    .search{flex:1;display:flex;gap:8px;align-items:center;background:var(--glass);padding:8px;border-radius:10px}
+    .search input{flex:1;background:transparent;border:0;padding:6px 8px;color:inherit;font-size:14px;outline:none}
+    select{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:10px;color:inherit}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-top:10px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .emoji{font-size:48px;line-height:1}
+    .name{font-size:13px;color:var(--muted);text-align:center}
+    .meta{display:flex;gap:8px}
+    button.small{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;font-size:13px;color:inherit;cursor:pointer}
+    button.small:active{transform:translateY(1px)}
+    .tag{font-size:11px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);color:var(--muted)}
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(rgba(2,6,23,0.6),rgba(2,6,23,0.6));z-index:60}
+    .modal.show{display:flex}
+    .modal-card{background:var(--card);padding:22px;border-radius:12px;min-width:280px;max-width:380px;text-align:center;box-shadow:0 12px 40px rgba(2,6,23,0.7)}
+    .modal .emoji{font-size:92px}
+    .copy-success{font-size:13px;color:var(--accent);margin-top:8px}
+    /* responsive */
+    @media (max-width:560px){
+      .emoji{font-size:40px}
+      .modal .emoji{font-size:72px}
+      .grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main">
+    <header>
+      <div>
+        <h1>Galería de Emojis — Aromaterapia 🌿</h1>
+        <p class="lead">Busca y copia emojis con temática de aromas, plantas, spa y bienestar para usar en tu código y catálogo.</p>
+      </div>
+      <div style="text-align:right">
+        <span class="tag">Formato: emoji / etiqueta</span>
+      </div>
+    </header>
+
+    <div class="controls" aria-hidden="false">
+      <div class="search" title="Buscar emoji por nombre o etiqueta">
+        🔎 <input id="search" placeholder="Buscar — ej. lavanda, aceite, vela, relax..." />
+      </div>
+
+      <select id="filter">
+        <option value="all">Todas las categorías</option>
+        <option value="essential-oils">Aceites esenciales</option>
+        <option value="plants">Plantas & flores</option>
+        <option value="spa">Spa & relajación</option>
+        <option value="kitchen">Cocina & especias</option>
+        <option value="seasonal">Estacional / navideño</option>
+        <option value="other">Otros</option>
+      </select>
+    </div>
+
+    <div class="grid" id="grid">
+      <!-- Cards generadas por JS -->
+    </div>
+
+    <footer>
+      Tip: haz clic en "Copiar emoji" para pegarlo donde quieras. Usa "Copiar etiqueta" si usas shortcodes en tu CMS.
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card" role="document">
+      <div id="modalEmoji" class="emoji">🌿</div>
+      <div id="modalName" style="margin-top:6px;color:var(--muted)"></div>
+      <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+        <button id="modalCopyEmoji" class="small">Copiar emoji</button>
+        <button id="modalCopyTag" class="small">Copiar etiqueta</button>
+        <button id="modalClose" class="small">Cerrar</button>
+      </div>
+      <div id="modalMsg" class="copy-success" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    // Lista de emojis con etiquetas/categoría (editable)
+    const EMOJIS = [
+      // Aceites esenciales
+      {e:'🫒', name:'Aceite (oliva / oil)', tag:':oil:', cat:'essential-oils'},
+      {e:'🌿', name:'Planta aromática / hierba', tag:':herb:', cat:'plants'},
+      {e:'💧', name:'Gota / esencia', tag:':drop:', cat:'essential-oils'},
+      {e:'🪔', name:'Vela aromática', tag:':candle:', cat:'spa'},
+      {e:'🧴', name:'Frasco / loción', tag:':bottle:', cat:'essential-oils'},
+      {e:'🧂', name:'Sal de baño', tag:':bath-salt:', cat:'spa'},
+      {e:'🌸', name:'Flor (lavanda, rosa)', tag:':flower:', cat:'plants'},
+      {e:'🌹', name:'Rosa', tag:':rose:', cat:'plants'},
+      {e:'🌼', name:'Flor silvestre', tag:':blossom:', cat:'plants'},
+      {e:'🍋', name:'Cítricos (limón)', tag:':lemon:', cat:'kitchen'},
+      {e:'🍊', name:'Naranja / aroma cítrico', tag:':orange:', cat:'kitchen'},
+      {e:'🫖', name:'Té (infusiones)', tag:':tea:', cat:'kitchen'},
+      {e:'🕯️', name:'Vela clásica', tag:':candle-classic:', cat:'spa'},
+      {e:'🛁', name:'Baño relajante', tag:':bath:', cat:'spa'},
+      {e:'🌲', name:'Aroma forestal / pino', tag:':pine:', cat:'plants'},
+      {e:'🧘', name:'Meditación / relajación', tag:':meditate:', cat:'spa'},
+      {e:'🧺', name:'Limpieza / fresco', tag:':fresh:', cat:'other'},
+      {e:'🍯', name:'Miel / notas dulces', tag:':honey:', cat:'kitchen'},
+      {e:'🥥', name:'Coco / tropical', tag:':coconut:', cat:'kitchen'},
+      {e:'🧾', name:'Etiqueta / etiqueta', tag:':label:', cat:'other'},
+      // Estacional / navideño aromático
+      {e:'🎄', name:'Navidad / pino', tag:':christmas-tree:', cat:'seasonal'},
+      {e:'🍪', name:'Galleta / aroma horneado', tag:':cookie:', cat:'seasonal'},
+      {e:'🧣', name:'Abrigo / cálido', tag:':scarf:', cat:'seasonal'},
+      {e:'🫧', name:'Burbuja / ligero', tag:':bubble:', cat:'other'},
+      // Más opciones
+      {e:'🌾', name:'Trigo / notas terrosas', tag:':wheat:', cat:'plants'},
+      {e:'🌺', name:'Hibisco / exótico', tag:':hibiscus:', cat:'plants'},
+      {e:'🍃', name:'Hoja / fresco', tag:':leaf:', cat:'plants'}
+    ];
+
+    const grid = document.getElementById('grid');
+    const search = document.getElementById('search');
+    const filter = document.getElementById('filter');
+    const modal = document.getElementById('modal');
+    const modalEmoji = document.getElementById('modalEmoji');
+    const modalName = document.getElementById('modalName');
+    const modalCopyEmoji = document.getElementById('modalCopyEmoji');
+    const modalCopyTag = document.getElementById('modalCopyTag');
+    const modalClose = document.getElementById('modalClose');
+    const modalMsg = document.getElementById('modalMsg');
+
+    // Render inicial
+    function render(items){
+      grid.innerHTML = '';
+      if(items.length === 0){
+        grid.innerHTML = '<div style="color:var(--muted);grid-column:1/-1;text-align:center;padding:24px">No se encontraron emojis.</div>';
+        return;
+      }
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="emoji" aria-hidden="true">${item.e}</div>
+          <div class="name">${item.name}</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="small" data-emoji="${item.e}">Copiar emoji</button>
+            <button class="small" data-tag="${item.tag}">Copiar etiqueta</button>
+            <button class="small" data-view="${item.e}">Ver</button>
+          </div>
+          <div style="margin-top:8px"><span class="tag">${item.tag}</span></div>
+        `;
+        // evento delegado
+        grid.appendChild(card);
+      });
+    }
+
+    // Filtrado y búsqueda
+    function applyFilters(){
+      const q = search.value.trim().toLowerCase();
+      const f = filter.value;
+      const filtered = EMOJIS.filter(it => {
+        if(f !== 'all' && it.cat !== f) return false;
+        if(!q) return true;
+        return (it.name + ' ' + it.tag + ' ' + it.cat).toLowerCase().includes(q);
+      });
+      render(filtered);
+    }
+
+    // Copiar helper
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        return true;
+      }catch(e){
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); document.body.removeChild(ta); return true; } catch(e2){ document.body.removeChild(ta); return false; }
+      }
+    }
+
+    // Delegado de clicks en grid
+    grid.addEventListener('click', async (ev) => {
+      const btn = ev.target.closest('button');
+      if(!btn) return;
+      if(btn.dataset.emoji){
+        const ok = await copyText(btn.dataset.emoji);
+        btn.textContent = ok ? '¡Copiado!' : 'Copiar';
+        setTimeout(()=> btn.textContent = 'Copiar emoji', 900);
+      } else if(btn.dataset.tag){
+        const ok = await copyText(btn.dataset.tag);
+        btn.textContent = ok ? '¡Etiqueta copiada!' : 'Copiar etiqueta';
+        setTimeout(()=> btn.textContent = 'Copiar etiqueta', 900);
+      } else if(btn.dataset.view){
+        openModal(btn.dataset.view);
+      }
+    });
+
+    // Modal handlers
+    function openModal(emojiChar){
+      const item = EMOJIS.find(x => x.e === emojiChar) || {e:emojiChar,name:'Emoji',tag:''};
+      modalEmoji.textContent = item.e;
+      modalName.textContent = item.name + '   ' + (item.tag || '');
+      modalCopyEmoji.dataset.emoji = item.e;
+      modalCopyTag.dataset.tag = item.tag || '';
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+      modalMsg.textContent = '';
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (ev) => { if(ev.target === modal) closeModal(); });
+
+    modalCopyEmoji.addEventListener('click', async ()=> {
+      const ok = await copyText(modalCopyEmoji.dataset.emoji || modalEmoji.textContent);
+      modalMsg.textContent = ok ? 'Emoji copiado ✓' : 'No se pudo copiar';
+      setTimeout(()=> modalMsg.textContent = '', 1200);
+    });
+    modalCopyTag.addEventListener('click', async ()=> {
+      const tag = modalCopyTag.dataset.tag || '';
+      if(!tag){ modalMsg.textContent = 'No hay etiqueta disponible'; setTimeout(()=> modalMsg.textContent = '',1200); return; }
+      const ok = await copyText(tag);
+      modalMsg.textContent = ok ? 'Etiqueta copiada ✓' : 'No se pudo copiar';
+      setTimeout(()=> modalMsg.textContent = '', 1200);
+    });
+
+    // Eventos búsqueda/filtro
+    search.addEventListener('input', applyFilters);
+    filter.addEventListener('change', applyFilters);
+
+    // inicial
+    render(EMOJIS);
+
+    // Atajos: Ctrl/Cmd+F para buscar
+    document.addEventListener('keydown', (e) => {
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase() === 'f'){ e.preventDefault(); search.focus(); search.select(); }
+    });
+  </script>
+</body>
+</html>

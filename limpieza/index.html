@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Catálogo Esentia</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .producto {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .producto img {
+      max-width: 100%;
+      height: auto;
+    }
+    .aroma-linea {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    .aroma-linea label {
+      flex: 1;
+    }
+    .aroma-linea input {
+      width: 60px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-top: 10px;
+    }
+    button {
+      margin-right: 10px;
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #carritoInfo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #00897b;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 999;
+}
+.botones-flotantes {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.botones-flotantes button {
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  background-color: #2ecc71;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background 0.2s;
+}
+
+.botones-flotantes button:hover {
+  background-color: #095ab3;
+}
+
+.total-flotante {
+  position: fixed;
+  top: 203px;
+  right: 35px;
+  background: #2ecc71;
+  color: #0c0c0c;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1.1em;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+.btn-regresar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: #4caf50;
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  z-index: 9999;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.btn-regresar:hover {
+  background: #388e3c;
+  transform: translateY(-50%) scale(1.1);
+}
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <h1>Catálogo Esentia - Pedido para Proveedor</h1>
+
+  <div id="productos"></div>
+
+  <div class="botones-flotantes">
+  <button id="generarPedido">🧾 Generar Pedido</button>
+  <button id="enviarWhatsapp">📱 WhatsApp</button>
+  <button id="descargarPDF">📄 PDF</button>
+</div>
+
+
+  <h3>Resumen del Pedido:</h3>
+  <textarea id="resumenPedido" readonly></textarea>
+
+  <script>
+    let productos = [];
+
+    fetch('../productos_limpieza_completo.json')
+      .then(response => response.json())
+  .then(data => {
+        productos = data;
+        renderProductos();
+      });
+
+    function renderProductos() {
+      const contenedor = document.getElementById('productos');
+      contenedor.innerHTML = '';
+      productos.forEach((producto, index) => {
+        if (!producto.disponible) return;
+        const div = document.createElement('div');
+        div.className = 'producto';
+        div.innerHTML = `
+          <img src="${producto.imagen || 'images/default.png'}" alt="${producto.nombre}">
+          <h3>${producto.nombre}</h3>
+          <p><strong>Categoría:</strong> ${producto.categoria}</p>
+          <p><strong>Precio público:</strong> ₡${producto.precioPublico}</p>
+          <p><strong>Precio compra:</strong> ₡${producto.precioCompra}</p>
+          ${renderAromas(producto.aromas, index)}
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    function renderAromas(aromas, index) {
+      if (!aromas || aromas.length === 0) {
+        return `
+          <div class="aroma-linea">
+            <label>Cantidad</label>
+            <input type="number" min="0" value="0" data-index="${index}" data-aroma="">
+          </div>
+        `;
+      }
+      return aromas.map(aroma => `
+        <div class="aroma-linea">
+          <label>${aroma}</label>
+          <input type="number" min="0" value="0" data-index="${index}" data-aroma="${aroma}">
+        </div>
+      `).join('');
+    }
+
+    function actualizarTotalCompra() {
+  const inputs = document.querySelectorAll('input[type="number"]');
+  let total = 0;
+
+  inputs.forEach(input => {
+    const cantidad = parseInt(input.value) || 0;
+    const idx = input.dataset.index;
+    if (cantidad > 0 && productos[idx]) {
+      total += cantidad * productos[idx].precioCompra;
+    }
+  });
+
+  document.getElementById('totalCompra').textContent = total.toLocaleString('es-CR');
+}
+
+document.getElementById('generarPedido').addEventListener('click', () => {
+  const inputs = document.querySelectorAll('input[type="number"]');
+  const pedido = {};
+  let totalCompra = 0;
+
+  inputs.forEach(input => {
+    const cantidad = parseInt(input.value);
+    if (cantidad > 0) {
+      const idx = input.dataset.index;
+      const aroma = input.dataset.aroma || 'Sin aroma';
+      const nombre = productos[idx].nombre;
+      const precio = productos[idx].precioCompra;
+
+      if (!pedido[nombre]) pedido[nombre] = { aromas: {}, precio };
+      pedido[nombre].aromas[aroma] = cantidad;
+
+      totalCompra += precio * cantidad;
+    }
+  });
+
+  let resumen = '--- Pedido Esentia ---\n';
+  for (const prod in pedido) {
+    resumen += `\n${prod} (₡${pedido[prod].precio})\n`;
+    for (const aroma in pedido[prod].aromas) {
+      resumen += ` - ${aroma}: ${pedido[prod].aromas[aroma]} unidad(es)\n`;
+    }
+  }
+
+  resumen += `\n💰 Total estimado de compra: ₡${totalCompra}`;
+
+  document.getElementById('resumenPedido').value = resumen;
+
+  // Guardar en historial local
+  localStorage.setItem('pedidoEsentia', resumen);
+
+  // Mostrar total en carrito flotante
+  document.getElementById('totalFlotante').textContent = `Total: ₡${totalCompra}`;
+});
+
+
+// También escuchamos cambios en los inputs
+document.addEventListener('input', (e) => {
+  if (e.target.matches('input[type="number"]')) {
+    actualizarTotalCompra();
+  }
+});
+
+
+    document.getElementById('descargarPDF').addEventListener('click', () => {
+      const resumen = document.getElementById('resumenPedido').value;
+      if (!resumen.trim()) {
+        alert('Primero genera el pedido.');
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(12);
+      const lines = doc.splitTextToSize(resumen, 180);
+      doc.text(lines, 10, 10);
+      doc.save('pedido-esentia.pdf');
+    });
+
+    document.getElementById('enviarWhatsapp').addEventListener('click', () => {
+      const resumen = document.getElementById('resumenPedido').value;
+      if (!resumen.trim()) {
+        alert('Primero genera el pedido.');
+        return;
+      }
+      const numero = prompt("Ingrese número de WhatsApp (ej. 50688889999):");
+      if (!numero || !/^\d{8,15}$/.test(numero)) {
+        alert('Número inválido');
+        return;
+      }
+      const mensaje = encodeURIComponent(resumen);
+      const url = `https://wa.me/${numero}?text=${mensaje}`;
+      window.open(url, '_blank');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+  const historial = localStorage.getItem('pedidoEsentia');
+  if (historial) {
+    document.getElementById('resumenPedido').value = historial;
+
+    const match = historial.match(/Total estimado de compra: ₡(\d+)/);
+    if (match) {
+      document.getElementById('totalFlotante').textContent = `Total: ₡${match[1]}`;
+    }
+  }
+});
+
+
+  </script>
+  <div id="carritoInfo">
+  Total compra: ₡<span id="totalCompra">0</span>
+</div>
+
+<div id="totalFlotante" class="total-flotante">Total: ₡0</div>
+
+<a href="https://wil1979.github.io/esentia-factura/" class="btn-regresar" title="Volver al inicio">🏠</a>
+</body>
+</html>

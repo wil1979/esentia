@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>📦 Esentia - Compras a Proveedores</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+      background-color: #f3f2f7;
+      color: #333;
+    }
+    h1 {
+      color: #6c4ba3;
+      text-align: center;
+    }
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #6c4ba3;
+      padding-bottom: 8px;
+      margin-top: 30px;
+    }
+    .item {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .botones-derecha {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+    }
+    .boton-accion {
+      padding: 2px 4px;
+      font-size: 0.7rem;
+      line-height: 1;
+      border-radius: 4px;
+    }
+    .scroll-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 999;
+    }
+    
+    .scroll-btn {
+      padding: 15px 20px;
+      border: none;
+      border-radius: 25px;
+      background: #2196F3;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .scroll-btn:hover {
+      background: #1976D2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+    }
+
+    .boton-accion:hover {
+      background-color: #573993;
+    }
+    .boton-rojo {
+      background: #d32f2f;
+    }
+    .boton-rojo:hover {
+      background: #b71c1c;
+    }
+    input, select, button {
+      font-family: inherit;
+      border-radius: 6px;
+    }
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+    }
+    .producto-item {
+      border: 1px dashed #ccc;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-contenido {
+      background: white;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .cerrar-modal {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+    .cerrar-modal:hover {
+      color: #000;
+    }
+    /* Filtros */
+    .filtro-compras {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: end;
+    }
+    .filtro-item {
+      flex: 1 1 200px;
+    }
+    .filtro-item label {
+      font-weight: bold;
+      color: #6c4ba3;
+      margin-bottom: 5px;
+      display: block;
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      .boton-accion {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+    }
+    
+    /* Nuevos estilos para el botón de actualizar inventario */
+    .acciones-compra {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #ccc;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-inventario {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .btn-inventario:hover {
+      background: #388e3c;
+    }
+    
+    .btn-inventario:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .estado-inventario {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .actualizado {
+      color: #4caf50;
+      font-weight: bold;
+    }
+    
+    .pendiente {
+      color: #ff9800;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-buttons">
+    <button class="scroll-btn" onclick="scrollToTop()">↑</button>
+    <button class="scroll-btn" onclick="scrollToBottom()">↓</button>
+  </div>
+
+  <h1>📦 Esentia - Compras a Proveedores</h1>
+
+  <!-- Botón para mostrar/ocultar proveedores -->
+  <button class="boton-accion" style="margin-bottom: 20px;" onclick="toggleProveedores()">
+    👁️ <span id="texto-toggle">Mostrar Proveedores</span>
+  </button>
+
+  <!-- Sección de Proveedores -->
+  <div id="contenedor-proveedores" style="display: none; border: 1px solid #ddd; border-radius: 10px; padding: 15px; background: #f9f9f9; margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <h2>🏢 Proveedores</h2>
+      <button class="boton-accion" onclick="abrirModalProveedor()">➕ Nuevo Proveedor</button>
+    </div>
+    <div id="lista-proveedores"></div>
+  </div>
+
+  <!-- Sección de Compras -->
+  <h2>🛒 Compras a Proveedores</h2>
+  <button class="boton-accion" onclick="abrirModalCompra()">➕ Registrar Compra</button>
+
+  <!-- Filtros de Compras -->
+  <div class="filtro-compras">
+    <div class="filtro-item">
+      <label for="filtro-proveedor">Filtrar por Proveedor:</label>
+      <select id="filtro-proveedor">
+        <option value="todos">Todos los proveedores</option>
+      </select>
+    </div>
+    <button class="boton-accion" onclick="filtrarCompras()">🔍 Mostrar Compras</button>
+  </div>
+
+  <!-- Lista de compras (oculta al inicio) -->
+  <div id="lista-compras"></div>
+
+  <!-- Modal: Nuevo Proveedor -->
+  <div id="modal-proveedor" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal" onclick="cerrarModalProveedor()">&times;</span>
+      <h3>➕ Nuevo Proveedor</h3>
+      <input type="text" id="nombre-proveedor" placeholder="Nombre del proveedor">
+      <input type="text" id="telefono-proveedor" placeholder="Teléfono (opcional)">
+      <input type="email" id="correo-proveedor" placeholder="Correo (opcional)">
+      <input type="text" id="sitio-proveedor" placeholder="Sitio web (opcional)">
+      <textarea id="notas-proveedor" placeholder="Notas adicionales" style="height: 80px;"></textarea>
+      <div class="botones-derecha">
+        <button class="boton-accion" onclick="cerrarModalProveedor()">❌ Cancelar</button>
+        <button class="boton-accion" onclick="guardarProveedor()">💾 Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Nueva Compra -->
+  <div id="modal-compra" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal" onclick="cerrarModalCompra()">&times;</span>
+      <h3 id="titulo-modal-compra">🛒 Nueva Compra</h3>
+      <label>Proveedor:</label>
+      <select id="select-proveedor"></select>
+      <label>Fecha:</label>
+      <input type="date" id="fecha-compra" value="">
+      <label>Fecha de pago esperada (opcional):</label>
+      <input type="date" id="fecha-pago">
+      <label>Factura (opcional):</label>
+      <input type="text" id="factura-compra" placeholder="FAC-001">
+      <label>Forma de pago:</label>
+      <select id="forma-pago">
+        <option>Efectivo</option>
+        <option>SINPE</option>
+        <option>Tarjeta</option>
+        <option>Crédito</option>
+      </select>
+      <label>Notas (opcional):</label>
+      <input type="text" id="notas-compra" placeholder="Detalles adicionales">
+
+      <h4>Productos Comprados</h4>
+      <div id="productos-compra"></div>
+      <button class="boton-accion" onclick="agregarProducto()">+ Agregar Producto</button>
+
+      <br><br>
+      <strong>Total: ₡<span id="total-compra">0</span></strong>
+      <br><br>
+      <div class="botones-derecha">
+        <button class="boton-accion" onclick="cerrarModalCompra()">❌ Cancelar</button>
+        <button class="boton-accion" onclick="guardarCompra()">💾 Guardar Compra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    // 🔥 Tu configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+      authDomain: "esentiacreditos-8345f.firebaseapp.com",
+      projectId: "esentiacreditos-8345f",
+      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+      messagingSenderId: "888658236080",
+      appId: "1:888658236080:web:506e5e2085b5a452dba175"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Referencias
+    const proveedoresRef = collection(db, "proveedores");
+    const comprasRef = collection(db, "comprasProveedor");
+    const stockRef = collection(db, "stock");
+
+    // Variables globales
+    let proveedores = [];
+    let todosLosProductos = [];
+
+    // URLs de productos
+    const URL_ESENCIA = "https://wil1979.github.io/esentia-factura/productos_esentia.json";
+    const URL_LIMPIEZA = "https://wil1979.github.io/esentia-factura/productos_limpieza_completo.json";
+
+    // Cargar datos al inicio
+    window.onload = async () => {
+      await cargarProductosJSON();
+      await cargarProveedores();
+      await cargarFiltroProveedores();
+      document.getElementById("lista-compras").innerHTML = "<p>Selecciona un filtro y haz clic en 'Mostrar Compras'.</p>";
+    };
+
+    // ========================
+    // CARGAR PRODUCTOS DESDE JSON
+    // ========================
+    async function cargarProductosJSON() {
+      try {
+        const [res1, res2] = await Promise.all([fetch(URL_ESENCIA), fetch(URL_LIMPIEZA)]);
+        const [aromas, limpieza] = await Promise.all([res1.json(), res2.json()]);
+        todosLosProductos = [...aromas, ...limpieza].filter(p => p.disponible);
+        console.log("✅ Productos cargados:", todosLosProductos.length);
+      } catch (error) {
+        console.error("❌ Error al cargar productos:", error);
+        alert("No se pudieron cargar los productos. Verifica la conexión.");
+      }
+    }
+
+    // ========================
+    // PROVEEDORES
+    // ========================
+    async function cargarProveedores() {
+      const cont = document.getElementById("lista-proveedores");
+      cont.innerHTML = "<p>Cargando proveedores...</p>";
+
+      try {
+        const snapshot = await getDocs(proveedoresRef);
+        proveedores = [];
+        snapshot.forEach(docSnap => {
+          const p = docSnap.data();
+          p.id = docSnap.id;
+          proveedores.push(p);
+        });
+
+        if (proveedores.length === 0) {
+          cont.innerHTML = "<p>No hay proveedores registrados.</p>";
+          return;
+        }
+
+        cont.innerHTML = "";
+        proveedores.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+            <strong>🏢 ${p.nombre}</strong><br>
+            📞 ${p.telefono || 'Sin teléfono'}<br>
+            ✉️ ${p.correo || 'Sin correo'}<br>
+            🌐 ${p.sitioWeb || 'Sin sitio'}<br>
+            📝 ${p.notas || 'Sin notas'}
+            <div class="botones-derecha">
+              <button class="boton-accion" onclick="editarProveedor('${p.id}')">✏️ Editar</button>
+              <button class="boton-accion boton-rojo" onclick="eliminarProveedor('${p.id}', '${p.nombre}')">🗑️ Eliminar</button>
+            </div>
+          `;
+          cont.appendChild(div);
+        });
+      } catch (error) {
+        cont.innerHTML = "<p>Error al cargar proveedores.</p>";
+        console.error("Error:", error);
+      }
+    }
+
+    // ✅ Cargar proveedores en el filtro
+    async function cargarFiltroProveedores() {
+      const filtro = document.getElementById("filtro-proveedor");
+      filtro.innerHTML = "<option value='todos'>Todos los proveedores</option>";
+
+      try {
+        const snapshot = await getDocs(proveedoresRef);
+        snapshot.forEach(docSnap => {
+          const p = docSnap.data();
+          const opt = document.createElement("option");
+          opt.value = docSnap.id;
+          opt.textContent = p.nombre;
+          filtro.appendChild(opt);
+        });
+      } catch (error) {
+        console.error("Error al cargar proveedores para filtro:", error);
+      }
+    }
+
+    function abrirModalProveedor() {
+      document.getElementById("modal-proveedor").style.display = "flex";
+      document.getElementById("nombre-proveedor").value = "";
+      document.getElementById("telefono-proveedor").value = "";
+      document.getElementById("correo-proveedor").value = "";
+      document.getElementById("sitio-proveedor").value = "";
+      document.getElementById("notas-proveedor").value = "";
+    }
+
+    function cerrarModalProveedor() {
+      document.getElementById("modal-proveedor").style.display = "none";
+    }
+
+    async function guardarProveedor() {
+      const nombre = document.getElementById("nombre-proveedor").value.trim();
+      if (!nombre) {
+        alert("⚠️ El nombre es obligatorio.");
+        return;
+      }
+
+      const telefono = document.getElementById("telefono-proveedor").value.trim();
+      const correo = document.getElementById("correo-proveedor").value.trim();
+      const sitioWeb = document.getElementById("sitio-proveedor").value.trim();
+      const notas = document.getElementById("notas-proveedor").value.trim();
+
+      try {
+        await addDoc(proveedoresRef, {
+          nombre,
+          telefono,
+          correo,
+          sitioWeb,
+          notas
+        });
+        alert("✅ Proveedor agregado.");
+        cerrarModalProveedor();
+        await cargarProveedores();
+        await cargarFiltroProveedores();
+      } catch (error) {
+        alert("❌ Error: " + error.message);
+      }
+    }
+
+    async function editarProveedor(id) {
+      const docSnap = await getDoc(doc(db, "proveedores", id));
+      if (!docSnap.exists()) return;
+      const p = docSnap.data();
+
+      const nombre = prompt("Nombre:", p.nombre);
+      if (!nombre) return;
+      const telefono = prompt("Teléfono:", p.telefono || "");
+      const correo = prompt("Correo:", p.correo || "");
+      const sitioWeb = prompt("Sitio web:", p.sitioWeb || "");
+      const notas = prompt("Notas:", p.notas || "");
+
+      await updateDoc(doc(db, "proveedores", id), {
+        nombre,
+        telefono,
+        correo,
+        sitioWeb,
+        notas
+      });
+      alert("✅ Proveedor actualizado.");
+      await cargarProveedores();
+      await cargarFiltroProveedores();
+    }
+
+    async function eliminarProveedor(id, nombre) {
+      if (!confirm(`¿Eliminar a ${nombre}?`)) return;
+      await deleteDoc(doc(db, "proveedores", id));
+      alert(`✅ ${nombre} eliminado.`);
+      await cargarProveedores();
+      await cargarFiltroProveedores();
+    }
+
+    // ========================
+    // COMPRAS
+    // ========================
+    async function abrirModalCompra(editId = null) {
+      const select = document.getElementById("select-proveedor");
+      select.innerHTML = "";
+      proveedores.forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = p.nombre;
+        select.appendChild(opt);
+      });
+
+      document.getElementById("fecha-compra").value = new Date().toISOString().slice(0,10);
+      document.getElementById("fecha-pago").value = "";
+      document.getElementById("factura-compra").value = "";
+      document.getElementById("notas-compra").value = "";
+      document.getElementById("forma-pago").value = "Efectivo";
+
+      // Limpiar productos
+      document.getElementById("productos-compra").innerHTML = "";
+      document.getElementById("total-compra").textContent = "0";
+
+      const modal = document.getElementById("modal-compra");
+
+      if (editId) {
+        // Modo edición
+        const docSnap = await getDoc(doc(db, "comprasProveedor", editId));
+        if (!docSnap.exists()) return;
+        const compra = docSnap.data();
+
+        select.value = compra.proveedorId;
+        document.getElementById("fecha-compra").value = compra.fecha;
+        document.getElementById("fecha-pago").value = compra.fechaPago || "";
+        document.getElementById("factura-compra").value = compra.factura || "";
+        document.getElementById("notas-compra").value = compra.notas || "";
+        document.getElementById("forma-pago").value = compra.formaPago;
+        document.getElementById("titulo-modal-compra").textContent = "✏️ Editar Compra";
+
+        compra.productos.forEach(prod => {
+          const div = document.createElement("div");
+          div.className = "producto-item";
+
+          const selProd = document.createElement("select");
+          selProd.classList.add("prod-seleccion");
+          selProd.innerHTML = "<option value=''>Selecciona un producto</option>";
+          todosLosProductos.forEach(p => {
+            const opt = document.createElement("option");
+            opt.value = p.nombre;
+            opt.textContent = p.nombre;
+            if (p.nombre === prod.nombre) opt.selected = true;
+            selProd.appendChild(opt);
+          });
+
+          const cantInput = document.createElement("input");
+          cantInput.type = "number";
+          cantInput.placeholder = "Cantidad";
+          cantInput.value = prod.cantidad;
+          cantInput.min = "1";
+          cantInput.classList.add("prod-cant");
+
+          const precioInput = document.createElement("input");
+          precioInput.type = "number";
+          precioInput.placeholder = "Precio de compra por unidad";
+          precioInput.value = prod.precioUnitario;
+          precioInput.min = "0";
+          precioInput.classList.add("prod-precio");
+
+          const totalSpan = document.createElement("span");
+          totalSpan.classList.add("total-producto");
+          totalSpan.textContent = `₡${(prod.cantidad * prod.precioUnitario).toLocaleString()}`;
+
+          const btnQuitar = document.createElement("button");
+          btnQuitar.textContent = "❌ Quitar";
+          btnQuitar.classList.add("boton-accion", "boton-rojo");
+          btnQuitar.onclick = () => {
+            div.remove();
+            actualizarTotalCompra();
+          };
+
+          function actualizar() {
+            const nombre = selProd.value;
+            const cantidad = parseFloat(cantInput.value) || 0;
+            const precio = parseFloat(precioInput.value) || 0;
+            const total = cantidad * precio;
+            totalSpan.textContent = `₡${total.toLocaleString()}`;
+            actualizarTotalCompra();
+          }
+
+          selProd.addEventListener("change", actualizar);
+          cantInput.addEventListener("input", actualizar);
+          precioInput.addEventListener("input", actualizar);
+
+          div.appendChild(selProd);
+          div.appendChild(cantInput);
+          div.appendChild(document.createElement("br"));
+          div.appendChild(precioInput);
+          div.appendChild(document.createElement("br"));
+          div.appendChild(document.createTextNode("Total: "));
+          div.appendChild(totalSpan);
+          div.appendChild(document.createElement("br"));
+          div.appendChild(btnQuitar);
+
+          document.getElementById("productos-compra").appendChild(div);
+          actualizar();
+        });
+
+        actualizarTotalCompra();
+        modal.dataset.editId = editId;
+      } else {
+        // Modo nuevo
+        agregarProducto();
+        document.getElementById("titulo-modal-compra").textContent = "🛒 Nueva Compra";
+        delete modal.dataset.editId;
+      }
+
+      modal.style.display = "flex";
+    }
+
+    function cerrarModalCompra() {
+      document.getElementById("modal-compra").style.display = "none";
+      const modal = document.getElementById("modal-compra");
+      if (modal.dataset.editId) {
+        delete modal.dataset.editId;
+      }
+    }
+
+    function agregarProducto() {
+      const cont = document.getElementById("productos-compra");
+      const div = document.createElement("div");
+      div.className = "producto-item";
+
+      const selProd = document.createElement("select");
+      selProd.classList.add("prod-seleccion");
+      selProd.innerHTML = "<option value=''>Selecciona un producto</option>";
+      todosLosProductos.forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p.nombre;
+        opt.textContent = p.nombre;
+        selProd.appendChild(opt);
+      });
+
+      const cantInput = document.createElement("input");
+      cantInput.type = "number";
+      cantInput.placeholder = "Cantidad";
+      cantInput.value = "1";
+      cantInput.min = "1";
+      cantInput.classList.add("prod-cant");
+
+      const precioInput = document.createElement("input");
+      precioInput.type = "number";
+      precioInput.placeholder = "Precio de compra por unidad";
+      precioInput.value = "0";
+      precioInput.min = "0";
+      precioInput.classList.add("prod-precio");
+
+      const totalSpan = document.createElement("span");
+      totalSpan.classList.add("total-producto");
+      totalSpan.textContent = "₡0";
+
+      const btnQuitar = document.createElement("button");
+      btnQuitar.textContent = "❌ Quitar";
+      btnQuitar.classList.add("boton-accion", "boton-rojo");
+      btnQuitar.onclick = () => {
+        div.remove();
+        actualizarTotalCompra();
+      };
+
+      function actualizar() {
+        const nombre = selProd.value;
+        const cantidad = parseFloat(cantInput.value) || 0;
+        const precio = parseFloat(precioInput.value) || 0;
+        const total = cantidad * precio;
+        totalSpan.textContent = `₡${total.toLocaleString()}`;
+        actualizarTotalCompra();
+      }
+
+      selProd.addEventListener("change", actualizar);
+      cantInput.addEventListener("input", actualizar);
+      precioInput.addEventListener("input", actualizar);
+
+      div.appendChild(selProd);
+      div.appendChild(cantInput);
+      div.appendChild(document.createElement("br"));
+      div.appendChild(precioInput);
+      div.appendChild(document.createElement("br"));
+      div.appendChild(document.createTextNode("Total: "));
+      div.appendChild(totalSpan);
+      div.appendChild(document.createElement("br"));
+      div.appendChild(btnQuitar);
+
+      cont.appendChild(div);
+      actualizar();
+    }
+
+    function actualizarTotalCompra() {
+      const productos = document.querySelectorAll("#productos-compra > div");
+      let total = 0;
+      productos.forEach(div => {
+        const totalSpan = div.querySelector(".total-producto").textContent.replace(/[₡,]/g, '');
+        total += parseFloat(totalSpan) || 0;
+      });
+      document.getElementById("total-compra").textContent = total.toLocaleString();
+    }
+
+    async function guardarCompra() {
+      const modal = document.getElementById("modal-compra");
+      const editId = modal.dataset.editId;
+      const esEdicion = !!editId;
+
+      const proveedorId = document.getElementById("select-proveedor").value;
+      const fecha = document.getElementById("fecha-compra").value;
+      const fechaPago = document.getElementById("fecha-pago").value;
+      const factura = document.getElementById("factura-compra").value;
+      const formaPago = document.getElementById("forma-pago").value;
+      const notas = document.getElementById("notas-compra").value;
+
+      if (!proveedorId || !fecha) {
+        alert("⚠️ Completa todos los campos obligatorios.");
+        return;
+      }
+
+      const proveedor = proveedores.find(p => p.id === proveedorId);
+      const productos = [];
+      let totalCompra = 0;
+
+      document.querySelectorAll("#productos-compra > div").forEach(div => {
+        const nombre = div.querySelector(".prod-seleccion").value;
+        const cantidad = parseFloat(div.querySelector(".prod-cant").value) || 0;
+        const precioUnitario = parseFloat(div.querySelector(".prod-precio").value) || 0;
+        const total = cantidad * precioUnitario;
+
+        if (!nombre || cantidad <= 0 || precioUnitario < 0) {
+          alert("⚠️ Producto incompleto: verifica nombre, cantidad y precio.");
+          return;
+        }
+
+        productos.push({
+          nombre,
+          cantidad,
+          precioUnitario,
+          total
+        });
+        totalCompra += total;
+      });
+
+      if (productos.length === 0) {
+        alert("⚠️ Agrega al menos un producto.");
+        return;
+      }
+
+      try {
+        const data = {
+          proveedorId,
+          proveedorNombre: proveedor.nombre,
+          fecha,
+          fechaPago,
+          factura,
+          formaPago,
+          notas,
+          productos,
+          totalCompra
+        };
+
+        if (esEdicion) {
+          await updateDoc(doc(db, "comprasProveedor", editId), data);
+          alert("✅ Compra actualizada exitosamente.");
+        } else {
+          await addDoc(comprasRef, data);
+          alert("✅ Compra registrada exitosamente.");
+
+          // ✅ Imprimir comprobante después de guardar
+          if (confirm("¿Imprimir comprobante de compra?")) {
+            imprimirComprobante(data);
+          }
+        }
+
+        cerrarModalCompra();
+        await filtrarCompras(); // Refrescar vista
+      } catch (error) {
+        alert("❌ Error al guardar: " + error.message);
+      }
+    }
+
+    // ✅ Filtrar compras por proveedor
+    async function filtrarCompras() {
+      const proveedorId = document.getElementById("filtro-proveedor").value;
+      const cont = document.getElementById("lista-compras");
+      cont.innerHTML = "<p>Filtrando compras...</p>";
+
+      try {
+        const snapshot = await getDocs(comprasRef);
+        const compras = [];
+
+        snapshot.forEach(docSnap => {
+          const c = docSnap.data();
+          c.id = docSnap.id;
+          if (proveedorId === "todos" || c.proveedorId === proveedorId) {
+            compras.push(c);
+          }
+        });
+
+        // Ordenar por fecha (reciente primero)
+        compras.sort((a, b) => b.fecha.localeCompare(a.fecha));
+
+        if (compras.length === 0) {
+          cont.innerHTML = "<p>No hay compras registradas para este filtro.</p>";
+          return;
+        }
+
+        cont.innerHTML = "";
+        compras.forEach(c => {
+          const div = document.createElement("div");
+          div.className = "item";
+          let productosHTML = "";
+          c.productos.forEach(p => {
+            productosHTML += `<li>${p.cantidad}x ${p.nombre} - ₡${p.precioUnitario}/ud = ₡${p.total}</li>`;
+          });
+
+          const nombreProveedor = c.proveedorNombre;
+          const fechaPago = c.fechaPago ? ` | 📅 Pagar: ${c.fechaPago}` : '';
+          const iconoPago = c.formaPago === 'Crédito' ? '💳' : '💵';
+
+          // Determinar estado de actualización de inventario
+          const estadoInventario = c.estadoInventario === 'actualizado' ? 
+            '<span class="estado-inventario actualizado">✅ Inventario actualizado</span>' : 
+            '<span class="estado-inventario pendiente">⚠️ Pendiente de actualizar</span>';
+
+          div.innerHTML = `
+            <strong>📦 ${nombreProveedor}</strong> | 📅 ${c.fecha} | ${iconoPago} ₡${c.totalCompra.toLocaleString()}${fechaPago}
+            <br>
+            <small>📄 ${c.factura || 'Sin factura'} | 💳 ${c.formaPago}</small>
+            <br>
+            <details>
+              <summary>Ver productos (${c.productos.length})</summary>
+              <ul>${productosHTML}</ul>
+              <p><strong>Notas:</strong> ${c.notas || 'Ninguna'}</p>
+            </details>
+            <div class="acciones-compra">
+              <button class="boton-accion" onclick="abrirModalCompra('${c.id}')">✏️ Editar</button>
+              <button class="boton-accion boton-rojo" onclick="eliminarCompra('${c.id}')">🗑️ Eliminar</button>
+              <button class="btn-inventario" onclick="actualizarInventario('${c.id}')">📦 Actualizar Inventario</button>
+            </div>
+            ${estadoInventario}
+          `;
+          cont.appendChild(div);
+        });
+      } catch (error) {
+        cont.innerHTML = "<p>Error al cargar compras.</p>";
+        console.error("Error:", error);
+      }
+    }
+
+    async function eliminarCompra(id) {
+      if (!confirm("¿Eliminar esta compra?")) return;
+      try {
+        await deleteDoc(doc(db, "comprasProveedor", id));
+        alert("✅ Compra eliminada.");
+        await filtrarCompras();
+      } catch (error) {
+        alert("❌ Error al eliminar.");
+      }
+    }
+
+    // ✅ Imprimir comprobante
+    function imprimirComprobante(compra) {
+      const ventana = window.open('', '_blank', 'width=800,height=600');
+      const fecha = new Date().toLocaleDateString();
+      let productosHTML = '';
+      compra.productos.forEach(p => {
+        productosHTML += `
+          <tr>
+            <td>${p.nombre}</td>
+            <td>${p.cantidad}</td>
+            <td>₡${p.precioUnitario.toLocaleString()}</td>
+            <td>₡${p.total.toLocaleString()}</td>
+          </tr>
+        `;
+      });
+
+      ventana.document.write(`
+        <html>
+          <head>
+            <title>Comprobante de Compra</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+              .encabezado { text-align: center; border-bottom: 2px solid #6c4ba3; padding-bottom: 10px; margin-bottom: 20px; }
+              .encabezado h2 { color: #6c4ba3; margin: 0; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+              th { background-color: #f5f5f5; }
+              .total { font-weight: bold; font-size: 1.1rem; }
+              @media print {
+                button { display: none; }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="encabezado">
+              <h2>📦 Comprobante de Compra</h2>
+              <p><strong>Proveedor:</strong> ${compra.proveedorNombre}</p>
+              <p><strong>Fecha:</strong> ${compra.fecha} | <strong>Factura:</strong> ${compra.factura || 'Sin factura'}</p>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cant</th>
+                  <th>Precio</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${productosHTML}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3" class="total">Total General</td>
+                  <td class="total">₡${compra.totalCompra.toLocaleString()}</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p><strong>Forma de pago:</strong> ${compra.formaPago}</p>
+            ${compra.fechaPago ? `<p><strong>Fecha de pago esperada:</strong> ${compra.fechaPago}</p>` : ''}
+            <p><strong>Notas:</strong> ${compra.notas || 'Ninguna'}</p>
+            <button onclick="window.print()" style="padding: 10px; background: #6c4ba3; color: white; border: none; border-radius: 5px; margin-top: 20px;">🖨️ Imprimir</button>
+          </body>
+        </html>
+      `);
+      ventana.document.close();
+    }
+
+    // ✅ Actualizar inventario desde compra
+    async function actualizarInventario(compraId) {
+      if (!confirm('¿Deseas actualizar el inventario con los productos de esta compra?')) {
+        return;
+      }
+
+      try {
+        // Obtener la compra
+        const compraDoc = doc(db, "comprasProveedor", compraId);
+        const docSnap = await getDoc(compraDoc);
+        
+        if (!docSnap.exists()) {
+          alert('Compra no encontrada.');
+          return;
+        }
+
+        const compra = docSnap.data();
+        const productosCompra = compra.productos;
+        
+        // Obtener inventario actual
+        const snapshotStock = await getDocs(stockRef);
+        const stockActual = {};
+        
+        snapshotStock.forEach(doc => {
+          const data = doc.data();
+          stockActual[data.nombre] = {
+            id: doc.id,
+            ...data
+          };
+        });
+
+        let productosActualizados = 0;
+        let productosNuevos = 0;
+        let errores = 0;
+
+        // Procesar cada producto de la compra
+        for (const producto of productosCompra) {
+          try {
+            if (stockActual[producto.nombre]) {
+              // Producto existente - actualizar cantidad
+              const productoExistente = stockActual[producto.nombre];
+              const nuevaCantidad = productoExistente.cantidad + producto.cantidad;
+              const productoDoc = doc(db, "stock", productoExistente.id);
+              
+              await updateDoc(productoDoc, {
+                cantidad: nuevaCantidad,
+                ultimaActualizacion: new Date().toISOString(),
+                precio: producto.precioUnitario,
+                fechaUltimaCompra: compra.fecha,
+                proveedor: compra.proveedorNombre
+              });
+              
+              productosActualizados++;
+            } else {
+              // Nuevo producto - crear registro
+              await addDoc(stockRef, {
+                nombre: producto.nombre,
+                cantidad: producto.cantidad,
+                categoria: 'compra-proveedor',
+                precio: producto.precioUnitario,
+                fechaCreacion: new Date().toISOString(),
+                fechaUltimaCompra: compra.fecha,
+                proveedor: compra.proveedorNombre,
+                notas: `Producto agregado desde compra ${compra.id}`
+              });
+              
+              productosNuevos++;
+            }
+          } catch (error) {
+            console.error(`Error al procesar ${producto.nombre}:`, error);
+            errores++;
+          }
+        }
+
+        // Actualizar estado de la compra
+        await updateDoc(compraDoc, {
+          estadoInventario: 'actualizado',
+          fechaActualizacionInventario: new Date().toISOString()
+        });
+
+        // Mostrar resultado
+        let mensaje = `✅ Actualización de inventario completada:\n`;
+        mensaje += `- ${productosActualizados} productos actualizados\n`;
+        mensaje += `- ${productosNuevos} nuevos productos agregados\n`;
+        
+        if (errores > 0) {
+          mensaje += `- ${errores} errores durante el proceso`;
+        }
+
+        alert(mensaje);
+        
+        // Refrescar la lista de compras
+        await filtrarCompras();
+
+      } catch (error) {
+        console.error("Error al actualizar inventario:", error);
+        alert(`❌ Error al actualizar el inventario: ${error.message}`);
+      }
+    }
+
+    // ✅ Mostrar/ocultar sección de proveedores
+    function toggleProveedores() {
+      const cont = document.getElementById("contenedor-proveedores");
+      const texto = document.getElementById("texto-toggle");
+      
+      if (cont.style.display === "block") {
+        cont.style.display = "none";
+        texto.textContent = "Mostrar Proveedores";
+      } else {
+        cont.style.display = "block";
+        texto.textContent = "Ocultar Proveedores";
+      }
+    }
+
+    // Hacer funciones globales
+    window.abrirModalProveedor = abrirModalProveedor;
+    window.cerrarModalProveedor = cerrarModalProveedor;
+    window.guardarProveedor = guardarProveedor;
+    window.editarProveedor = editarProveedor;
+    window.eliminarProveedor = eliminarProveedor;
+    window.abrirModalCompra = abrirModalCompra;
+    window.cerrarModalCompra = cerrarModalCompra;
+    window.agregarProducto = agregarProducto;
+    window.actualizarTotalCompra = actualizarTotalCompra;
+    window.guardarCompra = guardarCompra;
+    window.eliminarCompra = eliminarCompra;
+    window.imprimirComprobante = imprimirComprobante;
+    window.toggleProveedores = toggleProveedores;
+    window.cargarFiltroProveedores = cargarFiltroProveedores;
+    window.filtrarCompras = filtrarCompras;
+    window.actualizarInventario = actualizarInventario;
+  </script>
+
+  <script>
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    function scrollToBottom() {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+</body>
+</html>
