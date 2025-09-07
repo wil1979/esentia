@@ -400,32 +400,62 @@ h1 {
     width: 100%;
   }
 }
+.btn-filtro {
+  background: #f0f0f0;
+  border: 2px solid #ccc;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-filtro:hover {
+  background: #e0e0e0;
+}
+
+.btn-filtro.activo {
+  background: #6c4ba3;
+  color: white;
+  border-color: #6c4ba3;
+}
 
 /* Estilo del modal del carrito */
 .modal-carrito {
   display: none;
+  align-items: center;
+  justify-content: center;
   position: fixed;
-  z-index: 9999;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
 }
 
 .modal-contenido {
-  background-color: #fff;
-  margin: 8% auto;
-  padding: 24px;
+  background: white;
+  padding: 30px;
   border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
   position: relative;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeInUp 0.4s ease;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 @keyframes fadeIn {
   from {opacity: 0; transform: translateY(-10px);}
   to {opacity: 1; transform: translateY(0);}

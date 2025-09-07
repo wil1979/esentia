@@ -5,18 +5,55 @@
   <title>Catálogo Esentia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="catalogo.css" />
- 
+
+  <!-- Estilos para botones de filtro -->
+  <style>
+    .btn-filtro {
+      background: #f0f0f0;
+      border: 2px solid #ccc;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .btn-filtro:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-filtro.activo {
+      background: #6c4ba3;
+      color: white;
+      border-color: #6c4ba3;
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="logo-container">
       <img src="images/logo.png" alt="Logo de Esentia" class="logo" />
     </div>
-
     <h1>🌿 Catálogo de Productos Esentia</h1>
   </header>
 
   <main class="contenedor">
+    <!-- Loader -->
+    <div id="loader" style="display:flex; justify-content:center; align-items:center; height:300px; color:#6c4ba3; font-size:1.5rem; font-weight:bold;">
+      <div style="text-align:center;">
+        <div style="font-size:3rem; margin-bottom:10px;">⏳</div>
+        <div>Cargando catálogo...</div>
+      </div>
+    </div>
+
+    <!-- Filtros (ocultos hasta que cargue todo) -->
+    <div style="text-align:center; margin:1.5rem 0; display:none;" id="filtros-container">
+      <button id="btnMostrarDisponibles" class="btn-filtro activo">📦 Disponibles</button>
+      <button id="btnMostrarTodos" class="btn-filtro">📚 Ver todo el catálogo</button>
+    </div>
+
+    <!-- Contenedor de productos -->
     <div id="productos-hogar"></div>
   </main>
 
@@ -49,7 +86,7 @@
   </div>
 
   <!-- Botón flotante del carrito -->
-  <button id="botonCarrito" onclick="document.getElementById('modalCarrito').style.display='flex'">
+  <button id="botonCarrito" onclick="abrirModalCarrito()">
     🛒 <span id="contadorCarrito">0</span>
   </button>
 
@@ -59,10 +96,10 @@
   <!-- Scripts -->
   <script src="catalogo.js"></script>
 
-  <!-- Bloque Firebase (para inventario) -->
+  <!-- 🔥 Bloque Firebase (para inventario y actualización de stock) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
@@ -77,7 +114,11 @@
     const db = getFirestore(app);
     const stockCollection = collection(db, "stock");
 
+    // Exponer en window para que catalogo.js pueda usarlo
+    window.stockCollection = stockCollection;
+
     let inventario = {};
+    window.inventario = inventario;
 
     async function cargarInventario() {
       try {
@@ -86,9 +127,16 @@
           const data = doc.data();
           inventario[data.nombre] = data.cantidad;
         });
-        actualizarCatalogoConStock();
+
+        // Intentar renderizar productos una vez cargado el inventario
+        if (typeof intentarRenderizar === "function") {
+          intentarRenderizar();
+        }
       } catch (error) {
         console.error("Error cargando inventario:", error);
+        if (typeof mostrarErrorCarga === "function") {
+          mostrarErrorCarga();
+        }
       }
     }
 
@@ -101,7 +149,7 @@
         const boton = card.querySelector(".btn-agregar");
 
         if (stock > 0) {
-            stockLabel.innerHTML = `<span style="color:green;">✅ Disponible: ${stock}</span>`;
+          stockLabel.innerHTML = `<span style="color:green;">✅ Disponible: ${stock}</span>`;
           if (boton) boton.disabled = false;
         } else {
           stockLabel.textContent = `❌ Agotado`;
@@ -124,6 +172,7 @@
       }
     };
 
+    // Cargar inventario al iniciar
     document.addEventListener("DOMContentLoaded", cargarInventario);
   </script>
 </body>

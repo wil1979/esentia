@@ -5,6 +5,7 @@ let carrito = [];
 let cuponActivo = false;
 let productoSeleccionado = null;
 let productos = [];
+let modoVisualizacion = "disponibles"; // 'disponibles' o 'todos'
 
 // ==============================
 // 📦 CARGAR PRODUCTOS DESDE JSON
@@ -15,16 +16,26 @@ fetch(URL_ESENCIA)
   .then(res => res.json())
   .then(data => {
     productos = data;
-    renderizarProductos();
+    intentarRenderizar();
   })
-  .catch(err => console.error("Error cargando productos:", err));
+  .catch(err => {
+    console.error("Error cargando productos:", err);
+    mostrarErrorCarga();
+  });
 
 // ==============================
 // 🖼️ RENDERIZAR PRODUCTOS
 // ==============================
 function renderizarProductos() {
   const container = document.getElementById("productos-hogar");
-  if (!container) return;
+  const loader = document.getElementById("loader");
+  const filtrosContainer = document.getElementById("filtros-container");
+
+  if (!container || !loader) return;
+
+  // Ocultar loader y mostrar filtros + productos
+  loader.style.display = "none";
+  if (filtrosContainer) filtrosContainer.style.display = "block";
 
   container.innerHTML = "";
 
@@ -34,15 +45,29 @@ function renderizarProductos() {
   fila.style.flexWrap = "wrap";
   fila.style.gap = "1.5rem";
 
-  productos.forEach(producto => {
-    if (!producto.disponible) return;
+  // Filtrar productos según modoVisualizacion y disponibilidad
+  const productosFiltrados = productos.filter(producto => {
+    if (!producto.disponible) return false;
 
-    const divProducto = document.createElement("div");
-    divProducto.className = producto.precioOferta
-      ? "producto oferta producto-card"
-      : "producto producto-card";
-    divProducto.dataset.nombre = producto.nombre;
+    if (modoVisualizacion === "disponibles") {
+      const stock = inventario[producto.nombre] ?? 0;
+      return stock > 0;
+    }
 
+    return true; // modo "todos"
+  });
+
+  if (productosFiltrados.length === 0) {
+    const mensaje = document.createElement("p");
+    mensaje.textContent = "📭 No hay productos disponibles en este filtro.";
+    mensaje.style.gridColumn = "1 / -1";
+    mensaje.style.textAlign = "center";
+    mensaje.style.fontSize = "1.2rem";
+    mensaje.style.color = "#666";
+    fila.appendChild(mensaje);
+  }
+
+  productosFiltrados.forEach(producto => {
     const precioFinal = producto.precioOferta || producto.precio;
 
     let estrellasHTML = "";
@@ -66,6 +91,12 @@ function renderizarProductos() {
       \`${producto.beneficios || ''}\`,
       \`${producto.usoRecomendado || ''}\`
     )">Ver detalles</button>`;
+
+    const divProducto = document.createElement("div");
+    divProducto.className = producto.precioOferta
+      ? "producto oferta producto-card"
+      : "producto producto-card";
+    divProducto.dataset.nombre = producto.nombre;
 
     divProducto.innerHTML = `
       <div style="position:relative;">
@@ -91,6 +122,14 @@ function renderizarProductos() {
 
   container.appendChild(fila);
 
+  // Actualizar estilos de botones
+  const btnDisponibles = document.getElementById("btnMostrarDisponibles");
+  const btnTodos = document.getElementById("btnMostrarTodos");
+  if (btnDisponibles && btnTodos) {
+    btnDisponibles.classList.toggle("activo", modoVisualizacion === "disponibles");
+    btnTodos.classList.toggle("activo", modoVisualizacion === "todos");
+  }
+
   if (typeof actualizarCatalogoConStock === "function") {
     actualizarCatalogoConStock();
   }
@@ -109,11 +148,9 @@ function mostrarInfoProducto(nombre, precio, imagen, info, beneficios, usoRecome
 
   document.getElementById("modalProductoPrecio").textContent = `₡${precio.toLocaleString()}`;
 
-  // buscar producto real
   const productoReal = productos.find(p => p.nombre === nombre);
   productoSeleccionado = { ...productoReal };
 
-  // manejar variantes
   const selectorContainer = document.getElementById("selectorVariante");
   selectorContainer.innerHTML = "";
 
@@ -230,12 +267,28 @@ function vaciarCarrito() {
   }
 }
 
-function finalizarPedido() {
+// ==============================
+// 📲 FINALIZAR PEDIDO + ACTUALIZAR STOCK EN FIREBASE
+// ==============================
+async function finalizarPedido() {
   if (carrito.length === 0) {
     alert("El carrito está vacío");
     return;
   }
 
+  // Verificar stock
+  for (const item of carrito) {
+    // Asumimos que el nombre base es la primera palabra (mejorable con IDs)
+    const nombreBase = item.nombre.split(" ")[0];
+    const stockActual = inventario[nombreBase] ?? 0;
+
+    if (stockActual < item.cantidad) {
+      mostrarToast(`❌ No hay suficiente stock de "${nombreBase}"`, "#e53935");
+      return;
+    }
+  }
+
+  // Generar mensaje WhatsApp
   let mensaje = "Hola Wilber 👋%0AQuiero hacer el siguiente pedido:%0A%0A";
   let total = 0;
 
@@ -247,6 +300,37 @@ function finalizarPedido() {
 
   mensaje += `%0A💰 Total: ₡${Math.round(total).toLocaleString()}%0A%0A¡Gracias por tu compra! 🌿`;
   window.open(`https://wa.me/50672952454?text=${mensaje}`, "_blank");
+
+  // ✅ Actualizar stock en Firestore
+  try {
+    for (const item of carrito) {
+      const nombreBase = item.nombre.split(" ")[0];
+      const stockActual = inventario[nombreBase] ?? 0;
+      const nuevoStock = stockActual - item.cantidad;
+
+      const querySnapshot = await getDocs(stockCollection);
+      const doc = querySnapshot.docs.find(d => d.data().nombre === nombreBase);
+
+      if (doc) {
+        await updateDoc(doc.ref, { cantidad: nuevoStock });
+        inventario[nombreBase] = nuevoStock;
+      } else {
+        console.warn(`No se encontró documento para: ${nombreBase}`);
+      }
+    }
+
+    if (typeof actualizarCatalogoConStock === "function") {
+      actualizarCatalogoConStock();
+    }
+
+    carrito = [];
+    renderCarrito();
+    mostrarToast("✅ Pedido enviado y stock actualizado", "#4caf50");
+
+  } catch (error) {
+    console.error("Error actualizando stock:", error);
+    mostrarToast("⚠️ Error al actualizar stock. Contacta al administrador.", "#e53935");
+  }
 }
 
 // ==============================
@@ -278,3 +362,50 @@ function cerrarModalCarrito() {
   document.getElementById("modalCarrito").style.display = "none";
 }
 
+// ==============================
+// 🧩 RENDERIZAR CUANDO TODO ESTÉ LISTO
+// ==============================
+function intentarRenderizar() {
+  if (productos.length > 0 && typeof inventario !== "undefined" && Object.keys(inventario).length > 0) {
+    renderizarProductos();
+  } else {
+    setTimeout(intentarRenderizar, 100);
+  }
+}
+
+function mostrarErrorCarga() {
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:3rem; margin-bottom:10px;">⚠️</div>
+        <div>Error al cargar el catálogo. Por favor, recarga la página.</div>
+      </div>
+    `;
+  }
+}
+
+// ==============================
+// 🎛️ INICIAR
+// ==============================
+document.addEventListener("DOMContentLoaded", () => {
+  cargarCarrito();
+
+  // Eventos para los botones de filtro
+  const btnDisponibles = document.getElementById("btnMostrarDisponibles");
+  const btnTodos = document.getElementById("btnMostrarTodos");
+
+  if (btnDisponibles) {
+    btnDisponibles.addEventListener("click", () => {
+      modoVisualizacion = "disponibles";
+      renderizarProductos();
+    });
+  }
+
+  if (btnTodos) {
+    btnTodos.addEventListener("click", () => {
+      modoVisualizacion = "todos";
+      renderizarProductos();
+    });
+  }
+});
