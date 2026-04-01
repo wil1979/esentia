@@ -8,6 +8,7 @@ let clienteAutenticado = null;
 let datosLealtadCliente = null;
 let tarjetaLealtadAbierta = true;
 let adminProductoActualId = null;
+let clienteSeleccionado = null;
 window.catalogoListo = false;
 // Variable para controlar el estado de carga
 window.estadoCarga = {
@@ -80,6 +81,7 @@ function verificarSesion() {
     verificarYRenderizar();
     
     actualizarLealtadAlAutenticar();
+    cargarNotificacionesCliente();
     
     console.log('⏱️ Tiempo verificación sesión:', (performance.now() - inicio).toFixed(0), 'ms');
 }
@@ -684,7 +686,7 @@ document.addEventListener('click', (e) => {
 function crearCardProducto(p) {
     const precioFinal = p.precioOferta || p.precio || 3000;
     const precioOriginal = p.precioOriginal;
-    const stock = window.inventario[p.nombre] ?? 0;
+    const stock = window.inventario[normalizarNombre(p.nombre)] ?? 0;
     
     const card = document.createElement("div");
     card.className = p.precioOferta ? "producto-card oferta" : "producto-card";
@@ -907,23 +909,63 @@ function eliminarDelCarrito(index) {
   renderCarrito();
 }
 
-function aplicarCodigoPremio() {
+async function aplicarCodigoPremio() {
+
   const input = document.getElementById("codigoPremio");
+  if (!input) {
+    console.error("❌ Input codigoPremio no existe");
+    return;
+  }
+
   const codigo = input.value.trim().toUpperCase();
 
-  const codigos = {
-    "ESENTIA10": { tipo: "porcentaje", valor: 10 },
-    "ESENTIA20": { tipo: "porcentaje", valor: 20 },
-    "NAVIDAD": { tipo: "monto", valor: 1500 },
-    "PREMIO1": { tipo: "monto", valor: 1000 }
-  };
+  if (!codigo) {
+    mostrarToast("Ingresa un código", "#e74c3c");
+    return;
+  }
 
-  const promo = codigos[codigo];
+  console.log("🎁 Código ingresado:", codigo);
+
+  let promo = null;
+
+  // 🔥 1. Intentar Firebase
+  try {
+    if (typeof validarPromo === "function") {
+      const resultado = await validarPromo(codigo, "cliente123");
+
+      if (!resultado.valido) {
+  mostrarToast(resultado.mensaje || "Código inválido", "#e74c3c");
+  return;
+}
+    } else {
+      console.warn("⚠️ validarPromo no existe");
+    }
+  } catch (e) {
+    console.warn("❌ Error Firebase:", e);
+  }
+
+  // 🔥 2. Códigos locales (fallback)
+  if (!promo) {
+    const codigos = {
+      "ESENTIA10": { tipo: "porcentaje", valor: 10 },
+      "NAVIDAD": { tipo: "monto", valor: 1500 },
+      "PREMIO1": { tipo: "monto", valor: 1000 }
+    };
+
+    promo = codigos[codigo];
+
+    if (promo) {
+      console.log("✅ Promo local:", promo);
+    }
+  }
+
+  // ❌ Si no hay promo
   if (!promo) {
     mostrarToast("Código inválido", "#e74c3c");
     return;
   }
 
+  // 🔥 3. Calcular total
   let total = carrito.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
 
   if (promo.tipo === "porcentaje") {
@@ -933,9 +975,267 @@ function aplicarCodigoPremio() {
   }
 
   codigoAplicado = codigo;
+
+  console.log("💰 Descuento aplicado:", descuentoAplicado);
+
   renderCarrito();
-  mostrarToast(`¡Código aplicado! -₡${descuentoAplicado.toLocaleString()}`);
+
+  mostrarToast(`🎁 Descuento aplicado -₡${descuentoAplicado.toLocaleString()}`, "#2ecc71");
 }
+
+async function validarUsoCliente(clienteId, promoId, limite) {
+
+  const { getDocs, collection, query, where } = window.firebaseUtils;
+
+  const q = query(
+    collection(window.db, "promos_usadas"),
+    where("clienteId", "==", clienteId),
+    where("promoId", "==", promoId)
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) return true;
+
+  const data = snap.docs[0].data();
+
+  return data.vecesUsado < limite;
+}
+
+async function usarPromo(id, clienteId) {
+
+  const { doc, updateDoc } = window.firebaseUtils;
+
+  const ref = doc(window.db, "promociones", id);
+
+  try {
+    await updateDoc(ref, {
+      usosActuales: (window.increment ? window.increment(1) : 1)
+    });
+  } catch (error) {
+    console.error("Error registrando uso:", error);
+  }
+}
+
+async function validarPromo(codigo, clienteId) {
+
+  const { getDocs, collection, query, where, doc, getDoc } = window.firebaseUtils;
+
+  try {
+    const q = query(
+      collection(window.db, "promociones"),
+      where("codigo", "==", codigo)
+    );
+
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      return { valido: false, mensaje: "Código no existe" };
+    }
+
+    const docSnap = snap.docs[0];
+    const data = docSnap.data();
+
+    // 🔥 1. Activa
+    if (data.activa === false) {
+      return { valido: false, mensaje: "Código desactivado" };
+    }
+
+    // 🔥 2. Expiración
+    if (data.fechaExpiracion) {
+      if (new Date() > new Date(data.fechaExpiracion)) {
+        return { valido: false, mensaje: "Código expirado" };
+      }
+    }
+
+    // 🔥 3. Usos globales
+    if (data.usosMax && data.usosActuales >= data.usosMax) {
+      return { valido: false, mensaje: "Código agotado" };
+    }
+
+    // 🔥 4. Monto mínimo
+    const total = carrito.reduce((sum, i) => sum + i.precio * i.cantidad, 0);
+    if (data.minimoCompra && total < data.minimoCompra) {
+      return { 
+        valido: false, 
+        mensaje: `Compra mínima ₡${data.minimoCompra}` 
+      };
+    }
+
+    // 🔥 5. Primera compra
+    if (data.soloPrimeraCompra && clienteId) {
+      const refCliente = doc(window.db, "facturas", clienteId);
+      const snapCliente = await getDoc(refCliente);
+
+      const compras = snapCliente.exists() ? snapCliente.data().compras || [] : [];
+
+      if (compras.length > 0) {
+        return { valido: false, mensaje: "Solo para nuevos clientes" };
+      }
+    }
+
+    // 🔥 6. Clientes específicos
+    if (data.clientesPermitidos?.length > 0) {
+      if (!data.clientesPermitidos.includes(clienteId)) {
+        return { valido: false, mensaje: "No autorizado" };
+      }
+    }
+
+    return {
+      valido: true,
+      promo: {
+        id: docSnap.id,
+        ...data
+      }
+    };
+
+  } catch (error) {
+    console.error("Error validando promo:", error);
+    return { valido: false, mensaje: "Error validando" };
+  }
+}
+
+window.mostrarPanelPromos = async function () {
+  if (localStorage.getItem("adminEsentia") !== "1") return;
+
+  const panel = document.getElementById("panelPromos");
+  panel.classList.remove("hidden");
+
+  cargarPromosAdmin();
+};
+async function cargarNotificacionesCliente() {
+
+  const { getDocs, collection } = window.firebaseUtils;
+
+  const snap = await getDocs(collection(window.db, "notificaciones"));
+
+  snap.forEach(doc => {
+    const n = doc.data();
+
+    mostrarToast(`🔔 ${n.titulo}: ${n.mensaje}`, "#6c4ba3");
+  });
+}
+
+async function cargarPromosAdmin() {
+
+  console.log("Buscando listaPromos:", document.getElementById("listaPromos"));
+  const { getDocs, collection } = window.firebaseUtils;
+  const contenedor = document.getElementById("listaPromos");
+
+if (!contenedor) {
+  console.error("❌ listaPromos no existe en el DOM");
+  return;
+}
+
+  contenedor.innerHTML = "Cargando...";
+
+  const snap = await getDocs(collection(window.db, "promociones"));
+
+  contenedor.innerHTML = "";
+
+  if (snap.empty) {
+    contenedor.innerHTML = "⚠️ No hay códigos creados";
+    return;
+  }
+
+  snap.forEach(docSnap => {
+    const p = docSnap.data();
+    const id = docSnap.id;
+
+    const expira = p.fechaExpiracion ? new Date(p.fechaExpiracion) : null;
+    const expirada = expira && new Date() > expira;
+
+    contenedor.innerHTML += `
+      <div style="padding:10px;border:1px solid #444;margin-bottom:10px;border-radius:8px;">
+        
+        <strong style="font-size:16px;">${p.codigo}</strong><br>
+        
+        💸 ${p.tipo === "porcentaje" ? p.valor + "%" : "₡" + p.valor}<br>
+        📊 Usos: ${p.usosActuales || 0}/${p.usosMax || "∞"}<br>
+        ⏳ ${expirada ? "❌ Expirada" : "✅ Activa"}
+
+        <br><br>
+
+        <button onclick="editarPromo('${id}', '${p.codigo}', ${p.valor})">
+          ✏️ Editar
+        </button>
+
+        <button onclick="eliminarPromo('${id}')">
+          🗑️ Eliminar
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+window.editarPromo = async function (id, codigo, valorActual) {
+  const nuevoValor = prompt(`Editar valor para ${codigo}`, valorActual);
+
+  if (!nuevoValor) return;
+
+  const { updateDoc, doc } = window.firebaseUtils;
+
+  await updateDoc(doc(window.db, "promociones", id), {
+    valor: Number(nuevoValor)
+  });
+
+  alert("✅ Promo actualizada");
+
+  cargarPromosAdmin();
+};
+
+
+window.eliminarPromo = async function (id) {
+
+  if (!id) return;
+
+  if (!confirm("¿Eliminar esta promoción?")) return;
+
+  try {
+    await window.firebaseUtils.deleteDoc(
+      window.firebaseUtils.doc(window.db, "promociones", id)
+    );
+
+    mostrarToast("🗑️ Promoción eliminada", "#e74c3c");
+    cargarPromosAdmin();
+
+  } catch (error) {
+    console.error("Error eliminando promo:", error);
+    mostrarToast("⚠️ No se pudo eliminar", "#e74c3c");
+  }
+};
+
+async function cargarNotificacionesAdmin() {
+  const { getDocs, collection } = window.firebaseUtils;
+
+  const contenedor = document.getElementById("listaNotificaciones");
+  contenedor.innerHTML = "Cargando...";
+
+  const snap = await getDocs(collection(window.db, "notificaciones"));
+
+  contenedor.innerHTML = "";
+
+  snap.forEach(doc => {
+    const n = doc.data();
+
+    contenedor.innerHTML += `
+      <div class="promo-card">
+        <strong>${n.titulo}</strong><br>
+        ${n.mensaje}<br>
+
+        <button onclick="eliminarNotificacion('${doc.id}')">🗑️</button>
+      </div>
+    `;
+  });
+}
+
+window.eliminarNotificacion = async function (id) {
+  await window.firebaseUtils.deleteDoc(
+  window.firebaseUtils.doc(window.db, "promociones", id)
+  );
+  cargarNotificacionesAdmin();
+};
 
 function finalizarPedido() {
   if (!clienteAutenticado) {
@@ -965,6 +1265,134 @@ function finalizarPedido() {
 
   window.open(`https://wa.me/50672952454?text=${encodeURIComponent(mensaje)}`, "_blank");
 }
+
+
+
+window.abrirModalFacturacion = async function () {
+
+  document.getElementById("modalFacturacion").style.display = "flex";
+
+  renderProductosFact();
+  cargarClientesFact();
+  actualizarTotalesFact();
+};
+
+function cerrarModalFacturacion() {
+  document.getElementById("modalFacturacion").style.display = "none";
+}
+
+async function cargarClientesFact() {
+
+  const { getDocs, collection } = window.firebaseUtils;
+
+  const snap = await getDocs(collection(window.db, "clientesBD"));
+
+  const cont = document.getElementById("listaClientesFact");
+  cont.innerHTML = "";
+
+  snap.forEach(doc => {
+    const c = doc.data();
+
+    const div = document.createElement("div");
+    div.className = "cliente-item";
+    div.innerHTML = `${c.nombre} - ${c.telefono}`;
+
+    div.onclick = () => {
+      clienteSeleccionado = { id: doc.id, ...c };
+
+      document.querySelectorAll("#listaClientesFact div")
+        .forEach(el => el.classList.remove("activo"));
+
+      div.classList.add("activo");
+    };
+
+    cont.appendChild(div);
+  });
+}
+
+function renderProductosFact() {
+
+  const cont = document.getElementById("listaProductosFact");
+  cont.innerHTML = "";
+
+  carrito.forEach((p, i) => {
+
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      ${p.nombre} x${p.cantidad}
+      <span>₡${p.precio * p.cantidad}</span>
+    `;
+
+    cont.appendChild(div);
+  });
+}
+
+document.getElementById("descuentoFact").addEventListener("input", actualizarTotalesFact);
+
+function actualizarTotalesFact() {
+
+  const subtotal = carrito.reduce((s, p) => s + p.precio * p.cantidad, 0);
+  const descuento = Number(document.getElementById("descuentoFact").value) || 0;
+
+  const total = subtotal - descuento;
+
+  document.getElementById("subtotalFact").innerText = subtotal;
+  document.getElementById("descuentoMostrado").innerText = descuento;
+  document.getElementById("totalFact").innerText = total;
+}
+
+window.confirmarFacturacion = async function () {
+
+  if (!clienteSeleccionado) {
+    mostrarToast("Selecciona cliente", "#e74c3c");
+    return;
+  }
+
+  const metodo = document.getElementById("metodoPagoFact").value;
+  const descuento = Number(document.getElementById("descuentoFact").value) || 0;
+
+  const productos = carrito.map(p => ({
+    cantidad: p.cantidad,
+    idProducto: p.id,
+    nombre: p.nombre,
+    precio: p.precio,
+    variante: p.variante || "Única"
+  }));
+
+  const subtotal = productos.reduce((s, p) => s + p.precio * p.cantidad, 0);
+  const total = subtotal - descuento;
+
+  const compra = {
+    fecha: new Date().toISOString(),
+    productos,
+    total,
+    monto: total,
+    descuento,
+    metodoPago: metodo,
+    tipoPago: metodo === "Credito" ? "credito" : "contado",
+    pagado: metodo === "Credito" ? 0 : total,
+    saldo: metodo === "Credito" ? total : 0
+  };
+
+  const { doc, updateDoc, arrayUnion } = window.firebaseUtils;
+
+  await updateDoc(
+    doc(window.db, "facturas", clienteSeleccionado.id),
+    { compras: arrayUnion(compra) }
+  );
+
+  await descontarInventario(productos);
+  await actualizarLealtad(clienteSeleccionado.id);
+  enviarFacturaCliente(clienteSeleccionado, compra);
+
+  mostrarToast("🧾 Factura completa", "#2ecc71");
+
+  cerrarModalFacturacion();
+
+  carrito = [];
+  renderCarrito();
+};
 
 // ================================
 // UTILIDADES
@@ -1126,6 +1554,7 @@ function abrirModalInventario() {
                 <div class="modal-footer">
                     <button class="btn-submit" onclick="guardarInventarioCompleto()">💾 Guardar Cambios</button>
                     <button class="btn-secondary" onclick="exportarInventario()">📥 Exportar CSV</button>
+                    <button class="btn-secondary" onclick="cerrarModalInventario()">❌ Cerrar</button>
                 </div>
             </div>
         `;
@@ -1459,7 +1888,7 @@ function filtrarInventario() {
     
     const filtrados = productos.filter(p => {
         const coincideNombre = p.nombre.toLowerCase().includes(texto) || p.tipo.toLowerCase().includes(texto);
-        const stock = window.inventario[p.nombre] ?? 0;
+        const stock = window.inventario[normalizarNombre(p.nombre)] ?? 0;
         
         let coincideEstado = true;
         if (estado === "agotado") coincideEstado = stock === 0;
@@ -1492,7 +1921,7 @@ async function guardarInventarioCompleto() {
         const { doc, setDoc, serverTimestamp } = window.firebaseUtils;
         
         for (const p of modificados) {
-            const stock = window.inventario[p.nombre] ?? 0;
+           const stock = window.inventario[normalizarNombre(p.nombre)] ?? 0;
             // ✅ CAMBIO: "stock" en lugar de "inventario"
             const ref = doc(window.db, "stock", p.nombre);
             await setDoc(ref, {
@@ -1525,7 +1954,7 @@ function exportarInventario() {
     let csv = "Nombre,Tipo,Precio,Stock,Estado\n";
     
     productos.forEach(p => {
-        const stock = window.inventario[p.nombre] ?? 0;
+        const stock = window.inventario[normalizarNombre(p.nombre)] ?? 0;
         const estado = stock === 0 ? "Agotado" : stock <= 5 ? "Bajo" : "Normal";
         const precio = p.precioOferta || p.precio || 3000;
         
@@ -1576,6 +2005,251 @@ function importarInventario() {
     
     input.click();
 }
+
+async function verEstructuraFirestore() {
+
+  const { getDocs, collection } = window.firebaseUtils;
+
+  const colecciones = ["clientes", "facturas", "facturacion", "promociones"];
+
+  for (const col of colecciones) {
+    try {
+      const snap = await getDocs(collection(window.db, col));
+
+      console.log(`📦 Colección: ${col}`);
+
+      snap.forEach(doc => {
+        console.log("ID:", doc.id);
+        console.log("DATA:", doc.data());
+        return false; // solo uno
+      });
+
+    } catch (e) {
+      console.warn(`No existe colección: ${col}`);
+    }
+  }
+}
+
+window.facturarDesdeCatalogoPRO = async function () {
+
+  const metodoPago = prompt("Método de pago:", "Efectivo") || "Efectivo";
+  const descuento = Number(prompt("Descuento:", 0)) || 0;
+
+  const carritoLocal = carrito.map(item => ({
+    cantidad: item.cantidad,
+    id: item.id,
+    idProducto: item.id,
+    nombre: item.nombre,
+    precio: item.precio,
+    variante: item.variante || "Única"
+  }));
+
+  const subtotal = carritoLocal.reduce((s, i) => s + i.precio * i.cantidad, 0);
+  const total = subtotal - descuento;
+
+  const compra = {
+    fecha: new Date().toISOString(),
+    productos: carritoLocal,
+    total,
+    monto: total,
+    descuento,
+    metodoPago,
+    tipoPago: metodoPago === "Credito" ? "credito" : "contado",
+    pagado: metodoPago === "Credito" ? 0 : total,
+    saldo: metodoPago === "Credito" ? total : 0
+  };
+
+  const { doc, updateDoc, arrayUnion, getDoc } = window.firebaseUtils;
+
+  const ref = doc(window.db, "facturas", clienteSeleccionado.id);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    await updateDoc(ref, {
+      compras: arrayUnion(compra)
+    });
+  }
+
+  await descontarInventario(carritoLocal);
+  await actualizarLealtad(clienteSeleccionado.id);
+  enviarFacturaCliente(clienteSeleccionado, compra);
+
+  carrito = [];
+  renderCarrito();
+
+  mostrarToast("🧾 Factura completa", "#2ecc71");
+};
+
+async function descontarInventario(productos) {
+
+  const { doc, updateDoc, getDoc } = window.firebaseUtils;
+
+  for (const p of productos) {
+    const ref = doc(window.db, "inventario", p.idProducto);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) continue;
+
+    const data = snap.data();
+    const nuevoStock = (data.stock || 0) - p.cantidad;
+
+    await updateDoc(ref, {
+      stock: nuevoStock
+    });
+  }
+
+  console.log("📦 Inventario actualizado");
+}
+
+async function actualizarLealtad(clienteId) {
+
+  const { doc, getDoc, updateDoc } = window.firebaseUtils;
+
+  const ref = doc(window.db, "facturas", clienteId);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+  let sellos = data.lealtad?.sellos || 0;
+
+  sellos++;
+
+  let premios = data.lealtad?.premiosPendientes || 0;
+
+  if (sellos >= 6) {
+    premios++;
+    sellos = 0;
+    mostrarToast("🎁 Cliente ganó un premio", "#f39c12");
+  }
+
+  await updateDoc(ref, {
+    "lealtad.sellos": sellos,
+    "lealtad.premiosPendientes": premios
+  });
+}
+
+function generarFacturaPDF(cliente, compra) {
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("Factura Esentia", 20, 20);
+
+  doc.setFontSize(10);
+  doc.text(`Cliente: ${cliente.nombre}`, 20, 30);
+
+  let y = 40;
+
+  compra.productos.forEach(p => {
+    doc.text(`${p.nombre} x${p.cantidad}`, 20, y);
+    doc.text(`₡${p.precio * p.cantidad}`, 150, y);
+    y += 10;
+  });
+
+  doc.text(`Total: ₡${compra.total}`, 20, y + 10);
+
+  doc.save("factura_esentia.pdf");
+}
+
+function enviarFacturaCliente(cliente, compra) {
+
+  const detalle = compra.productos
+    .map(p => `• ${p.nombre} x${p.cantidad}`)
+    .join("\n");
+
+  const mensaje = `
+🧾 Factura Esentia
+
+${cliente.nombre}
+
+${detalle}
+
+Total: ₡${compra.total}
+`;
+
+  const url = `https://wa.me/506${cliente.telefono}?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank");
+
+  generarFacturaPDF(cliente, compra);
+}
+
+window.abrirSelectorCliente = async function () {
+  document.getElementById("modalCliente").style.display = "flex";
+
+  const { getDocs, collection } = window.firebaseUtils;
+  const snap = await getDocs(collection(window.db, "clientesBD"));
+
+  const contenedor = document.getElementById("listaClientes");
+  contenedor.innerHTML = "";
+
+  snap.forEach(doc => {
+    const c = doc.data();
+
+    const div = document.createElement("div");
+    div.className = "cliente-item";
+    div.innerHTML = `
+      <strong>${c.nombre}</strong><br>
+      📱 ${c.telefono}
+    `;
+
+    div.onclick = () => {
+      clienteSeleccionado = { id: doc.id, ...c };
+      document.querySelectorAll(".cliente-item").forEach(el => el.classList.remove("activo"));
+      div.classList.add("activo");
+    };
+
+    contenedor.appendChild(div);
+  });
+};
+
+function cerrarModalCliente() {
+  document.getElementById("modalCliente").style.display = "none";
+}
+
+function confirmarCliente() {
+  if (!clienteSeleccionado) {
+    mostrarToast("Selecciona un cliente", "#e74c3c");
+    return;
+  }
+
+  cerrarModalCliente();
+  facturarDesdeCatalogoPRO();
+}
+
+async function enviarFacturaCliente(clienteId, compra) {
+
+  const { doc, getDoc } = window.firebaseUtils;
+
+  const ref = doc(window.db, "clientesBD", clienteId);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return;
+
+  const cliente = snap.data();
+
+  const detalle = compra.productos
+    .map(p => `• ${p.nombre} x${p.cantidad} = ₡${p.precio * p.cantidad}`)
+    .join("\n");
+
+  const mensaje = `
+🧾 *Factura Esentia*
+
+👤 ${cliente.nombre}
+
+${detalle}
+
+💰 Total: ₡${compra.total}
+`;
+
+  const url = `https://wa.me/506${cliente.telefono}?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank");
+}
+
+
 
 // Ver productos agotados rápidamente
 function verProductosAgotados() {
@@ -1640,39 +2314,25 @@ function verHistorialCompleto() {
     mostrarToast("📋 Historial completo abierto", "#6c4ba3");
 }
 
-// NUEVO: Generar Códigos Promo
-function generarCodigosPromo() {
-    const adminMenu = document.getElementById("adminMenu");
-    adminMenu.style.display = "none";
-    
-    const codigos = [
-        "PROMO" + Math.random().toString(36).substr(2, 6).toUpperCase(),
-        "DESCUENTO" + Math.random().toString(36).substr(2, 4).toUpperCase(),
-        "REGALO" + Math.random().toString(36).substr(2, 5).toUpperCase()
-    ];
-    
-    alert(`🎁 CÓDIGOS GENERADOS\n\n${codigos.join("\n")}\n\n⚠️ Estos códigos son de ejemplo. Configúralos en Firebase.`);
-}
-
 window.generarCodigoPromoAuto = async function () {
   try {
     const { addDoc, collection } = window.firebaseUtils;
 
     // 🔥 Generar código automático
-    const codigo = "ESENTIA-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-
+    //const codigo = "ESENTIA-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const codigo = "ESENTIA" + Math.floor(Math.random() * 10000);
     // ⏱️ Fecha actual
     const ahora = new Date();
 
     // ⏳ Expira en 24 horas
     const expiracion = new Date(ahora.getTime() + (24 * 60 * 60 * 1000));
-
+    
     await addDoc(collection(window.db, "promociones"), {
       codigo,
       tipo: "porcentaje", // puedes cambiar a "fijo"
       valor: 10,
       activo: true,
-      usosMax: 50,
+      usosMax: 2,
       usosActuales: 0,
       fechaCreacion: ahora.toISOString(),
       fechaExpiracion: expiracion.toISOString(),
@@ -1689,22 +2349,38 @@ ${codigo}
     console.error("Error creando código:", error);
     alert("Error al generar código");
   }
+  cargarPromosAdmin()
+};
+
+window.enviarNotificacionMasiva = async function () {
+
+  const adminMenu = document.getElementById("adminMenu");
+  if (adminMenu) adminMenu.style.display = "none";
+
+  const mensaje = prompt("📣 Mensaje para todos los clientes:");
+  if (!mensaje) return;
+
+  const titulo = prompt("📝 Título de la notificación:", "Esentia") || "Esentia";
+
+  const { addDoc, collection, serverTimestamp } = window.firebaseUtils;
+
+  try {
+    await addDoc(collection(window.db, "notificaciones"), {
+      titulo,
+      mensaje,
+      fecha: serverTimestamp(),
+      leidaPor: []
+    });
+
+    mostrarToast("🔔 Notificación enviada a todos", "#2ecc71");
+
+  } catch (error) {
+    console.error("Error enviando notificación:", error);
+    mostrarToast("❌ Error al enviar", "#e74c3c");
+  }
 };
 
 
-
-// NUEVO: Notificación Masiva
-function enviarNotificacionMasiva() {
-    const adminMenu = document.getElementById("adminMenu");
-    adminMenu.style.display = "none";
-    
-    const mensaje = prompt("📣 Mensaje para notificación masiva:");
-    if (!mensaje) return;
-    
-    // Aquí iría la lógica para enviar a Firebase Cloud Messaging
-    mostrarToast("🔔 Notificación preparada (requiere configuración FCM)", "#6c4ba3");
-    console.log("Notificación masiva:", mensaje);
-}
 
 // NUEVO: Limpiar Caché
 function limpiarCache() {
@@ -1809,6 +2485,12 @@ function publicarFacebookDirecto() {
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank");
 }
 
+window.addEventListener("click", function (e) {
+  const modal = document.getElementById("modalInventario");
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+});
 
 // Sync con Firebase (no bloqueante)
 async function sincronizarInventarioFirebase() {

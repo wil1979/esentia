@@ -77,19 +77,31 @@
         <!-- Sección: Marketing -->
         <div class="admin-menu-section">
             <div class="admin-section-title">📣 Marketing</div>
-            <button onclick="generarCodigosPromoAuto()">
-                <span class="icon">🎁</span> Generar Códigos Promo
+            <button onclick="cargarPromosAdmin();">
+                <span class="icon">🎁</span> Ver Códigos Promo
             </button>
             <button onclick="enviarNotificacionMasiva()">
                 <span class="icon">🔔</span> Notificación Masiva
             </button>
+             <button onclick="generarCodigoPromoAuto()">➕🎁Generar Código</button>
+             <div id="listaPromos"></div>
+
+
+            
         </div>
+
+
         <!-- En la sección de Productos del menú admin -->
 <div class="admin-menu-section">
+     <div class="admin-section-title">📦 Facturacion</div>
+        <button onclick="abrirModalFacturacion()" class="btn-submit">
+        🧾 Facturar rápido
+       </button>
+
     <div class="admin-section-title">📦 Productos</div>
-    <button onclick="gestionarInventario()">
+      <button onclick="gestionarInventario()">
         <span class="icon">📋</span> Gestionar Inventario
-    </button>
+      </button>
     <button onclick="verProductosAgotados()">
         <span class="icon">⚠️</span> Productos Agotados
     </button>
@@ -157,7 +169,6 @@
 
   </div>
 </div>
-
 <!-- Panel de Estadísticas (NUEVO) -->
 <div id="panelEstadisticas" class="admin-panel hidden">
     <div class="admin-panel-header">
@@ -168,12 +179,12 @@
 </div>
       
     </div>
-<!-- Barra de búsqueda y filtros -->
+<!-- Barra de búsqueda y filtros 
 <input type="text" id="searchInput" placeholder="🔍 Buscar esencias, beneficios..." />
 <button id="btnFiltros" type="button">🎛️ Filtros</button>
 <button id="btnComparador" type="button" style="display:none;">⚖️ (<span id="countComparador">0</span>)</button>
 
-<!-- Panel de filtros (inicialmente oculto) -->
+ Panel de filtros (inicialmente oculto) -->
 <div id="panelFiltros" style="display:none;">
     <select id="filtroTipo">
         <option value="">Todos los tipos</option>
@@ -249,6 +260,8 @@
       <button onclick="finalizarPedido()" class="btn-submit" style="background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);">✅ Finalizar por WhatsApp</button>
     </div>
   </div>
+
+  
 
   <!-- Modal Login -->
   <div id="modalLoginRegistro" class="modal-carrito">
@@ -369,7 +382,7 @@
 
     
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, getDoc, doc, setDoc, query, where, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import {  getFirestore, collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where, orderBy  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
@@ -387,7 +400,7 @@
    window.db = db;
    window.getDocs = getDocs;
    window.collection = collection;
-   window.firebaseUtils = { query, where, collection, getDocs, getDoc, doc, setDoc, addDoc, serverTimestamp, orderBy };
+   window.firebaseUtils = { query, where, collection, getDocs, getDoc, doc, deleteDoc, setDoc, addDoc,updateDoc, serverTimestamp, orderBy };
 
     let inventario = {};
     // 🔥 INVENTARIO GLOBAL
@@ -395,6 +408,7 @@
     window.inventario = inventario;
 
   </script>
+
 
  <!-- 1. Cargar el núcleo (Lógica base, Firebase, Auth) -->
 <script src="esentia.js"></script>
@@ -405,6 +419,47 @@
 <!-- 3. Cargar el puente de integración (Ver paso 2) -->
 <script src="esentia-integracion.js"></script>
 
+<div id="modalFacturacion" class="modal-carrito" style="display:none;">
+  <div class="modal-contenido modal-grande">
 
+    <button onclick="cerrarModalFacturacion()" class="modal-cerrar">×</button>
+
+    <h2>🧾 Facturación</h2>
+
+    <!-- 👤 Cliente -->
+    <h3>Cliente</h3>
+    <input type="text" id="buscarClienteFact" placeholder="Buscar cliente...">
+    <div id="listaClientesFact"></div>
+
+    <!-- 🛒 Productos -->
+    <h3>Productos</h3>
+    <div id="listaProductosFact"></div>
+
+    <!-- 💸 Descuento -->
+    <h3>Descuento</h3>
+    <input type="number" id="descuentoFact" placeholder="₡0" value="0">
+
+    <!-- 💰 Totales -->
+    <div id="resumenFacturacion">
+      <p>Subtotal: ₡<span id="subtotalFact">0</span></p>
+      <p>Descuento: ₡<span id="descuentoMostrado">0</span></p>
+      <h3>Total: ₡<span id="totalFact">0</span></h3>
+    </div>
+
+    <!-- ⚙️ Método -->
+    <select id="metodoPagoFact">
+      <option>Efectivo</option>
+      <option>SINPE</option>
+      <option>Credito</option>
+    </select>
+
+    <!-- 🚀 Acción -->
+    <button onclick="confirmarFacturacion()" class="btn-submit">
+      ✅ Confirmar Factura
+    </button>
+
+  </div>
+</div>
+</div>
 </body>
 </html>

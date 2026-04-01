@@ -816,6 +816,26 @@ body {
 
 .admin-sheet-btn-secondary:hover { background: rgba(108, 75, 163, 0.2); }
 
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.admin-tabs button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #2c2c3e;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-tab.hidden {
+  display: none;
+}
+
 /* ================================
    ESTILOS DEL HISTORIAL DE COMPRAS
    ================================ */
@@ -1643,3 +1663,17 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
+
+#listaPromos {
+  margin-top: 20px;
+}
+
+.promo-card {
+  background: #2c2c3e;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.promo-activa { border-left: 5px solid #2ecc71; }
+.promo-expirada { border-left: 5px solid #e74c3c; }
