@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esentia • Producto</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --gold-primary: #d4af37;
+        --gold-light: #f5e6a1;
+        --gold-dark: #caa84a;
+        --purple-deep: #6c4ba3;
+        --purple-light: #9b7fd4;
+        --black: #0a0a0a;
+        --white: #ffffff;
+        --gray-light: #f5f5f5;
+        --shadow-soft: 0 10px 40px rgba(0,0,0,0.08);
+        --shadow-medium: 0 20px 60px rgba(0,0,0,0.12);
+        --shadow-gold: 0 10px 40px rgba(212,175,55,0.3);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 50%, #e8e6e6 100%);
+        color: #333;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .bg-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--gold-primary);
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: float 15s infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.3; }
+        90% { opacity: 0.3; }
+        100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+    }
+
+    .contenedor {
+        max-width: 480px;
+        margin: auto;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Header with shimmer effect */
+    .header-esentia {
+        width: 100%;
+        background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #000 100%);
+        padding: 25px 0;
+        text-align: center;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header-esentia::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    @font-face {
+        font-family: "Adelia";
+        src: url("./fonts/Adelia.ttf") format("truetype");
+        font-weight: 400;
+    }
+
+    .header-esentia h1 {
+        font-family: "Adelia", cursive;
+        font-size: 3rem;
+        margin: 0;
+        background: linear-gradient(90deg, var(--gold-primary), var(--gold-light), var(--gold-dark), var(--gold-primary));
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 3px;
+        animation: goldShine 3s linear infinite;
+        position: relative;
+        z-index: 1;
+    }
+
+    @keyframes goldShine {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 300% 50%; }
+    }
+
+    /* Card with 3D tilt effect */
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: var(--shadow-medium);
+        margin-bottom: 40px;
+        transform-style: preserve-3d;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: cardEntry 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid rgba(212,175,55,0.1);
+    }
+
+    @keyframes cardEntry {
+        0% { opacity: 0; transform: translateY(40px) scale(0.9); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card:hover {
+        box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+    }
+
+    /* Product image with floating animation */
+    .imagen-producto-container {
+        position: relative;
+        display: inline-block;
+        margin: 20px 0;
+    }
+
+    .imagen-producto {
+        width: 240px;
+        height: 240px;
+        object-fit: contain;
+        border-radius: 16px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: zoom-in;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+        animation: floatImage 6s ease-in-out infinite;
+    }
+
+    @keyframes floatImage {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .imagen-producto:hover {
+        transform: scale(1.15) rotate(2deg);
+        filter: drop-shadow(0 30px 60px rgba(212,175,55,0.25));
+    }
+
+    .imagen-producto-container::after {
+        content: '🔍';
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+    }
+
+    .imagen-producto-container:hover::after {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        animation: fadeInUp 0.6s ease 0.2s both;
+    }
+
+    .precio-container {
+        animation: fadeInUp 0.6s ease 0.3s both;
+        margin: 15px 0;
+    }
+
+    .precio-oferta {
+        font-size: 2rem;
+        color: var(--black);
+        font-weight: 800;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .precio-oferta::before {
+        content: '✨';
+        animation: sparkle 2s infinite;
+    }
+
+    @keyframes sparkle {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .precio-original {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 1.1rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .precio-original::after {
+        content: 'OFERTA';
+        position: absolute;
+        top: -20px;
+        right: -50px;
+        background: linear-gradient(135deg, #ff4757, #ff6348);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .estrellas {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        animation: fadeInUp 0.6s ease 0.4s both;
+        letter-spacing: 2px;
+    }
+
+    .estrellas span {
+        display: inline-block;
+        animation: starPop 0.5s ease backwards;
+    }
+
+    .estrellas span:nth-child(1) { animation-delay: 0.1s; }
+    .estrellas span:nth-child(2) { animation-delay: 0.2s; }
+    .estrellas span:nth-child(3) { animation-delay: 0.3s; }
+    .estrellas span:nth-child(4) { animation-delay: 0.4s; }
+    .estrellas span:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes starPop {
+        0% { transform: scale(0) rotate(0deg); opacity: 0; }
+        50% { transform: scale(1.4) rotate(180deg); }
+        100% { transform: scale(1) rotate(360deg); opacity: 1; }
+    }
+
+    .descripcion {
+        margin: 20px 0;
+        line-height: 1.6;
+        color: #555;
+        font-size: 1.05rem;
+        animation: fadeInUp 0.6s ease 0.5s both;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Sections with hover effects */
+    .seccion {
+        text-align: left;
+        margin-top: 25px;
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(212,175,55,0.05), rgba(107,75,163,0.05));
+        border-radius: 16px;
+        border-left: 4px solid var(--gold-primary);
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.6s ease 0.6s both;
+    }
+
+    .seccion:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(212,175,55,0.15);
+    }
+
+    .titulo-seccion {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        background: linear-gradient(90deg, var(--gold-dark), var(--purple-deep));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .titulo-seccion::before {
+        content: '▸';
+        color: var(--gold-primary);
+        font-size: 1.4rem;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    ul li {
+        margin-bottom: 8px;
+        padding-left: 20px;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+
+    ul li::before {
+        content: '✦';
+        position: absolute;
+        left: 0;
+        color: var(--gold-primary);
+        font-size: 0.8rem;
+    }
+
+    ul li:hover {
+        color: var(--purple-deep);
+        transform: translateX(5px);
+    }
+
+    /* Variant selector */
+    .variantes-container {
+        margin-top: 20px;
+        animation: fadeInUp 0.6s ease 0.7s both;
+    }
+
+    .variante-btn {
+        display: inline-block;
+        margin: 5px;
+        padding: 10px 20px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .variante-btn:hover, .variante-btn.active {
+        border-color: var(--gold-primary);
+        background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(212,175,55,0.3);
+    }
+
+    /* WhatsApp Button with ripple */
+    .btn-wsp {
+        width: 100%;
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        padding: 18px;
+        border-radius: 16px;
+        border: none;
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-top: 25px;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(37,211,102,0.3);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease 0.8s both;
+    }
+
+    .btn-wsp::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-wsp:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-wsp:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(37,211,102,0.4);
+    }
+
+    .btn-wsp:active {
+        transform: translateY(-1px) scale(0.98);
+    }
+
+    /* Floating back button */
+    .btn-volver {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, var(--purple-deep), var(--purple-light));
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 1.8rem;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(107,75,163,0.4);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeInUp 0.6s ease 1s both;
+    }
+
+    .btn-volver:hover {
+        transform: scale(1.1) rotate(-10deg);
+        box-shadow: 0 15px 40px rgba(107,75,163,0.5);
+    }
+
+    .btn-volver::after {
+        content: 'Volver';
+        position: absolute;
+        right: 70px;
+        background: var(--purple-deep);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        opacity: 0;
+        transform: translateX(10px);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    .btn-volver:hover::after {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* QR Section */
+    .qr-contenedor {
+        margin-top: 30px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(107,75,163,0.1));
+        border-radius: 20px;
+        animation: fadeInUp 0.6s ease 0.9s both;
+    }
+
+    .qr-contenedor p {
+        font-weight: 600;
+        color: var(--purple-deep);
+        margin-bottom: 15px;
+    }
+
+    .qr-contenedor img {
+        max-width: 160px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .qr-contenedor img:hover {
+        transform: scale(1.05);
+    }
+
+    /* Facebook Banner */
+    .banner-facebook-pro {
+        margin-top: 25px;
+        padding: 25px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #1877f2, #0d5bd3, #1877f2);
+        background-size: 200% 200%;
+        color: white;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(24,119,242,0.3);
+        position: relative;
+        overflow: hidden;
+        animation: gradientShift 5s ease infinite, fadeInUp 0.6s ease 1s both;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .banner-facebook-pro::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+        animation: rotate 10s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .banner-facebook-pro * {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-facebook-pro h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 800;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .banner-facebook-pro p {
+        margin: 12px 0 20px;
+        font-size: 1.05rem;
+        font-weight: 500;
+        opacity: 0.95;
+    }
+
+    .btn-facebook-pro {
+        display: inline-block;
+        background: white;
+        color: #1877f2;
+        padding: 16px 28px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-facebook-pro:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+    }
+
+    .btn-facebook-pro::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-facebook-pro:hover::after {
+        left: 100%;
+    }
+
+    /* Lightbox */
+    .lightbox-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.95);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 5000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .lightbox-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .lightbox-img {
+        max-width: 90%;
+        max-height: 85%;
+        border-radius: 20px;
+        box-shadow: 0 0 60px rgba(212,175,55,0.3);
+        transform: scale(0.8);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .lightbox-overlay.active .lightbox-img {
+        transform: scale(1);
+    }
+
+    .lightbox-close {
+        position: fixed;
+        top: 30px;
+        right: 35px;
+        font-size: 3rem;
+        color: white;
+        cursor: pointer;
+        z-index: 6000;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.1);
+    }
+
+    .lightbox-close:hover {
+        background: rgba(255,255,255,0.2);
+        transform: rotate(90deg);
+    }
+
+    /* Loading animation */
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(212,175,55,0.2);
+        border-top-color: var(--gold-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+        color: var(--gold-primary);
+        font-weight: 600;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* Stock indicator */
+    .stock-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: rgba(37,211,102,0.1);
+        color: #25D366;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-top: 10px;
+        animation: fadeInUp 0.6s ease 0.45s both;
+    }
+
+    .stock-indicator.low {
+        background: rgba(255,193,7,0.1);
+        color: #ffc107;
+    }
+
+    .stock-indicator.out {
+        background: rgba(244,67,54,0.1);
+        color: #f44336;
+    }
+
+    .stock-dot {
+        width: 8px;
+        height: 8px;
+        background: currentColor;
+        border-radius: 50%;
+        animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* Toast notification */
+    .toast {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: linear-gradient(135deg, var(--purple-deep), var(--purple-light));
+        color: white;
+        padding: 16px 32px;
+        border-radius: 50px;
+        font-weight: 600;
+        box-shadow: 0 10px 40px rgba(107,75,163,0.4);
+        z-index: 4000;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .toast::before {
+        content: '✓';
+        width: 24px;
+        height: 24px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+        .header-esentia h1 { font-size: 2.5rem; }
+        h1 { font-size: 1.7rem; }
+        .precio-oferta { font-size: 1.7rem; }
+        .imagen-producto { width: 200px; height: 200px; }
+        .btn-volver { width: 55px; height: 55px; font-size: 1.5rem; right: 20px; bottom: 20px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    .banner-mas-vendidos {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-radius: 24px;
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border: 1px solid rgba(212,175,55,0.2);
+}
+
+.banner-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.fire-icon {
+    font-size: 2rem;
+    animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+.banner-header h3 {
+    color: #d4af37;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.badge-top {
+    position: absolute;
+    right: 0;
+    background: linear-gradient(135deg, #d4af37, #f5e6a1);
+    color: #000;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.producto-mini {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(212,175,55,0.1);
+}
+
+.producto-mini:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(212,175,55,0.2);
+}
+
+.rank {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #000;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+}
+
+.rank.silver { background: linear-gradient(135deg, #c0c0c0, #e8e8e8); }
+.rank.bronze { background: linear-gradient(135deg, #cd7f32, #daa520); }
+
+.producto-mini img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 10px 0;
+    border: 2px solid rgba(212,175,55,0.3);
+}
+
+.info-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nombre {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.vendidos {
+    color: #888;
+    font-size: 0.75rem;
+}
+
+.precio-mini {
+    color: #d4af37;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(212,175,55,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.producto-mini:hover .hover-overlay {
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .productos-grid { grid-template-columns: 1fr; }
+    .producto-mini { display: flex; align-items: center; gap: 15px; text-align: left; }
+    .producto-mini img { width: 60px; height: 60px; margin: 0; }
+    .info-mini { flex: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background particles -->
+<div class="bg-particles" id="particles"></div>
+
+<header class="header-esentia">
+    <h1>Esentia</h1>
+</header>
+
+<!-- Banner Más Vendidos - Grid Estático -->
+<div class="banner-mas-vendidos">
+    <div class="banner-header">
+        <span class="fire-icon">🔥</span>
+        <h3>Los Más Vendidos</h3>
+        <span class="badge-top">TOP 3</span>
+    </div>
+    
+    <div class="productos-grid">
+        <div class="producto-mini" onclick="verProducto(1)">
+            <div class="rank">#1</div>
+            <img src="https://wil1979.github.io/esentia-factura/img/producto1.jpg" alt="Más vendido">
+            <div class="info-mini">
+                <span class="nombre">Esencia Luna</span>
+                <span class="vendidos">128 vendidos</span>
+                <span class="precio-mini">₡12,500</span>
+            </div>
+            <div class="hover-overlay">Ver →</div>
+        </div>
+        
+        <div class="producto-mini" onclick="verProducto(2)">
+            <div class="rank silver">#2</div>
+            <img src="https://wil1979.github.io/esentia-factura/img/producto2.jpg" alt="Segundo">
+            <div class="info-mini">
+                <span class="nombre">Aroma Dorado</span>
+                <span class="vendidos">96 vendidos</span>
+                <span class="precio-mini">₡15,000</span>
+            </div>
+            <div class="hover-overlay">Ver →</div>
+        </div>
+        
+        <div class="producto-mini" onclick="verProducto(3)">
+            <div class="rank bronze">#3</div>
+            <img src="https://wil1979.github.io/esentia-factura/img/producto3.jpg" alt="Tercero">
+            <div class="info-mini">
+                <span class="nombre">Brisa Natural</span>
+                <span class="vendidos">84 vendidos</span>
+                <span class="precio-mini">₡9,900</span>
+            </div>
+            <div class="hover-overlay">Ver →</div>
+        </div>
+    </div>
+</div>
+
+<div class="contenedor">
+    <div class="card" id="contenedorProducto">
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Cargando producto...</div>
+        </div>
+    </div>
+</div>
+
+<button class="btn-volver" onclick="window.location.href='catalogo.html'">←</button>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">Producto agregado al carrito</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox-overlay" onclick="cerrarLightbox(event)">
+    <span class="lightbox-close" onclick="cerrarLightbox(event)">×</span>
+    <img id="lightbox-img" class="lightbox-img" src="" onclick="event.stopPropagation()">
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+    authDomain: "esentiacreditos-8345f.firebaseapp.com",
+    projectId: "esentiacreditos-8345f",
+    storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+    messagingSenderId: "888658236080",
+    appId: "1:888658236080:web:506e5e2085b5a452dba175"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const stockCollection = collection(db, "stock");
+
+window.inventario = {};
+
+// Cargar inventario Firestore
+getDocs(stockCollection).then(snapshot => {
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        inventario[data.nombre] = data.cantidad;
+    });
+});
+</script>
+
+<script>
+// Crear partículas de fondo
+function createParticles() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        container.appendChild(particle);
+    }
+}
+createParticles();
+
+// Función para aplanar el JSON categorizado
+function aplanarProductos(data) {
+    if (Array.isArray(data)) return data;
+    let flatList = [];
+    for (const categoria in data) {
+        if (Array.isArray(data[categoria])) {
+            flatList = flatList.concat(data[categoria]);
+        }
+    }
+    return flatList;
+}
+
+// Metadatos OG dinámicos
+(async () => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    if (!id) return;
+
+    try {
+        const res = await fetch("https://wil1979.github.io/esentia-factura/productos_esentia.json");
+        const data = await res.json();
+        const productos = aplanarProductos(data);
+        const prod = productos.find(p => String(p.id) === String(id));
+        
+        if (!prod) return;
+
+        const nombre = prod.nombre || "Producto Esentia";
+        const beneficios = prod.beneficios || "";
+        const uso = prod.usoRecomendado || "";
+        const imagen = prod.imagen || "";
+        const calificacion = prod.calificacion ? `⭐ ${prod.calificacion} / 5` : "";
+        const precio = prod.precioOferta
+            ? `Oferta: ₡${prod.precioOferta.toLocaleString()} (Antes ₡${prod.precioOriginal.toLocaleString()})`
+            : `Precio: ₡${prod.precioOriginal?.toLocaleString() || prod.precio?.toLocaleString()}`;
+
+        const hashtags = "#Esentia #FraganciasQueEnamoran #AromasParaElHogar #Bienestar";
+        const desc = `${calificacion}\n${precio}\n\nBeneficios: ${beneficios}\nUso recomendado: ${uso}\n\n${hashtags}`.trim();
+        const title = `${nombre} – Fragancia Esentia`;
+
+        const addMeta = (property, content) => {
+            const m = document.createElement("meta");
+            m.setAttribute("property", property);
+            m.setAttribute("content", content);
+            document.head.appendChild(m);
+        };
+
+        addMeta("og:title", title);
+        addMeta("og:description", desc);
+        addMeta("og:image", imagen);
+        addMeta("og:type", "product");
+        addMeta("og:url", window.location.href);
+        addMeta("og:site_name", "Esentia Fragancias");
+    } catch (e) {
+        console.error("Error en metadatos OG:", e);
+    }
+})();
+
+// Obtener ID desde URL
+const params = new URLSearchParams(window.location.search);
+const productId = (params.get("id") || "").trim();
+
+// Cargar producto actual
+fetch("https://wil1979.github.io/esentia-factura/productos_esentia.json")
+    .then(r => r.json())
+    .then(data => {
+        const lista = aplanarProductos(data);
+        const producto = lista.find(p => String(p.id) === String(productId));
+
+        if (producto) {
+            renderProducto(producto);
+        } else {
+            document.getElementById("contenedorProducto").innerHTML = `
+                <div style="padding: 40px 20px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">😕</div>
+                    <h2 style="color: var(--purple-deep); margin-bottom: 10px;">Producto no encontrado</h2>
+                    <p style="color: #666;">Lo sentimos, no pudimos encontrar el aroma solicitado.</p>
+                </div>
+            `;
+        }
+    })
+    .catch(err => {
+        console.error("Error cargando producto:", err);
+        document.getElementById("contenedorProducto").innerHTML = `
+            <div style="padding: 40px 20px;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
+                <h2 style="color: #f44336; margin-bottom: 10px;">Error de conexión</h2>
+                <p style="color: #666;">No fue posible cargar la información. Intenta de nuevo.</p>
+            </div>
+        `;
+    });
+
+// RENDER PRINCIPAL DEL PRODUCTO
+function renderProducto(p) {
+    const precio = p.precioOferta ?? p.precioOriginal;
+    
+    // Calcular stock
+    const stock = window.inventario[p.nombre] || 10;
+    let stockHtml = '';
+    if (stock > 5) {
+        stockHtml = `<div class="stock-indicator"><span class="stock-dot"></span>En stock (${stock} disponibles)</div>`;
+    } else if (stock > 0) {
+        stockHtml = `<div class="stock-indicator low"><span class="stock-dot"></span>¡Quedan pocas unidades! (${stock})</div>`;
+    } else {
+        stockHtml = `<div class="stock-indicator out"><span class="stock-dot"></span>Agotado temporalmente</div>`;
+    }
+
+    let estrellasHtml = "";
+    if (p.calificacion) {
+        const llenas = Math.floor(p.calificacion);
+        const media = p.calificacion % 1 >= 0.5;
+        const vacias = 5 - llenas - (media ? 1 : 0);
+        
+        estrellasHtml = '<div class="estrellas">';
+        for (let i = 0; i < llenas; i++) estrellasHtml += '<span>⭐</span>';
+        if (media) estrellasHtml += '<span>✨</span>';
+        for (let i = 0; i < vacias; i++) estrellasHtml += '<span style="opacity: 0.3;">⭐</span>';
+        estrellasHtml += '</div>';
+    }
+
+    // Manejo de variantes
+    let variantesHtml = "";
+    if (p.variantes && p.variantes.length > 0) {
+        variantesHtml = `
+            <div class="variantes-container">
+                <div class="titulo-seccion">Presentaciones disponibles</div>
+                <div style="margin-top: 10px;">
+                    ${p.variantes.map((v, i) => `
+                        <button class="variante-btn ${i === 0 ? 'active' : ''}" onclick="selectVariante(this, '${v.nombre}', ${v.precio})">
+                            ${v.nombre} – ₡${(v.precio || 0).toLocaleString()}
+                        </button>
+                    `).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    const precioHtml = p.precioOferta
+        ? `<div class="precio-container">
+             <div class="precio-oferta">₡${p.precioOferta.toLocaleString()}</div>
+             <div class="precio-original">₡${p.precioOriginal.toLocaleString()}</div>
+           </div>`
+        : `<div class="precio-container">
+             <div class="precio-oferta">₡${(p.precioOriginal || 0).toLocaleString()}</div>
+           </div>`;
+
+    document.getElementById("contenedorProducto").innerHTML = `
+        <div class="imagen-producto-container">
+            <img src="${p.imagen}" class="imagen-producto" onclick="abrirLightbox('${p.imagen}')" alt="${p.nombre}">
+        </div>
+
+        <h1>${p.nombre}</h1>
+        
+        ${estrellasHtml}
+        ${stockHtml}
+        ${precioHtml}
+
+        <p class="descripcion">${p.info || 'Descubre la esencia de la elegancia con esta fragancia única.'}</p>
+
+        <div class="seccion">
+            <div class="titulo-seccion">Beneficios</div>
+            <div style="color: #555; line-height: 1.6;">${p.beneficios || 'Fragancia duradera y sofisticada que transforma cualquier espacio.'}</div>
+        </div>
+
+        <div class="seccion">
+            <div class="titulo-seccion">Uso recomendado</div>
+            <div style="color: #555; line-height: 1.6;">${p.usoRecomendado || 'Ideal para hogar, oficina o como regalo especial.'}</div>
+        </div>
+
+        ${variantesHtml}
+
+        <button class="btn-wsp" onclick="agregarAlCarrito('${encodeURIComponent(p.nombre)}')">
+            🛒 Agregar al carrito
+        </button>
+
+        <div class="qr-contenedor">
+            <p>📱 Compartir este producto</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=200-160-90&qzone=3&data=${encodeURIComponent(window.location.href)}" alt="QR Code">
+        </div>
+
+        <div class="banner-facebook-pro">
+            <h3>🔥 Ofertas exclusivas en Facebook</h3>
+            <p>Promociones, combos y aromas nuevos que NO publicamos aquí 👀</p>
+            <a href="https://www.facebook.com/profile.php?id=61579078480913" target="_blank" class="btn-facebook-pro">
+                👉 Ver ofertas ahora
+            </a>
+        </div>
+    `;
+
+    // Efecto 3D en la tarjeta
+    const card = document.querySelector('.card');
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 50;
+        const rotateY = (centerX - x) / 50;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    });
+}
+
+// Selección de variante
+function selectVariante(btn, nombre, precio) {
+    document.querySelectorAll('.variante-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Actualizar precio mostrado
+    const precioContainer = document.querySelector('.precio-oferta');
+    if (precioContainer) {
+        precioContainer.style.transform = 'scale(1.1)';
+        precioContainer.style.color = 'var(--gold-primary)';
+        setTimeout(() => {
+            precioContainer.textContent = `₡${precio.toLocaleString()}`;
+            precioContainer.style.transform = 'scale(1)';
+            precioContainer.style.color = '';
+        }, 200);
+    }
+}
+
+// LIGHTBOX mejorado
+function abrirLightbox(src) {
+    const lightbox = document.getElementById("lightbox");
+    const img = document.getElementById("lightbox-img");
+    img.src = src;
+    lightbox.classList.add("active");
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarLightbox(e) {
+    if (e.target.classList.contains('lightbox-overlay') || e.target.classList.contains('lightbox-close')) {
+        const lightbox = document.getElementById("lightbox");
+        lightbox.classList.remove("active");
+        document.body.style.overflow = '';
+    }
+}
+
+// Cerrar lightbox con ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const lightbox = document.getElementById("lightbox");
+        if (lightbox.classList.contains('active')) {
+            lightbox.classList.remove("active");
+            document.body.style.overflow = '';
+        }
+    }
+});
+
+// Toast notification
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// Agregar al carrito mejorado
+function agregarAlCarrito(nombreProductoCodificado) {
+    const btn = document.querySelector('.btn-wsp');
+    const originalText = btn.innerHTML;
+    
+    // Animación de carga en el botón
+    btn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">↻</span> Agregando...';
+    btn.style.opacity = '0.8';
+    
+    const nombreProducto = decodeURIComponent(nombreProductoCodificado);
+    let carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+
+    fetch("https://wil1979.github.io/esentia-factura/productos_esentia.json")
+        .then(r => r.json())
+        .then(data => {
+            const lista = aplanarProductos(data);
+            const producto = lista.find(p => p.nombre === nombreProducto);
+            
+            if (!producto) {
+                showToast("Error: producto no encontrado");
+                btn.innerHTML = originalText;
+                btn.style.opacity = '';
+                return;
+            }
+
+            const idCarrito = String(producto.id);
+            let existente = carrito.find(i => String(i.id) === idCarrito);
+
+            if (existente) {
+                existente.cantidad += 1;
+                showToast(`¡${producto.nombre} actualizado! (${existente.cantidad} en carrito)`);
+            } else {
+                carrito.push({
+                    id: idCarrito,
+                    nombre: producto.nombre,
+                    precio: producto.precioOferta ?? producto.precioOriginal,
+                    cantidad: 1,
+                    imagen: producto.imagen
+                });
+                showToast('¡Producto agregado al carrito! 🎉');
+            }
+
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            
+            // Restaurar botón con éxito
+            setTimeout(() => {
+                btn.innerHTML = '✓ Agregado';
+                btn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.opacity = '';
+                }, 1500);
+            }, 500);
+        })
+        .catch(err => {
+            console.error(err);
+            showToast("Error al agregar producto");
+            btn.innerHTML = originalText;
+            btn.style.opacity = '';
+        });
+}
+
+function verProducto(id) {
+    window.location.href = `producto.html?id=${id}`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Generador de Etiquetas - Esentia</title>
+<!-- Librerías para descarga con fallback local -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<!-- Librería para generar códigos QR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    gap: 15px;
+    transition: all 0.3s ease;
+    min-height: 100vh;
+    margin: 0;
+}
+body.modo-oscuro {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #e0e0e0;
+}
+.formulario {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    max-width: 380px;
+    height: fit-content;
+    overflow-y: auto;
+    max-height: 95vh;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+body.modo-oscuro .formulario {
+    background: rgba(45, 45, 45, 0.95);
+    color: #e0e0e0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+.btn-seccion {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+.btn-seccion:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+body.modo-oscuro .btn-seccion {
+    background: linear-gradient(135deg, #4a6fa5 0%, #3a5a8a 100%);
+}
+body.modo-oscuro .btn-seccion:hover {
+    box-shadow: 0 4px 12px rgba(74, 111, 165, 0.4);
+}
+.contador-etiquetas {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left: 4px solid #2196f3;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+body.modo-oscuro .contador-etiquetas {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #a2d2ff;
+    border-left-color: #3498db;
+}
+.etiqueta-container {
+    flex: 2;
+    display: grid;
+    gap: 0;
+    background: white;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+body.modo-oscuro .etiqueta-container {
+    background: #222;
+}
+.etiqueta {
+    position: relative;
+    width: var(--etiqueta-width, 8cm);
+    height: var(--etiqueta-height, 4cm);
+    background-image: var(--fondo-imagen, none);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+    transition: all 0.2s ease;
+}
+.etiqueta:hover {
+    transform: scale(1.02);
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.etiqueta-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.fondo-etiqueta {
+ position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          
+    z-index: 1;
+
+    filter: blur(var(--blur-fondo, 0px)) brightness(var(--brillo-fondo, 1));
+    transform: scale(1.05); /* evita bordes blancos al hacer blur */
+}
+.fondo-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,var(--overlay-fondo, 0));
+    z-index: 2;
+}
+.download-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: 0;
+    backdrop-filter: blur(2px);
+}
+.etiqueta:hover .download-overlay {
+    opacity: 1;
+}
+.producto-imagen {
+    position: absolute;
+    width: var(--img-width, 60px);
+    height: var(--img-height, 60px);
+    top: var(--img-top, 50%);
+    left: var(--img-left, 50%);
+    transform: rotate(var(--img-rotacion, 0deg));
+    object-fit: contain;
+    border-radius: 4px;
+    z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+.nombre-producto {
+    position: absolute;
+    font-size: var(--nombre-font-size, 8px);
+    color: var(--nombre-color, #000);
+    top: var(--nombre-top, 70%);
+    left: var(--nombre-left, 50%);
+    transform: rotate(var(--nombre-rotacion, 0deg));
+    text-align: center;
+    font-weight: bold;
+    z-index: 3;
+    white-space: nowrap;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+.instrucciones {
+    position: absolute;
+    top: var(--instrucciones-top, 10%);
+    left: var(--instrucciones-left, 5%);
+    width: var(--instrucciones-width, 30%);
+    font-size: var(--instrucciones-font-size, 6px);
+    color: var(--instrucciones-color, #fff);
+    line-height: 1.2;
+    text-align: left;
+    padding: 5px;
+    background: rgba(252, 250, 250, 0.5);
+    border-radius: 4px;
+    transform: rotate(var(--instrucciones-rotacion, 0deg));
+    z-index: 2;
+    word-wrap: break-word;
+    backdrop-filter: blur(2px);
+}
+.texto-adicional-1,
+.texto-adicional-2,
+.texto-adicional-3 {
+    position: absolute;
+    text-align: center;
+    z-index: 3;
+    white-space: nowrap;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.texto-adicional-1 {
+    font-size: var(--texto1-font-size, 6px);
+    color: var(--texto1-color, #000);
+    top: var(--texto1-top, 90%);
+    left: var(--texto1-left, 50%);
+    transform: rotate(var(--texto1-rotacion, 0deg));
+    background: linear-gradient(to bottom, #ffd700, #daa520, #b8860b);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.texto-adicional-2 {
+    font-size: var(--texto2-font-size, 6px);
+    color: var(--texto2-color, #000);
+    top: var(--texto2-top, 90%);
+    left: var(--texto2-left, 50%);
+    transform: rotate(var(--texto2-rotacion, 0deg));
+}
+.texto-adicional-3 {
+    font-size: var(--texto3-font-size, 6px);
+    color: var(--texto3-color, #000);
+    top: var(--texto3-top, 5%);
+    left: var(--texto3-left, 50%);
+    transform: rotate(var(--texto3-rotacion, 0deg));
+}
+.imagen-adicional {
+    position: absolute;
+    width: var(--img-adicional-width, 30px);
+    height: var(--img-adicional-height, 30px);
+    top: var(--img-adicional-top, 10%);
+    left: var(--img-adicional-left, 90%);
+    transform: rotate(var(--img-adicional-rotacion, 0deg));
+    object-fit: contain;
+    z-index: 2;
+}
+@media print {
+    body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    body > *:not(.etiqueta-container) {
+        display: none !important;
+    }
+    .etiqueta-container {
+        position: static !important;
+        width: var(--hoja-ancho-cm, 21.6cm) !important;
+        height: var(--hoja-alto-cm, 27.9cm) !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        background: white !important;
+        display: grid !important;
+        gap: 0 !important;
+        page-break-after: auto;
+        box-sizing: border-box;
+        image-rendering: crisp-edges;
+    }
+    .etiqueta {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    @page {
+        margin: 0;
+        size: var(--hoja-ancho-cm, 21.6cm) var(--hoja-alto-cm, 27.9cm);
+    }
+}
+.checkbox-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background: #fafafa;
+}
+body.modo-oscuro .checkbox-group {
+    background: #3c3c3c;
+    border-color: #555;
+}
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.checkbox-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+.checkbox-item input {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.checkbox-item label {
+    color: #333;
+    cursor: pointer;
+    flex: 1;
+}
+body.modo-oscuro .checkbox-item label {
+    color: #e0e0e0;
+}
+#btnModoOscuro {
+    background: linear-gradient(135deg, #333 0%, #555 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+body.modo-oscuro #btnModoOscuro {
+    background: linear-gradient(135deg, #ffcc00 0%, #ffaa00 100%);
+    color: #222;
+    font-weight: bold;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+body.modo-oscuro .modal-content {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+body.modo-oscuro .modal-header {
+    border-bottom-color: #444;
+}
+.modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #667eea;
+}
+body.modo-oscuro .modal-header h3 {
+    color: #a2d2ff;
+}
+.btn-cerrar-modal {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+.btn-cerrar-modal:hover {
+    background: rgba(0,0,0,0.1);
+}
+body.modo-oscuro .btn-cerrar-modal {
+    color: #ccc;
+}
+.modal-body {
+    margin-bottom: 20px;
+}
+.modal-body label {
+    display: block;
+    margin: 12px 0 6px 0;
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+}
+body.modo-oscuro .modal-body label {
+    color: #ccc;
+}
+.modal-body input,
+.modal-body select,
+.modal-body textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.modal-body input:focus,
+.modal-body select:focus,
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+.codigo-qr {
+    position: absolute;
+    width: var(--qr-size, 50px);
+    height: var(--qr-size, 50px);
+    top: var(--qr-top, 90%);
+    left: var(--qr-left, 90%);
+    transform: rotate(var(--qr-rotacion, 0deg));
+    z-index: 4;
+     background: white;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: grab;
+}
+.codigo-qr img {
+    width: 100%;
+    height: 100%;
+}
+.btn-modal {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.btn-guardar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.btn-guardar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+.btn-cancelar {
+    background: #e0e0e0;
+    color: #333;
+    margin-right: 10px;
+}
+.btn-cancelar:hover {
+    background: #d0d0d0;
+}
+body.modo-oscuro .btn-cancelar {
+    background: #444;
+    color: #fff;
+}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+body.modo-oscuro .modal-footer {
+    border-top-color: #444;
+}
+/* Nuevos estilos para validación */
+.input-error {
+    border-color: #f44336 !important;
+    background: #ffebee !important;
+}
+.error-mensaje {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+.error-mensaje.visible {
+    display: block;
+}
+/* Toast notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 2000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.toast.success {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+}
+.toast.error {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+.toast.show {
+    transform: translateX(0);
+}
+/* Botones de acción mejorados */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+.action-buttons button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.btn-generar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.btn-imprimir {
+    background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+    color: white;
+}
+.btn-descargar {
+    background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+    color: white;
+}
+.action-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.export-import {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+.export-import button {
+    padding: 10px;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.export-import button:hover {
+    background: #667eea;
+    color: white;
+}
+body.modo-oscuro .export-import button {
+    background: transparent;
+    border-color: #4a6fa5;
+    color: #4a6fa5;
+}
+body.modo-oscuro .export-import button:hover {
+    background: #4a6fa5;
+    color: white;
+}
+
+.codigo-qr svg {
+  shape-rendering: crispEdges;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.loading-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #fff;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.imagen-extra-1 {
+    position: absolute;
+    width: var(--img-extra1-width, 30px);
+    top: var(--img-extra1-top, 90%);
+    left: var(--img-extra1-left, 90%);    
+    z-index: 2;
+}
+</style>
+</head>
+<body>
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="spinner"></div>
+  <div>Generando etiquetas...</div>
+</div>
+
+<!-- Toast container -->
+<div id="toastContainer"></div>
+
+<div class="formulario">
+<h2 style="margin-top: 0;">Esentia Labels</h2>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalTamanoHoja')">
+📄 Tamaño de hoja
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalTamanoEtiqueta')">
+📏 Tamaño de etiqueta
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalConfiguracion')">
+⚙️ Configuración básica
+<span>▼</span>
+</button>
+<div style="margin: 15px 0;">
+<label style="font-weight: bold; display: block; margin-bottom: 5px;">Seleccionar productos:</label>
+<div style="display: flex; gap: 5px; margin-bottom: 5px;">
+<button type="button" onclick="seleccionarTodos(true)" style="flex: 1; padding: 5px; font-size: 12px;">Todos</button>
+<button type="button" onclick="seleccionarTodos(false)" style="flex: 1; padding: 5px; font-size: 12px;">Ninguno</button>
+</div>
+<div id="checkboxContainer" class="checkbox-group">
+<!-- Checkboxes se cargan aquí -->
+</div>
+</div>
+<!-- CONTADOR DE ETIQUETAS -->
+<div class="contador-etiquetas" id="contadorEtiquetas">
+📊 <span id="etiquetasGeneradas">0</span> etiquetas generadas de <span id="etiquetasMaximas">0</span> posibles
+</div>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalInstrucciones')">
+📝 Editar Instrucciones
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalEstilosProducto')">
+🎨 Estilos de Producto
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalTextosAdicionales')">
+✍️ Textos adicionales
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalImagenAdicional')">
+🖼️ Imagen adicional
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalElementosAdicionales')">
+🖼️+ Elementos adicionales
+<span>▼</span>
+</button>
+<button type="button" class="btn-seccion" onclick="abrirModal('modalFondo')">
+🎨 Fondo de etiqueta
+<span>▼</span>
+</button>
+<div style="margin-top: 15px;">
+<button onclick="generarEtiquetas()" style="width:100%; padding:10px; margin-bottom:8px;">🔄 Generar Etiquetas</button>
+<button onclick="window.print()" style="width:100%; padding:10px; margin-bottom:8px;">🖨️ Imprimir etiquetas</button>
+<button type="button" onclick="descargarTodasComoImagen()" style="width:100%; padding:10px; margin-bottom:8px;">💾 Descargar Todas (ZIP)</button>
+<button type="button" onclick="exportarConfiguracion()" style="width:48%; margin-right:4%; padding:10px;">📤 Exportar</button>
+<button onclick="generarPDF()" style="width:100%; padding:10px; margin-bottom:8px;">📄 Descargar PDF</button>
+<button type="button" onclick="document.getElementById('inputImportar').click()" style="width:48%; padding:10px;">📥 Importar</button>
+<input type="file" id="inputImportar" accept=".json" style="display:none;" onchange="importarConfiguracion(event)">
+<button type="button" onclick="alternarModoOscuro()" id="btnModoOscuro" style="margin-top:8px;">🌑 Modo Oscuro</button>
+<label>Desenfoque del fondo (px):</label>
+<input type="range" id="blurFondo" min="0" max="10" step="0.5" value="0" oninput="actualizarEstilos()">
+
+<label>Brillo del fondo:</label>
+<input type="range" id="brilloFondo" min="0.5" max="1.5" step="0.1" value="1" oninput="actualizarEstilos()">
+
+<label>Oscurecer fondo:</label>
+<input type="range" id="overlayFondo" min="0" max="0.7" step="0.05" value="0" oninput="actualizarEstilos()">
+
+</div>
+</div>
+<div class="etiqueta-container" id="etiquetas"></div>
+<!-- Modales -->
+<div id="modalTamanoHoja" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Tamaño de hoja</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalTamanoHoja')">&times;</button>
+</div>
+<div class="modal-body">
+<label>Tamaño de hoja:</label>
+<select id="tamanoHoja" onchange="actualizarTamanoHoja()">
+<option value="carta">Carta (8.5x11")</option>
+<option value="13x19">13x19 pulgadas (33x48 cm)</option>
+<option value="a4">A4 (21x29.7 cm)</option>
+<option value="personalizado">Personalizado</option>
+</select>
+<div id="camposPersonalizados" style="display: none; margin-top: 10px;">
+<label>Ancho hoja (cm):</label>
+<input type="number" id="anchoHojaCm" value="33" step="0.1" oninput="generarEtiquetas()">
+<label>Alto hoja (cm):</label>
+<input type="number" id="altoHojaCm" value="48" step="0.1" oninput="generarEtiquetas()">
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalTamanoHoja')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalConfiguracion" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Configuración básica</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalConfiguracion')">&times;</button>
+</div>
+<div class="modal-body">
+<label>Lista manual (opcional):</label>
+<input id="productosManual" placeholder="Ej: vainilla,limon" oninput="generarEtiquetas()">
+<label>Cantidad por producto:</label>
+<input id="cantidadPorProducto" type="number" min="1" value="4" oninput="generarEtiquetasDebounce()">
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalConfiguracion')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalInstrucciones" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Editar Instrucciones</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalInstrucciones')">&times;</button>
+</div>
+<div class="modal-body">
+<div id="editorInstrucciones" contenteditable="true">
+<span style="color: red; font-weight: bold;">Indicaciones de uso en difusor eléctrico o ambiente:</span><br>
+- Utilice 5-10 gotas en difusor eléctrico según capacidad del recipiente<br>
+- Para uso ambiental, colocar 2-3 gotas en superficies porosas o difusores pasivos<br>
+- Evite derramar el aceite sobre superficies pintadas o barnizadas<br>
+- No aplicar directamente sobre piel, ropa o materiales delicados<br>
+- Mantener fuera del alcance de niños y mascotas<br>
+- Conservar en lugar fresco y seco, protegido de la luz solar directa<br>
+<span style="color: red; font-weight: bold;">Advertencias:</span>
+✖ No son consumibles ni de uso tópico<br>
+✖ Evitar contacto con ojos y mucosas<br>
+✖ Suspender su uso ante reacciones alérgicas
+</div>
+<label>Tamaño texto instrucciones (px):</label>
+<input type="number" id="instruccionesFontSize" value="5" min="4" max="12" step="0.5" oninput="actualizarEstilos()">
+<label>Color texto instrucciones:</label>
+<input type="color" id="instruccionesColor" value="#ffffff" onchange="actualizarEstilos()">
+<label>Orientación texto instrucciones:</label>
+<select id="instruccionesRotacion" onchange="actualizarEstilos()">
+<option value="0">0° (normal)</option>
+<option value="90">90° (vertical)</option>
+<option value="180">180° (invertido)</option>
+<option value="-90">-90° (vertical inverso)</option>
+</select>
+<label>Posición X (%) :</label>
+<input type="number" id="instruccionesLeft" value="5" min="0" max="100" step="1" oninput="actualizarEstilos()">
+<label>Posición Y (%) :</label>
+<input type="number" id="instruccionesTop" value="10" min="0" max="100" step="1" oninput="actualizarEstilos()">
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalInstrucciones')">Cancelar</button>
+<button class="btn-modal btn-guardar" onclick="guardarInstrucciones()">Guardar</button>
+</div>
+</div>
+</div>
+<div id="modalTamanoEtiqueta" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Tamaño de etiqueta</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalTamanoEtiqueta')">&times;</button>
+</div>
+<div class="modal-body">
+<label>Ancho etiqueta (cm):</label>
+<input type="number" id="anchoCm" value="8" step="0.1" min="1" oninput="actualizarEstilos(); generarEtiquetas();">
+<label>Alto etiqueta (cm):</label>
+<input type="number" id="altoCm" value="4" step="0.1" min="1" oninput="actualizarEstilos(); generarEtiquetas();">
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalTamanoEtiqueta')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalEstilosProducto" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Estilos de Producto</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalEstilosProducto')">&times;</button>
+</div>
+<div class="modal-body">
+<label>Ancho imagen (px):</label>
+<input type="number" id="imgWidth" value="90" oninput="actualizarEstilos()">
+<label>Alto imagen (px):</label>
+<input type="number" id="imgHeight" value="90" oninput="actualizarEstilos()">
+<label>Posición X imagen (%):</label>
+<input type="number" id="imgLeft" value="50" oninput="actualizarEstilos()">
+<label>Posición Y imagen (%):</label>
+<input type="number" id="imgTop" value="70" oninput="actualizarEstilos()">
+<label>Rotación imagen (deg):</label>
+<input type="number" id="imgRotacion" value="0" oninput="actualizarEstilos()">
+<hr>
+<label>Tamaño fuente nombre (px):</label>
+<input type="number" id="nombreFontSize" value="8" oninput="actualizarEstilos()">
+<label>Color nombre:</label>
+<input type="color" id="nombreColor" value="#000000" onchange="actualizarEstilos()">
+<label>Posición X nombre (%):</label>
+<input type="number" id="nombreLeft" value="50" oninput="actualizarEstilos()">
+<label>Posición Y nombre (%):</label>
+<input type="number" id="nombreTop" value="70" oninput="actualizarEstilos()">
+<label>Rotación nombre (deg):</label>
+<input type="number" id="nombreRotacion" value="0" oninput="actualizarEstilos()">
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalEstilosProducto')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalTextosAdicionales" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Textos adicionales</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalTextosAdicionales')">&times;</button>
+</div>
+<div class="modal-body">
+<label>Texto 1:</label>
+<input type="text" id="texto1" value="" oninput="generarEtiquetas()">
+<label>Tamaño fuente 1 (px):</label>
+<input type="number" id="texto1FontSize" value="6" oninput="actualizarEstilos()">
+<label>Color 1:</label>
+<input type="color" id="texto1Color" value="#000000" onchange="actualizarEstilos()">
+<label>Posición X 1 (%):</label>
+<input type="number" id="texto1Left" value="50" oninput="actualizarEstilos()">
+<label>Posición Y 1 (%):</label>
+<input type="number" id="texto1Top" value="90" oninput="actualizarEstilos()">
+<label>Rotación 1 (deg):</label>
+<input type="number" id="texto1Rotacion" value="0" oninput="actualizarEstilos()">
+<hr>
+<label>Texto 2:</label>
+<input type="text" id="texto2" value="" oninput="generarEtiquetas()">
+<label>Tamaño fuente 2 (px):</label>
+<input type="number" id="texto2FontSize" value="6" oninput="actualizarEstilos()">
+<label>Color 2:</label>
+<input type="color" id="texto2Color" value="#000000" onchange="actualizarEstilos()">
+<label>Posición X 2 (%):</label>
+<input type="number" id="texto2Left" value="50" oninput="actualizarEstilos()">
+<label>Posición Y 2 (%):</label>
+<input type="number" id="texto2Top" value="90" oninput="actualizarEstilos()">
+<label>Rotación 2 (deg):</label>
+<input type="number" id="texto2Rotacion" value="0" oninput="actualizarEstilos()">
+<hr>
+<label>Texto 3:</label>
+<input type="text" id="texto3" value="" oninput="generarEtiquetas()">
+<label>Tamaño fuente 3 (px):</label>
+<input type="number" id="texto3FontSize" value="6" oninput="actualizarEstilos()">
+<label>Color 3:</label>
+<input type="color" id="texto3Color" value="#000000" onchange="actualizarEstilos()">
+<label>Posición X 3 (%):</label>
+<input type="number" id="texto3Left" value="50" oninput="actualizarEstilos()">
+<label>Posición Y 3 (%):</label>
+<input type="number" id="texto3Top" value="5" oninput="actualizarEstilos()">
+<label>Rotación 3 (deg):</label>
+<input type="number" id="texto3Rotacion" value="0" oninput="actualizarEstilos()">
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalTextosAdicionales')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalImagenAdicional" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Imagen adicional</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalImagenAdicional')">&times;</button>
+</div>
+<div class="modal-body">
+<input type="file" id="imagenAdicionalFile" accept="image/*" onchange="cargarImagenAdicional(event)">
+<div id="previewImagenAdicional" style="display: none; margin-top: 10px;">
+<img id="imgPreviewAdicional" src="" style="max-width: 100px; display: block; margin-bottom: 5px;">
+<button type="button" onclick="eliminarImagenAdicional()">Eliminar imagen</button>
+</div>
+<label>Ancho imagen adicional (px):</label>
+<input type="number" id="imgAdicionalWidth" value="70" oninput="actualizarEstilos()">
+<label>Alto imagen adicional (px):</label>
+<input type="number" id="imgAdicionalHeight" value="70" oninput="actualizarEstilos()">
+<label>Posición X adicional izquier a derecha (%):</label>
+<input type="number" id="imgAdicionalLeft" value="60" oninput="actualizarEstilos()">
+<label>Posición Y adicional (%):</label>
+<input type="number" id="imgAdicionalTop" value="30" oninput="actualizarEstilos()">
+<label>Rotación adicional (deg):</label>
+<input type="number" id="imgAdicionalRotacion" value="0" oninput="actualizarEstilos()">
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalImagenAdicional')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalElementosAdicionales" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Elementos adicionales (Imágenes y QR)</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalElementosAdicionales')">&times;</button>
+</div>
+<div class="modal-body">
+<h4>Imagen Extra 1</h4>
+<input type="file" id="imgExtra1File" accept="image/*" onchange="cargarImagenExtra(1, event)">
+<div id="previewImgExtra1" style="display: none;">
+<img id="imgPreviewExtra1" style="max-width: 50px;">
+<button onclick="eliminarImagenExtra(1)">X</button>
+</div>
+<label>Ancho (px):</label> <input type="number" id="imgExtra1Width" value="30" oninput="actualizarEstilos()">
+<label>X (%):</label> <input type="number" id="imgExtra1Left" value="90" oninput="actualizarEstilos()">
+<label>Y (%):</label> <input type="number" id="imgExtra1Top" value="90" oninput="actualizarEstilos()">
+<hr>
+<h4>Código QR</h4>
+<label>Contenido QR (URL):</label>
+<input type="checkbox" id="qrDinamico" checked>
+ QR dinámico por producto
+<label>Tamaño QR (px):</label>
+<input type="number" id="qrSize" value="50" oninput="actualizarEstilos(); generarEtiquetas();">
+<label>X (%):</label> <input type="number" id="qrLeft" value="88" oninput="actualizarEstilos()">
+<label>Y (%):</label> <input type="number" id="qrTop" value="65" oninput="actualizarEstilos()">
+<label>Rotación (deg):</label> <input type="number" id="qrRotacion" value="0" oninput="actualizarEstilos()">
+
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalElementosAdicionales')">Cerrar</button>
+</div>
+</div>
+</div>
+<div id="modalFondo" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h3>Fondo de etiqueta</h3>
+<button class="btn-cerrar-modal" onclick="cerrarModal('modalFondo')">&times;</button>
+</div>
+<div class="modal-body">
+<label>Tipo de fondo:</label>
+<select id="fondoTipo" onchange="cambiarTipoFondo()">
+<option value="ninguno">Ninguno</option>
+<option value="subir">Subir imagen</option>
+<option value="predefinido">Predefinido</option>
+</select>
+<input type="file" id="fondoImagen" accept="image/*" style="display: none;" onchange="previsualizarFondo(event)">
+<div id="predefinidosContainer" style="display: none; margin-top: 10px;">
+<p>Selecciona un fondo:</p>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;">
+<button onclick="seleccionarFondoPredefinido('fondo1.jpg')">Fondo 1</button>
+<button onclick="seleccionarFondoPredefinido('fondo2.jpg')">Fondo 2</button>
+<button onclick="seleccionarFondoPredefinido('fondo3.jpg')">Fondo 3</button>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn-modal btn-cancelar" onclick="cerrarModal('modalFondo')">Cerrar</button>
+</div>
+</div>
+</div>
+<script>
+let productosDisponibles = [];
+let productosParaEtiquetas = [];
+let imagenAdicionalDataUrl = null;
+let fondoActualUrl = null;
+let imgExtra1Url = null;
+let instruccionesHtml = `
+<span style="color: red; font-weight: bold;">Indicaciones de uso en difusor eléctrico o ambiente:</span><br><br>
+- Utilice 5-10 gotas en difusor eléctrico según capacidad del recipiente<br>
+- Para uso ambiental, colocar 2-3 gotas en superficies porosas o difusores pasivos<br>
+- Evite derramar el aceite sobre superficies pintadas o barnizadas<br>
+- No aplicar directamente sobre piel, ropa o materiales delicados<br>
+- Mantener fuera del alcance de niños y mascotas<br>
+- Conservar en lugar fresco y seco, protegido de la luz solar directa<br><br>
+<span style="color: red; font-weight: bold;">Advertencias:</span><br>
+✖ No son consumibles ni de uso tópico<br>
+✖ Evitar contacto con ojos y mucosas<br>
+✖ Suspender su uso ante reacciones alérgicas.
+`;
+const tamanosHoja = {
+carta: { w: 21.6, h: 27.9, name: "letter" },
+"13x19": { w: 33, h: 48, name: "330mm 480mm" },
+a4: { w: 21, h: 29.7, name: "A4" },
+personalizado: { w: 33, h: 48, name: "custom" }
+};
+
+// Sistema de Toast notifications
+function showToast(message, type = 'success', duration = 3000) {
+const container = document.getElementById('toastContainer');
+const toast = document.createElement('div');
+toast.className = `toast ${type}`;
+toast.textContent = message;
+container.appendChild(toast);
+setTimeout(() => toast.classList.add('show'), 10);
+setTimeout(() => {
+toast.classList.remove('show');
+setTimeout(() => toast.remove(), 300);
+}, duration);
+}
+
+// Loading indicator
+function setLoading(show) {
+document.getElementById('loadingOverlay').classList.toggle('active', show);
+}
+
+function aplanarProductos(data) {
+if (Array.isArray(data)) return data;
+let flatList = [];
+for (const categoria in data) {
+if (Array.isArray(data[categoria])) {
+flatList = flatList.concat(data[categoria]);
+}
+}
+return flatList.map(p => ({
+  ...p,
+  id: p.id || crypto.randomUUID()
+}));
+}
+
+
+async function cargarProductos() {
+setLoading(true);
+try {
+const response = await fetch('https://wil1979.github.io/esentia-factura/productos_esentia.json');
+if (!response.ok) throw new Error('No se pudo cargar productos_esentia.json');
+const data = await response.json();
+productosDisponibles = aplanarProductos(data);
+renderizarCheckboxes();
+generarEtiquetas();
+showToast('Productos cargados correctamente', 'success');
+} catch (error) {
+console.error('Error al cargar productos:', error);
+document.getElementById("etiquetas").innerHTML = `<p style='color:red;'>⚠️ Error: ${error.message}</p>`;
+showToast('Error al cargar productos: ' + error.message, 'error', 5000);
+} finally {
+setLoading(false);
+}
+}
+
+function cargarImagenExtra(num, event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const url = e.target.result;
+if (num === 1) imgExtra1Url = url;
+document.getElementById(`imgPreviewExtra${num}`).src = url;
+document.getElementById(`previewImgExtra${num}`).style.display = 'block';
+guardarConfiguracion();
+generarEtiquetas();
+showToast('Imagen extra cargada', 'success');
+};
+reader.readAsDataURL(file);
+}
+}
+
+function eliminarImagenExtra(num) {
+if (num === 1) imgExtra1Url = null;
+document.getElementById(`imgPreviewExtra${num}`).src = '';
+document.getElementById(`previewImgExtra${num}`).style.display = 'none';
+document.getElementById(`imgExtra${num}File`).value = '';
+guardarConfiguracion();
+generarEtiquetas();
+showToast('Imagen extra eliminada', 'warning');
+}
+
+function eliminarImagenAdicional() {
+imagenAdicionalDataUrl = null;
+document.getElementById('imgPreviewAdicional').src = '';
+document.getElementById('previewImagenAdicional').style.display = 'none';
+document.getElementById('imagenAdicionalFile').value = '';
+guardarConfiguracion();
+generarEtiquetas();
+showToast('Imagen adicional eliminada', 'warning');
+}
+
+function renderizarCheckboxes() {
+const container = document.getElementById("checkboxContainer");
+container.innerHTML = '';
+productosDisponibles.forEach((prod, index) => {
+const safeId = `prod_${index}`;
+const div = document.createElement("div");
+div.className = "checkbox-item";
+div.innerHTML = `
+<input type="checkbox" id="${safeId}" value="${prod.id}">
+<label for="${safeId}">${prod.nombre}</label>
+`;
+container.appendChild(div);
+document.getElementById(safeId).addEventListener('change', () => {
+  generarEtiquetas();
+});
+});
+}
+
+window.onload = () => {
+cargarProductos();
+const saved = localStorage.getItem('configEtiqueta');
+if (saved) {
+try {
+const config = JSON.parse(saved);
+Object.keys(config).forEach(key => {
+const el = document.getElementById(key);
+if (el && el.value !== undefined) el.value = config[key];
+});
+if (config.infoIzquierdaHtml) instruccionesHtml = config.infoIzquierdaHtml;
+if (config.fondoTipo === 'subir' && config.fondoDataUrl) {
+fondoActualUrl = config.fondoDataUrl;
+aplicarFondo(`url(${config.fondoDataUrl})`);
+} else if (config.fondoTipo === 'predefinido' && config.fondoNombre) {
+fondoActualUrl = `fondos/${config.fondoNombre}`;
+aplicarFondo(`url('fondos/${config.fondoNombre}')`);
+}
+if (config.imagenAdicional) {
+imagenAdicionalDataUrl = config.imagenAdicional;
+document.getElementById('imgPreviewAdicional').src = imagenAdicionalDataUrl;
+document.getElementById('previewImagenAdicional').style.display = 'block';
+}
+if (config.imgExtra1) {
+imgExtra1Url = config.imgExtra1;
+document.getElementById('imgPreviewExtra1').src = imgExtra1Url;
+document.getElementById('previewImgExtra1').style.display = 'block';
+}
+if (config.qrContenido) {
+qrContenido = config.qrContenido;
+document.getElementById('qrContenido').value = qrContenido;
+}
+actualizarEstilos();
+} catch (e) {
+console.error('Error al cargar configuración guardada:', e);
+}
+}
+const modoGuardado = localStorage.getItem('modoOscuro') === 'true';
+if (modoGuardado) {
+document.body.classList.add('modo-oscuro');
+document.getElementById('btnModoOscuro').innerHTML = '☀️ Desactivar Modo Oscuro';
+}
+actualizarTamanoHoja();
+};
+
+function abrirModal(modalId) {
+document.getElementById(modalId).style.display = 'flex';
+}
+
+function cerrarModal(modalId) {
+document.getElementById(modalId).style.display = 'none';
+}
+
+window.onclick = function(event) {
+const modales = document.querySelectorAll('.modal');
+modales.forEach(modal => {
+if (event.target === modal) {
+modal.style.display = 'none';
+}
+});
+};
+
+function generarQRSVG(texto, size = 100) {
+  const qr = qrcode(0, 'H');
+  qr.addData(texto);
+  qr.make();
+
+  const modules = qr.getModuleCount();
+
+  let svg = `
+  <svg width="${size}" height="${size}" viewBox="-2 -2 ${modules + 4} ${modules + 4}" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fondo blanco -->
+    <rect x="-2" y="-2" width="${modules + 4}" height="${modules + 4}" fill="white"/>
+  `;
+
+  for (let r = 0; r < modules; r++) {
+    for (let c = 0; c < modules; c++) {
+      if (qr.isDark(r, c)) {
+        svg += `<rect x="${c}" y="${r}" width="1" height="1" fill="black"/>`;
+      }
+    }
+  }
+
+  svg += `</svg>`;
+  return svg;
+}
+
+function cargarImagenAdicional(event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+imagenAdicionalDataUrl = e.target.result;
+document.getElementById('imgPreviewAdicional').src = imagenAdicionalDataUrl;
+document.getElementById('previewImagenAdicional').style.display = 'block';
+guardarConfiguracion();
+generarEtiquetas();
+showToast('Imagen adicional cargada', 'success');
+};
+reader.readAsDataURL(file);
+}
+}
+
+function seleccionarTodos(checked) {
+document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(cb => {
+cb.checked = checked;
+});
+generarEtiquetas();
+showToast(checked ? 'Todos los productos seleccionados' : 'Selección limpiada', 'success');
+}
+
+function actualizarTamanoHoja() {
+const tipo = document.getElementById("tamanoHoja").value;
+document.getElementById("camposPersonalizados").style.display = tipo === "personalizado" ? "block" : "none";
+let anchoCm = 21.6, altoCm = 27.9;
+if (tipo === "personalizado") {
+anchoCm = parseFloat(document.getElementById('anchoHojaCm').value) || 21.6;
+altoCm = parseFloat(document.getElementById('altoHojaCm').value) || 27.9;
+} else {
+anchoCm = tamanosHoja[tipo].w;
+altoCm = tamanosHoja[tipo].h;
+}
+document.documentElement.style.setProperty('--hoja-ancho-cm', `${anchoCm}cm`);
+document.documentElement.style.setProperty('--hoja-alto-cm', `${altoCm}cm`);
+generarEtiquetas();
+}
+
+function actualizarEstilos() {
+document.documentElement.style.setProperty('--etiqueta-width', document.getElementById('anchoCm').value + 'cm');
+document.documentElement.style.setProperty('--etiqueta-height', document.getElementById('altoCm').value + 'cm');
+document.documentElement.style.setProperty('--img-width', document.getElementById('imgWidth').value + 'px');
+document.documentElement.style.setProperty('--img-height', document.getElementById('imgHeight').value + 'px');
+document.documentElement.style.setProperty('--img-left', document.getElementById('imgLeft').value + '%');
+document.documentElement.style.setProperty('--img-top', document.getElementById('imgTop').value + '%');
+document.documentElement.style.setProperty('--img-rotacion', document.getElementById('imgRotacion').value + 'deg');
+document.documentElement.style.setProperty('--nombre-font-size', document.getElementById('nombreFontSize').value + 'px');
+document.documentElement.style.setProperty('--nombre-color', document.getElementById('nombreColor').value);
+document.documentElement.style.setProperty('--nombre-left', document.getElementById('nombreLeft').value + '%');
+document.documentElement.style.setProperty('--nombre-top', document.getElementById('nombreTop').value + '%');
+document.documentElement.style.setProperty('--nombre-rotacion', document.getElementById('nombreRotacion').value + 'deg');
+document.documentElement.style.setProperty('--instrucciones-font-size', document.getElementById('instruccionesFontSize').value + 'px');
+document.documentElement.style.setProperty('--instrucciones-color', document.getElementById('instruccionesColor').value);
+document.documentElement.style.setProperty('--instrucciones-rotacion', document.getElementById('instruccionesRotacion').value + 'deg');
+document.documentElement.style.setProperty('--instrucciones-top', document.getElementById('instruccionesTop').value + '%');
+document.documentElement.style.setProperty('--instrucciones-left', document.getElementById('instruccionesLeft').value + '%');
+document.documentElement.style.setProperty('--texto1-font-size', document.getElementById('texto1FontSize').value + 'px');
+document.documentElement.style.setProperty('--texto1-color', document.getElementById('texto1Color').value);
+document.documentElement.style.setProperty('--texto1-left', document.getElementById('texto1Left').value + '%');
+document.documentElement.style.setProperty('--texto1-top', document.getElementById('texto1Top').value + '%');
+document.documentElement.style.setProperty('--texto1-rotacion', document.getElementById('texto1Rotacion').value + 'deg');
+document.documentElement.style.setProperty('--texto2-font-size', document.getElementById('texto2FontSize').value + 'px');
+document.documentElement.style.setProperty('--texto2-color', document.getElementById('texto2Color').value);
+document.documentElement.style.setProperty('--texto2-left', document.getElementById('texto2Left').value + '%');
+document.documentElement.style.setProperty('--texto2-top', document.getElementById('texto2Top').value + '%');
+document.documentElement.style.setProperty('--texto2-rotacion', document.getElementById('texto2Rotacion').value + 'deg');
+document.documentElement.style.setProperty('--texto3-font-size', document.getElementById('texto3FontSize').value + 'px');
+document.documentElement.style.setProperty('--texto3-color', document.getElementById('texto3Color').value);
+document.documentElement.style.setProperty('--texto3-left', document.getElementById('texto3Left').value + '%');
+document.documentElement.style.setProperty('--texto3-top', document.getElementById('texto3Top').value + '%');
+document.documentElement.style.setProperty('--texto3-rotacion', document.getElementById('texto3Rotacion').value + 'deg');
+document.documentElement.style.setProperty('--img-adicional-width', document.getElementById('imgAdicionalWidth').value + 'px');
+document.documentElement.style.setProperty('--img-adicional-height', document.getElementById('imgAdicionalHeight').value + 'px');
+document.documentElement.style.setProperty('--img-adicional-left', document.getElementById('imgAdicionalLeft').value + '%');
+document.documentElement.style.setProperty('--img-adicional-top', document.getElementById('imgAdicionalTop').value + '%');
+document.documentElement.style.setProperty('--img-adicional-rotacion', document.getElementById('imgAdicionalRotacion').value + 'deg');
+document.documentElement.style.setProperty('--qr-size', document.getElementById('qrSize')?.value + 'px');
+document.documentElement.style.setProperty('--qr-left', document.getElementById('qrLeft')?.value + '%');
+document.documentElement.style.setProperty('--qr-top', document.getElementById('qrTop')?.value + '%');
+document.documentElement.style.setProperty('--qr-rotacion', document.getElementById('qrRotacion')?.value + 'deg');
+// Variables CSS para imagen extra 1
+document.documentElement.style.setProperty('--img-extra1-width', document.getElementById('imgExtra1Width')?.value + 'px' || '30px');
+document.documentElement.style.setProperty('--img-extra1-left', document.getElementById('imgExtra1Left')?.value + '%' || '90%');
+document.documentElement.style.setProperty('--img-extra1-top', document.getElementById('imgExtra1Top')?.value + '%' || '90%');
+document.documentElement.style.setProperty('--blur-fondo', document.getElementById('blurFondo')?.value + 'px' || '0px');
+document.documentElement.style.setProperty('--brillo-fondo', document.getElementById('brilloFondo')?.value || '1');
+document.documentElement.style.setProperty('--overlay-fondo', document.getElementById('overlayFondo')?.value || 0);
+guardarConfiguracion();
+}
+
+function cambiarTipoFondo() {
+const tipo = document.getElementById('fondoTipo').value;
+const fileInput = document.getElementById('fondoImagen');
+const predefContainer = document.getElementById('predefinidosContainer');
+if (tipo === 'subir') {
+fileInput.style.display = 'block';
+predefContainer.style.display = 'none';
+fileInput.click();
+} else if (tipo === 'predefinido') {
+fileInput.style.display = 'none';
+predefContainer.style.display = 'block';
+} else {
+fileInput.style.display = 'none';
+predefContainer.style.display = 'none';
+aplicarFondo(null);
+fondoActualUrl = null;
+guardarConfiguracion();
+generarEtiquetas();
+}
+}
+
+function previsualizarFondo(event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const url = e.target.result;
+aplicarFondo(`url(${url})`);
+fondoActualUrl = url;
+guardarConfiguracion();
+generarEtiquetas();
+showToast('Fondo cargado correctamente', 'success');
+};
+reader.readAsDataURL(file);
+}
+}
+
+function seleccionarFondoPredefinido(nombre) {
+const url = `fondos/${nombre}`;
+aplicarFondo(`url('${url}')`);
+fondoActualUrl = url;
+localStorage.setItem('fondoNombre', nombre);
+guardarConfiguracion();
+generarEtiquetas();
+showToast('Fondo predefinido seleccionado', 'success');
+}
+
+function aplicarFondo(url) {
+if (url) {
+document.documentElement.style.setProperty('--fondo-imagen', url);
+} else {
+document.documentElement.style.setProperty('--fondo-imagen', 'none');
+}
+}
+
+function exportarConfiguracion() {
+const config = guardarConfiguracion();
+const dataStr = JSON.stringify(config, null, 2);
+const dataBlob = new Blob([dataStr], { type: 'application/json' });
+const url = URL.createObjectURL(dataBlob);
+const link = document.createElement('a');
+link.download = 'config-etiqueta-esentia.json';
+link.href = url;
+link.click();
+URL.revokeObjectURL(url);
+showToast('Configuración exportada', 'success');
+}
+
+// Usar readAsText para archivos JSON
+function importarConfiguracion(event) {
+const file = event.target.files[0];
+if (!file) return;
+const reader = new FileReader();
+reader.onload = function(e) {
+try {
+const config = JSON.parse(e.target.result);
+Object.keys(config).forEach(key => {
+const el = document.getElementById(key);
+if (el && el.value !== undefined) el.value = config[key];
+});
+imagenAdicionalDataUrl = config.imagenAdicional || null;
+if (imagenAdicionalDataUrl) {
+document.getElementById('imgPreviewAdicional').src = imagenAdicionalDataUrl;
+document.getElementById('previewImagenAdicional').style.display = 'block';
+}
+fondoActualUrl = (config.fondoTipo === 'subir') ? config.fondoDataUrl :
+(config.fondoTipo === 'predefinido') ? `fondos/${config.fondoNombre}` : null;
+if (fondoActualUrl) aplicarFondo(`url(${fondoActualUrl})`);
+if (config.fondoNombre) localStorage.setItem('fondoNombre', config.fondoNombre);
+if (config.infoIzquierdaHtml) {
+instruccionesHtml = config.infoIzquierdaHtml;
+document.getElementById('editorInstrucciones').innerHTML = instruccionesHtml;
+}
+actualizarEstilos();
+generarEtiquetas();
+showToast('Configuración importada correctamente', 'success');
+} catch (err) {
+console.error('Error al importar:', err);
+showToast('Error al importar configuración: ' + err.message, 'error', 5000);
+}
+};
+reader.readAsText(file);
+}
+
+function guardarConfiguracion() {
+const config = {
+anchoCm: document.getElementById('anchoCm').value,
+altoCm: document.getElementById('altoCm').value,
+imgWidth: document.getElementById('imgWidth').value,
+imgHeight: document.getElementById('imgHeight').value,
+imgLeft: document.getElementById('imgLeft').value,
+imgTop: document.getElementById('imgTop').value,
+imgRotacion: document.getElementById('imgRotacion').value,
+nombreFontSize: document.getElementById('nombreFontSize').value,
+nombreColor: document.getElementById('nombreColor').value,
+nombreLeft: document.getElementById('nombreLeft').value,
+nombreTop: document.getElementById('nombreTop').value,
+nombreRotacion: document.getElementById('nombreRotacion').value,
+instruccionesFontSize: document.getElementById('instruccionesFontSize').value,
+instruccionesColor: document.getElementById('instruccionesColor').value,
+instruccionesRotacion: document.getElementById('instruccionesRotacion').value,
+instruccionesTop: document.getElementById('instruccionesTop').value,
+instruccionesLeft: document.getElementById('instruccionesLeft').value,
+texto1: document.getElementById('texto1').value,
+texto1FontSize: document.getElementById('texto1FontSize').value,
+texto1Color: document.getElementById('texto1Color').value,
+texto1Left: document.getElementById('texto1Left').value,
+texto1Top: document.getElementById('texto1Top').value,
+texto1Rotacion: document.getElementById('texto1Rotacion').value,
+texto2: document.getElementById('texto2').value,
+texto2FontSize: document.getElementById('texto2FontSize').value,
+texto2Color: document.getElementById('texto2Color').value,
+texto2Left: document.getElementById('texto2Left').value,
+texto2Top: document.getElementById('texto2Top').value,
+texto2Rotacion: document.getElementById('texto2Rotacion').value,
+texto3: document.getElementById('texto3').value,
+texto3FontSize: document.getElementById('texto3FontSize').value,
+texto3Color: document.getElementById('texto3Color').value,
+texto3Left: document.getElementById('texto3Left').value,
+texto3Top: document.getElementById('texto3Top').value,
+texto3Rotacion: document.getElementById('texto3Rotacion').value,
+imagenAdicional: imagenAdicionalDataUrl,
+fondoTipo: document.getElementById('fondoTipo').value,
+fondoNombre: localStorage.getItem('fondoNombre'),
+fondoDataUrl: (document.getElementById('fondoTipo').value === 'subir') ? fondoActualUrl : null,
+infoIzquierdaHtml: instruccionesHtml,
+tamanoHoja: document.getElementById('tamanoHoja').value,
+anchoHojaCm: document.getElementById('anchoHojaCm')?.value,
+altoHojaCm: document.getElementById('altoHojaCm')?.value,
+productosManual: document.getElementById('productosManual').value,
+cantidadPorProducto: document.getElementById('cantidadPorProducto').value,
+qrSize: document.getElementById('qrSize')?.value,
+qrLeft: document.getElementById('qrLeft')?.value,
+qrTop: document.getElementById('qrTop')?.value,
+qrRotacion: document.getElementById('qrRotacion')?.value,
+imgExtra1: imgExtra1Url,
+imgExtra1Width: document.getElementById('imgExtra1Width')?.value,
+blurFondo: document.getElementById('blurFondo')?.value,
+brilloFondo: document.getElementById('brilloFondo')?.value,
+imgExtra1Left: document.getElementById('imgExtra1Left')?.value,
+imgExtra1Top: document.getElementById('imgExtra1Top')?.value
+};
+localStorage.setItem('configEtiqueta', JSON.stringify(config));
+return config;
+}
+
+// FUNCIÓN CORREGIDA - Eliminada referencia a indicesSeleccionados
+function generarEtiquetas() {
+    console.log("Generando etiquetas...");
+   
+actualizarEstilos();
+const anchoEtiquetaCm = parseFloat(document.getElementById('anchoCm').value);
+const altoEtiquetaCm = parseFloat(document.getElementById('altoCm').value);
+let anchoHojaCm = 21.6, altoHojaCm = 27.9;
+const tipoHoja = document.getElementById("tamanoHoja").value;
+if (tipoHoja === "personalizado") {
+anchoHojaCm = parseFloat(document.getElementById('anchoHojaCm').value) || 21.6;
+altoHojaCm = parseFloat(document.getElementById('altoHojaCm').value) || 27.9;
+} else {
+anchoHojaCm = tamanosHoja[tipoHoja].w;
+altoHojaCm = tamanosHoja[tipoHoja].h;
+}
+
+// Calcular columnas y filas sin márgenes (100% aprovechamiento)
+const columnas = Math.floor(anchoHojaCm / anchoEtiquetaCm);
+const filas = Math.floor(altoHojaCm / altoEtiquetaCm);
+const maxEtiquetas = columnas * filas;
+
+// Actualizar contador
+document.getElementById('etiquetasMaximas').textContent = maxEtiquetas;
+document.getElementById('etiquetasGeneradas').textContent = '0';
+
+if (columnas <= 0 || filas <= 0) {
+document.getElementById("etiquetas").innerHTML = "<p style='color:red;'>⚠️ La etiqueta es demasiado grande para la hoja seleccionada.</p>";
+return;
+}
+
+const contenedor = document.getElementById("etiquetas");
+contenedor.style.gridTemplateColumns = `repeat(${columnas}, ${anchoEtiquetaCm}cm)`;
+contenedor.style.gridTemplateRows = `repeat(${filas}, ${altoEtiquetaCm}cm)`;
+contenedor.style.width = `${anchoHojaCm}cm`;
+contenedor.style.height = `${altoHojaCm}cm`;
+contenedor.style.padding = `0`; // Sin padding
+
+// Obtener productos seleccionados de los checkboxes
+const seleccionados = [];
+document.querySelectorAll('.checkbox-item input[type="checkbox"]:checked')
+.forEach(cb => {
+  const producto = productosDisponibles.find(p => p.id == cb.value);
+  if (producto) {
+    seleccionados.push({ ...producto });
+  }
+});
+
+productosParaEtiquetas = seleccionados;
+const productosManual = document.getElementById("productosManual").value.split(',').map(p => p.trim()).filter(p => p);
+
+// Si hay productos manuales, usarlos en lugar de los seleccionados
+if (productosManual.length > 0) {
+productosParaEtiquetas = productosManual.map(nombreManual => {
+const encontrado = productosDisponibles.find(p => p.nombre.toLowerCase().includes(nombreManual.toLowerCase()));
+return encontrado || { nombre: nombreManual, imagen: '' };
+});
+}
+
+// Si no hay productos seleccionados ni manuales, mostrar mensaje
+if (productosParaEtiquetas.length === 0) {
+document.getElementById("etiquetas").innerHTML = "<p style='color:orange; padding:20px;'>⚠️ Selecciona al menos un producto o ingresa una lista manual.</p>";
+return;
+}
+
+const cantidadPorProducto = parseInt(document.getElementById("cantidadPorProducto").value) || 1;
+const todasEtiquetas = [];
+productosParaEtiquetas.forEach(producto => {
+if (!producto || !producto.nombre) return;
+for (let i = 0; i < cantidadPorProducto; i++) todasEtiquetas.push({ ...producto });
+});
+
+const etiquetasAMostrar = todasEtiquetas.slice(0, maxEtiquetas);
+const etiquetasGeneradas = etiquetasAMostrar.length;
+
+// Actualizar contador con valores reales
+document.getElementById('etiquetasGeneradas').textContent = etiquetasGeneradas;
+
+// Mensaje adicional si hay más productos que espacio
+if (todasEtiquetas.length > maxEtiquetas) {
+document.querySelector('.contador-etiquetas').innerHTML = `
+📊 <span style="color:#d32f2f">${etiquetasGeneradas}</span> etiquetas generadas de <span id="etiquetasMaximas">${maxEtiquetas}</span> posibles<br>
+⚠️ <span style="font-size:12px;color:#d32f2f">Quedan ${todasEtiquetas.length - maxEtiquetas} etiquetas sin espacio. Usa otra hoja o reduce el tamaño.</span>
+`;
+} else {
+document.querySelector('.contador-etiquetas').innerHTML = `
+📊 <span id="etiquetasGeneradas">${etiquetasGeneradas}</span> etiquetas generadas de <span id="etiquetasMaximas">${maxEtiquetas}</span> posibles
+`;
+}
+
+contenedor.innerHTML = "";
+etiquetasAMostrar.forEach((producto, index) => {
+const uniqueKey = producto._uid || index;
+const imgSrc = producto.imagen || '';
+const etiqueta = document.createElement("div");
+etiqueta.className = "etiqueta";
+let fondoHtml = fondoActualUrl ? `<img class="fondo-etiqueta" src="${fondoActualUrl}" alt="Fondo" crossorigin="anonymous">` : '';
+let htmlAdicional = '';
+if (document.getElementById("texto1").value.trim()) htmlAdicional += `<div class="texto-adicional-1">${document.getElementById("texto1").value}</div>`;
+if (document.getElementById("texto2").value.trim()) htmlAdicional += `<div class="texto-adicional-2">${document.getElementById("texto2").value}</div>`;
+if (document.getElementById("texto3").value.trim()) htmlAdicional += `<div class="texto-adicional-3">${document.getElementById("texto3").value}</div>`;
+if (imagenAdicionalDataUrl) htmlAdicional += `<img class="imagen-adicional" src="${imagenAdicionalDataUrl}" alt="Adicional" crossorigin="anonymous">`;
+if (imgExtra1Url)
+  htmlAdicional += `<img class="imagen-extra-1" src="${imgExtra1Url}" crossorigin="anonymous">`;
+const qrId = `qr-${Math.random().toString(36).substr(2, 9)}`;
+htmlAdicional += `<div class="codigo-qr" id="${qrId}"></div>`;
+etiqueta.innerHTML = `
+<div class="etiqueta-content">
+${fondoHtml}
+<div class="fondo-overlay"></div>
+<img class="producto-imagen" src="${imgSrc}" alt="${producto.nombre}" onerror="this.style.display='none'" crossorigin="anonymous">
+<div class="nombre-producto">${producto.nombre}</div>
+${instruccionesHtml ? `<div class="instrucciones">${instruccionesHtml}</div>` : ''}
+${htmlAdicional}
+</div>
+<div class="download-overlay">🔽 Click para descargar</div>
+`;
+// Descargar etiqueta individual
+etiqueta.addEventListener('click', function () {
+setLoading(true);
+html2canvas(etiqueta.querySelector('.etiqueta-content'), { scale: 3, backgroundColor: null, useCORS: true }).then(canvas => {
+const link = document.createElement('a');
+link.download = `etiqueta-${producto.nombre.replace(/[^a-z0-9]/gi, '_')}.png`;
+link.href = canvas.toDataURL('image/png');
+link.click();
+showToast('Etiqueta descargada', 'success');
+}).catch(err => {
+console.error('Error al generar imagen:', err);
+showToast('Error al generar imagen', 'error');
+}).finally(() => {
+setLoading(false);
+});
+});
+contenedor.appendChild(etiqueta);
+const qrContent = obtenerQRProducto(producto);
+const qrSize = parseInt(document.getElementById('qrSize')?.value) || 50;
+
+document.getElementById(qrId).innerHTML = generarQRSVG(qrContent, qrSize);
+});
+ console.log(
+  "Seleccionados:",
+  productosParaEtiquetas.map(p => p.nombre)
+);
+console.log(
+  "Final:",
+  todasEtiquetas.map(p => p.nombre)
+);
+}
+
+function obtenerQRProducto(producto) {
+  const usarDinamico = document.getElementById('qrDinamico')?.checked;
+
+  if (usarDinamico && producto.id !== undefined) {
+    return `https://wil1979.github.io/esentia-factura/producto.html?id=${producto.id}`;
+  }
+
+  return document.getElementById('qrContenido')?.value || "https://www.facebook.com/profile.php?id=61579078480913";
+}
+
+
+
+async function descargarTodasComoImagen() {
+  const etiquetas = document.querySelectorAll('.etiqueta-content');
+  if (etiquetas.length === 0) return showToast('No hay etiquetas para descargar', 'warning');
+  setLoading(true);
+  try {
+    const zip = new JSZip();
+    const promises = Array.from(etiquetas).map((content, i) => {
+      const nombre = content.querySelector('.producto-imagen')?.alt || `producto_${i + 1}`;
+      return html2canvas(content, { scale: 2, backgroundColor: null, useCORS: true })
+        .then(canvas => new Promise((resolve) => {
+          canvas.toBlob((blob) => {
+            if (blob) zip.file(`${nombre}_${i + 1}.png`, blob);
+            resolve();
+          });
+        }));
+    });
+    await Promise.all(promises);
+    const blob = await zip.generateAsync({ type: "blob" });
+    saveAs(blob, "etiquetas.zip");
+    showToast('Todas las etiquetas se descargaron en un archivo ZIP', 'success');
+  } catch (err) {
+    console.error('Error al descargar todas las etiquetas:', err);
+    showToast('Error al descargar etiquetas: ' + err.message, 'error', 6000);
+  } finally {
+    setLoading(false);
+  }
+}
+async function generarPDF() {
+  const contenedor = document.getElementById('etiquetas');
+
+  if (!contenedor || contenedor.children.length === 0) {
+    return showToast('No hay etiquetas para exportar', 'warning');
+  }
+
+  setLoading(true);
+
+  try {
+    const canvas = await html2canvas(contenedor, {
+      scale: 3, // alta calidad
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+
+    // Obtener tamaño hoja en cm
+    const anchoCm = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hoja-ancho-cm'));
+    const altoCm = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hoja-alto-cm'));
+
+    // Convertir a mm (jsPDF usa mm)
+    const anchoMM = anchoCm * 10;
+    const altoMM = altoCm * 10;
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
+      orientation: anchoMM > altoMM ? 'landscape' : 'portrait',
+      unit: 'mm',
+      format: [anchoMM, altoMM]
+    });
+
+    pdf.addImage(imgData, 'PNG', 0, 0, anchoMM, altoMM);
+
+    pdf.save('etiquetas-esentia.pdf');
+
+    showToast('PDF generado correctamente', 'success');
+
+  } catch (err) {
+    console.error(err);
+    showToast('Error al generar PDF: ' + err.message, 'error');
+  } finally {
+    setLoading(false);
+  }
+}
+
+function alternarModoOscuro() {
+  const body = document.body;
+  body.classList.toggle('modo-oscuro');
+  const activo = body.classList.contains('modo-oscuro');
+  const btn = document.getElementById('btnModoOscuro');
+  btn.innerHTML = activo ? '☀️ Desactivar Modo Oscuro' : '🌑 Modo Oscuro';
+  localStorage.setItem('modoOscuro', activo ? 'true' : 'false');
+  showToast(activo ? 'Modo oscuro activado' : 'Modo oscuro desactivado', 'success');
+}
+
+function guardarInstrucciones() {
+  instruccionesHtml = document.getElementById('editorInstrucciones').innerHTML;
+  localStorage.setItem('configEtiqueta', JSON.stringify(guardarConfiguracion()));
+  generarEtiquetas();
+  cerrarModal('modalInstrucciones');
+  showToast('Instrucciones guardadas', 'success');
+}
+
+// Debounce para evitar múltiples llamadas rápidas
+let debounceTimer;
+function generarEtiquetasDebounce() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(generarEtiquetas, 300);
+}
+</script>
+</body>
+</html>

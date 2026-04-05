@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esentia — Clientes</title>
+
+  <link rel="stylesheet" href="clientes.css" />
+
+  
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ================= SIDEBAR CLIENTES ================= -->
+  <div id="app">
+  <aside id="panel-clientes">
+  <h2>👥 Clientes</h2>
+  <input id="buscador-clientes" type="text" placeholder="Buscar cliente..." />
+    <!-- Dentro de #panel-clientes, arriba de la lista -->
+ <div style="margin-bottom: 15px;">  
+    <input type="checkbox" id="filtro-deudores">
+ </div>
+  <button id="btn-nuevo-cliente">➕ </button>
+  <button onclick="cargarResumenCompleto()">🔍 Cargar resumen completo</button>
+  <!-- En la sección de acciones globales, después de "Cargar resumen completo" -->
+  <button id="btn-exportar-facturas" class="btn secondary" onclick="exportarFacturasADetalle()">📤 Exportar a 'detalle'</button>
+  <button id="btn-refrescar-clientes">🔄</button>
+  <button id="btn-toggle-deudores">💰</button>
+  <div id="lista-clientes" style="margin-top:12px;"></div>
+
+
+  </aside>
+
+  <!-- ================= CONTENIDO PRINCIPAL ================= -->
+  <main id="panel-detalle">
+
+    <!-- INFO CLIENTE -->
+    <div id="info-cliente" class="card vacio">
+
+       <div id="sellos-cliente" style="margin-top:6px;color:#6c4;">
+     🎁 Sellos: 0
+    </div>
+    
+      <div id="info-basica"></div>
+
+     
+
+
+
+
+      
+
+    </div>
+
+    <!-- HISTORIAL DE COMPRAS -->
+    <div id="panel-historial" class="card hidden">
+      <h3>🧾 Historial de compras</h3>
+      <div id="historial-compras"></div>
+      
+    </div>
+    
+  
+
+    
+
+  </main>
+
+</div>
+
+<!-- ================= MODAL NUEVO CLIENTE ================= -->
+<div id="modal-nuevo-cliente" class="modal hidden"
+  style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center;">
+
+  <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:500px;">
+    <h2>👤 Registrar Nuevo Cliente</h2>
+
+    <!-- 🔍 Buscador desde personal.json -->
+    <div style="margin-bottom:15px;">
+      <label>Buscar Persona (Cédula o Nombre):</label>
+      <input type="text" id="buscador-personal" placeholder="Buscar en personal.json" 
+        style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px;">
+      <div id="resultados-personal" 
+        style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-top:5px; border-radius:6px; display:none;">
+        <!-- Aquí aparecen los resultados -->
+      </div>
+    </div>
+
+    <!-- 🆔 Cédula + API Hacienda -->
+    <div style="margin-bottom:15px;">
+      <label>Cédula:</label>
+      <input type="text" id="modal-cedula" placeholder="Ej: 112230405" 
+        style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px;" maxlength="12">
+      <small id="nombre-desde-api" style="color:#4CAF50; display:block; margin-top:5px; font-weight:bold;"></small>
+    </div>
+
+    <!-- 👤 Nombre editable -->
+    <div style="margin-bottom:15px;">
+      <label>Nombre (editable):</label>
+      <input type="text" id="modal-nombre" placeholder="Nombre del cliente" 
+        style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px;">
+    </div>
+
+    <!-- 📞 Teléfono -->
+    <div style="margin-bottom:20px;">
+      <label>Teléfono (8 dígitos):</label>
+      <input type="text" id="modal-telefono" placeholder="Ej: 88889999" 
+        style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px;" maxlength="8">
+    </div>
+
+    <!-- ✅ Botones -->
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button class="boton-accion" style="background:#666; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer;"
+        onclick="cerrarModalNuevoCliente()">❌ Cancelar</button>
+      <button class="boton-accion" style="background:#4CAF50; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer;"
+        onclick="guardarNuevoCliente()">✅ Guardar y Agregar Productos</button>
+    </div>
+  </div>
+</div>
+
+<!-- =============================== -->
+<!-- 🛒 MODAL PRODUCTOS / NUEVA VENTA -->
+<!-- =============================== -->
+<div id="modal-productos" class="modal hidden">
+  <div class="modal-contenido">
+
+    <h2>🛒 Nueva Venta</h2>
+
+    <!-- FILTRO -->
+    <input
+      type="text" style="margin-top:12px;padding:12px;border-radius:12px;
+             background:#84a54e;border:1px solid #ddd;"
+      id="filtro-productos"
+      placeholder="Buscar producto..."
+    />
+
+    <!-- PRODUCTO -->
+    <label>Producto</label>
+    <select id="select-producto"></select>
+
+    - Selector de variantes (se ocultará si no hay) -->
+<select id="select-variante" style="width:100%; margin:8px 0;">
+    <option value="">Seleccione presentación</option>
+</select>
+
+<!-- El input de precio editable se genera dinámicamente en mostrarVistaPrevia() -->
+<div id="vista-previa-producto"></div>
+
+<!-- Cantidad -->
+<input type="number" id="input-cantidad" value="1" min="1" style="width:80px;">
+
+<!-- Botón agregar -->
+<button onclick="agregarAlCarritoModal()">➕ Agregar al carrito</button>
+
+    <hr>
+
+    <!-- CARRITO -->
+    <div id="carrito-modal"></div>
+
+    <hr>
+
+    <!-- DESCUENTO -->
+    <label>Descuento ₡</label>
+    <input type="number" id="descuento" value="0" min="0">
+
+    <!-- TIPO DE PAGO -->
+    <label>Tipo de pago</label>
+    <select id="tipo-pago">
+      <option value="contado">Contado</option>
+      <option value="credito">Crédito</option>
+    </select>
+
+    <!-- MÉTODO DE PAGO -->
+    <label>Método de pago</label>
+<select id="metodo-pago">
+  <option value="Efectivo">Efectivo</option>
+  <option value="SINPE">SINPE</option>
+  <option value="Transferencia">Transferencia</option>
+  <option value="Tarjeta">Tarjeta</option>
+  <option value="Pendiente">Pendiente</option>
+</select>
+
+ <!-- 💳 RESUMEN PAGOS (por método) -->
+    <h4>💳 Pagos por método</h4>
+    <div id="resumen-pagos"
+      style="margin-top:12px;padding:12px;border-radius:12px;
+             background:#f8f9fa;border:1px solid #ddd;">
+    </div>
+
+    <!-- 🧾 RESUMEN DE VENTA -->
+    <h4>🧾 Resumen de venta</h4>
+    <div id="resumen-venta"
+      style="margin-top:12px;padding:12px;border-radius:10px;
+             background:#608bb6;color:white;">
+    </div>
+
+
+    <!-- ACCIONES -->
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:15px">
+      <button type="button" onclick="cerrarModalProductos()">Cancelar</button>
+      <button type="button" onclick="facturarVenta()" style="background:green;color:white">
+        💾 Facturar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =============================== -->
+<!-- ✏️ MODAL EDITAR COMPRA -->
+<!-- =============================== -->
+<div id="modal-editar-compra" class="modal hidden">
+  <div class="modal-contenido" style="max-width:600px">
+
+    <h2>✏️ Editar Compra</h2>
+
+    <div id="edit-productos"></div>
+
+    <label>Descuento ₡</label>
+    <input type="number" id="edit-descuento" value="0" min="0">
+
+    <!-- RESUMEN EDICIÓN -->
+    <div id="edit-resumen-venta"
+         style="margin-top:15px;padding:12px;border-radius:10px;
+                background:#f1f1f1;border:1px solid #ccc;font-size:.9rem">
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:15px">
+      <button type="button" onclick="cerrarModalEditarCompra()">Cancelar</button>
+      <button type="button" onclick="guardarEdicionCompra()"
+              style="background:#1976d2;color:white">
+        💾 Guardar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= MODAL PAGAR FACTURA ================= -->
+<div id="modal-pagar-factura" class="modal hidden">
+  <div class="modal-contenido" style="max-width:420px;">
+    <h2>💳 Pagar factura</h2>
+
+    <div id="info-factura-pago" style="margin-bottom:10px;"></div>
+
+    <label>Monto a abonar ₡</label>
+    <input type="number" id="abono-monto" min="1" />
+s
+    <label>Método de pago</label>
+    <select id="abono-metodo">
+      <option value="Efectivo">Efectivo</option>
+      <option value="SINPE">SINPE</option>
+      <option value="Transferencia">Transferencia</option>
+      <option value="Tarjeta">Tarjeta</option>
+      <option value="Pendiente">Pendiente</option>
+    </select>
+
+    <label>Nota (opcional)</label>
+    <input type="text" id="abono-nota" placeholder="Ej: SINPE 8844-XXXX" />
+
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px">
+      <button onclick="cerrarModalPagoFactura()">Cancelar</button>
+      <button onclick="guardarPagoFactura()" style="background:green;color:white">
+        💾 Registrar pago
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Eliminar Cliente -->
+<div id="modal-eliminar-cliente" class="modal hidden">
+  <div class="modal-contenido">
+    <h3>🗑️ Eliminar Cliente</h3>
+    <p id="info-eliminar"></p>
+    <p>⚠️ Esta acción no se puede deshacer.</p>
+
+    <label>
+      <input type="radio" name="tipo-eliminar" value="historial" checked>
+      🧾 Solo borrar historial (conservar cliente)
+    </label><br>
+    <label>
+      <input type="radio" name="tipo-eliminar" value="completo">
+      💥 Eliminar cliente completamente
+    </label><br><br>
+
+    <p>Escribe el nombre del cliente para confirmar:</p>
+    <input type="text" id="confirmar-nombre-eliminar" placeholder="Nombre exacto">
+
+    <div style="margin-top:15px;">
+      <button onclick="confirmarEliminarCliente()">✅ Confirmar</button>
+      <button onclick="cerrarModalEliminar()" class="btn-secundario">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal: Editar Cliente -->
+<div id="modal-editar-cliente" class="modal hidden">
+  <div class="modal-contenido">
+    <h3>✏️ Editar Cliente</h3>
+    <div style="margin-bottom:10px;">
+      <label>Nombre *</label>
+      <input type="text" id="edit-nombre" required style="text-transform: uppercase;">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label>Cédula</label>
+      <input type="text" id="edit-cedula">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label>Teléfono *</label>
+      <input type="text" id="edit-telefono" required>
+    </div>
+    <button onclick="guardarEdicionCliente()">✅ Guardar</button>
+    <button onclick="normalizarClientes()">✅ Normalizar Clientes</button>
+    
+    <button onclick="cerrarModalEditar()" class="btn-secundario">Cancelar</button>
+  </div>
+</div>
+
+ 
+<div id="resumen-general" class="hidden" style="
+  background:#fff;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  border:1px solid #ddd;
+">
+</div>
+
+ <!-- RESUMEN EDICIÓN -->
+    <div id="actualizarResumenVenta" style="margin-top:15px;padding:12px;border-radius:10px;
+           background:#f1f1f1;border:1px solid #ccc;font-size:.9rem">          
+    </div>
+
+<a href="index.html" class="fab">🏠</a>
+<script type="module" src="clientes.js"></script>
+
+</body>
+</html>

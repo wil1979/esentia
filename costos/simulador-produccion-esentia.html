@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Simulador Producción Esentia</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+padding:40px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px;
+}
+
+input,select{
+padding:8px;
+width:100%;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+padding:12px;
+background:black;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-top:20px;
+}
+
+.result{
+margin-top:20px;
+background:#f1f1f1;
+padding:15px;
+border-radius:6px;
+}
+
+.result p{
+font-size:18px;
+margin:6px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Simulador de Producción Esentia</h2>
+
+<div class="grid">
+
+<div>
+<label>Aceite disponible (ml)</label>
+<input id="aceiteDisponible" type="number">
+</div>
+
+<div>
+<label>Tamaño del envase</label>
+<select id="tamano">
+<option value="30">30 ml</option>
+<option value="60">60 ml</option>
+<option value="120">120 ml</option>
+</select>
+</div>
+
+<div>
+<label>Costo del aceite comprado</label>
+<input id="precioAceite" type="number">
+</div>
+
+<div>
+<label>Cantidad aceite comprado (ml)</label>
+<input id="cantidadAceite" type="number">
+</div>
+
+<div>
+<label>Costo envase</label>
+<input id="envase" type="number">
+</div>
+
+<div>
+<label>Costo etiqueta</label>
+<input id="etiqueta" type="number">
+</div>
+
+<div>
+<label>Otros insumos</label>
+<input id="insumos" type="number">
+</div>
+
+<div>
+<label>Transporte</label>
+<input id="transporte" type="number">
+</div>
+
+<div>
+<label>Impuestos</label>
+<input id="impuestos" type="number">
+</div>
+
+<div>
+<label>% Ganancia</label>
+<input id="ganancia" type="number" value="60">
+</div>
+
+</div>
+
+<button onclick="simular()">Simular Producción</button>
+
+<div class="result">
+
+<p><b>Frascos que puedes producir:</b> <span id="frascos">0</span></p>
+
+<p><b>Costo por producto:</b> ₡ <span id="costoProducto">0</span></p>
+
+<p><b>Precio de venta:</b> ₡ <span id="precioVenta">0</span></p>
+
+<p><b>Costo total lote:</b> ₡ <span id="costoLote">0</span></p>
+
+<p><b>Ingreso total lote:</b> ₡ <span id="ingresoLote">0</span></p>
+
+<p><b>Ganancia total lote:</b> ₡ <span id="gananciaLote">0</span></p>
+
+</div>
+
+</div>
+
+<script>
+
+function simular(){
+
+let aceiteDisponible = Number(document.getElementById("aceiteDisponible").value)
+
+let tamano = Number(document.getElementById("tamano").value)
+
+let precioAceite = Number(document.getElementById("precioAceite").value)
+let cantidadAceite = Number(document.getElementById("cantidadAceite").value)
+
+let envase = Number(document.getElementById("envase").value)
+let etiqueta = Number(document.getElementById("etiqueta").value)
+let insumos = Number(document.getElementById("insumos").value)
+let transporte = Number(document.getElementById("transporte").value)
+let impuestos = Number(document.getElementById("impuestos").value)
+
+let porcentaje = Number(document.getElementById("ganancia").value)
+
+let frascos = Math.floor(aceiteDisponible / tamano)
+
+let costoML = precioAceite / cantidadAceite
+
+let costoAceiteProducto = costoML * tamano
+
+let costoProducto = costoAceiteProducto + envase + etiqueta + insumos + transporte + impuestos
+
+let precioVenta = costoProducto * (1 + porcentaje/100)
+
+let costoLote = costoProducto * frascos
+
+let ingresoLote = precioVenta * frascos
+
+let gananciaLote = ingresoLote - costoLote
+
+document.getElementById("frascos").innerText = frascos
+
+document.getElementById("costoProducto").innerText = costoProducto.toFixed(0)
+
+document.getElementById("precioVenta").innerText = precioVenta.toFixed(0)
+
+document.getElementById("costoLote").innerText = costoLote.toFixed(0)
+
+document.getElementById("ingresoLote").innerText = ingresoLote.toFixed(0)
+
+document.getElementById("gananciaLote").innerText = gananciaLote.toFixed(0)
+
+}
+
+</script>
+
+</body>
+</html>

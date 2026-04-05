@@ -382,7 +382,7 @@
 
     
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import {  getFirestore, collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where, orderBy  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import {  getFirestore, collection, getDocs, getDoc, doc, arrayUnion, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where, orderBy  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
@@ -400,7 +400,7 @@
    window.db = db;
    window.getDocs = getDocs;
    window.collection = collection;
-   window.firebaseUtils = { query, where, collection, getDocs, getDoc, doc, deleteDoc, setDoc, addDoc,updateDoc, serverTimestamp, orderBy };
+   window.firebaseUtils = { query, where, collection, arrayUnion, getDocs, getDoc, doc, deleteDoc, setDoc, addDoc,updateDoc, serverTimestamp, orderBy };
 
     let inventario = {};
     // 🔥 INVENTARIO GLOBAL

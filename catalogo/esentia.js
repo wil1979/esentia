@@ -1328,7 +1328,6 @@ function renderProductosFact() {
   });
 }
 
-document.getElementById("descuentoFact").addEventListener("input", actualizarTotalesFact);
 
 function actualizarTotalesFact() {
 
@@ -2066,9 +2065,11 @@ window.facturarDesdeCatalogoPRO = async function () {
 
   if (snap.exists()) {
     await updateDoc(ref, {
-      compras: arrayUnion(compra)
-    });
-  }
+      compras: [],
+      abonos: [],
+      lealtad: { sellos: 0, premiosPendientes: 0, objetivo: 6 }
+  });
+}
 
   await descontarInventario(carritoLocal);
   await actualizarLealtad(clienteSeleccionado.id);
@@ -2085,10 +2086,21 @@ async function descontarInventario(productos) {
   const { doc, updateDoc, getDoc } = window.firebaseUtils;
 
   for (const p of productos) {
-    const ref = doc(window.db, "inventario", p.idProducto);
+
+    const id = p.idProducto || p.id || p.nombre;
+
+    if (!id || typeof id !== "string") {
+      console.warn("❌ ID inválido en producto:", p);
+      continue;
+    }
+
+    const ref = doc(window.db, "inventario", id);
     const snap = await getDoc(ref);
 
-    if (!snap.exists()) continue;
+    if (!snap.exists()) {
+      console.warn("⚠️ Producto no existe en inventario:", id);
+      continue;
+    }
 
     const data = snap.data();
     const nuevoStock = (data.stock || 0) - p.cantidad;
@@ -2199,6 +2211,10 @@ window.abrirSelectorCliente = async function () {
       clienteSeleccionado = { id: doc.id, ...c };
       document.querySelectorAll(".cliente-item").forEach(el => el.classList.remove("activo"));
       div.classList.add("activo");
+       // 🔥 NUEVO: mostrar cliente seleccionado
+  document.getElementById("clienteSeleccionadoLabel").innerText =
+    `Cliente: ${c.nombre} (${c.telefono})`;
+
     };
 
     contenedor.appendChild(div);
@@ -2668,6 +2684,7 @@ document.getElementById("formRegistro")?.addEventListener("submit", async e => {
 // INICIALIZACION (ORDEN CORREGIDO)
 // ================================
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("descuentoFact").addEventListener("input", actualizarTotalesFact);
     cargarCarrito();
     cargarProductos();
     cargarInventario(); // 👈 CLAVE
@@ -2699,3 +2716,5 @@ document.addEventListener("click", function(e) {
     panel.classList.add("hidden");
   }
 });
+
+

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Costos Esentia PRO</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+padding:40px;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+label{
+display:block;
+margin-top:10px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:8px;
+margin-top:4px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+margin-top:20px;
+width:100%;
+padding:12px;
+background:black;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+padding:15px;
+background:#f1f1f1;
+border-radius:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Calculadora de Costos Esentia</h2>
+
+<h3>Compra de aceite</h3>
+
+<label>Costo del aceite comprado (₡)</label>
+<input type="number" id="precioAceite">
+
+<label>Cantidad comprada (ml)</label>
+<input type="number" id="cantidadAceite">
+
+<h3>Uso por producto</h3>
+
+<label>Cantidad usada en el envase (ml)</label>
+<input type="number" id="mlUsados">
+
+<h3>Otros costos</h3>
+
+<label>Envase (₡)</label>
+<input type="number" id="envase">
+
+<label>Etiqueta (₡)</label>
+<input type="number" id="etiqueta">
+
+<label>Otros insumos (₡)</label>
+<input type="number" id="insumos">
+
+<label>Transporte (₡)</label>
+<input type="number" id="transporte">
+
+<label>Impuestos (₡)</label>
+<input type="number" id="impuestos">
+
+<label>% Ganancia</label>
+<input type="number" id="ganancia" value="50">
+
+<button onclick="calcular()">Calcular</button>
+
+<div class="result">
+
+<p><b>Costo por ml aceite:</b> ₡ <span id="costoML">0</span></p>
+
+<p><b>Costo del aceite en producto:</b> ₡ <span id="costoAceiteProducto">0</span></p>
+
+<p><b>Costo total producto:</b> ₡ <span id="costoTotal">0</span></p>
+
+<p><b>Precio de venta recomendado:</b> ₡ <span id="precioVenta">0</span></p>
+
+</div>
+
+</div>
+
+<script>
+
+function calcular(){
+
+let precioAceite = Number(document.getElementById("precioAceite").value) || 0;
+let cantidadAceite = Number(document.getElementById("cantidadAceite").value) || 0;
+
+let mlUsados = Number(document.getElementById("mlUsados").value) || 0;
+
+let envase = Number(document.getElementById("envase").value) || 0;
+let etiqueta = Number(document.getElementById("etiqueta").value) || 0;
+let insumos = Number(document.getElementById("insumos").value) || 0;
+let transporte = Number(document.getElementById("transporte").value) || 0;
+let impuestos = Number(document.getElementById("impuestos").value) || 0;
+
+let porcentaje = Number(document.getElementById("ganancia").value) || 0;
+
+let costoML = precioAceite / cantidadAceite;
+
+let costoAceiteProducto = costoML * mlUsados;
+
+let costoTotal = costoAceiteProducto + envase + etiqueta + insumos + transporte + impuestos;
+
+let precioVenta = costoTotal * (1 + porcentaje/100);
+
+document.getElementById("costoML").innerText = costoML.toFixed(2);
+document.getElementById("costoAceiteProducto").innerText = costoAceiteProducto.toFixed(0);
+document.getElementById("costoTotal").innerText = costoTotal.toFixed(0);
+document.getElementById("precioVenta").innerText = precioVenta.toFixed(0);
+
+}
+
+</script>
+
+</body>
+</html>

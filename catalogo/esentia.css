@@ -1677,3 +1677,17 @@ body {
 
 .promo-activa { border-left: 5px solid #2ecc71; }
 .promo-expirada { border-left: 5px solid #e74c3c; }
+
+.cliente-item {
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  background: rgba(0,0,0,0.05);
+}
+
+.cliente-item.activo {
+  background: #6c4ba3;
+  color: white;
+  transform: scale(1.02);
+}
