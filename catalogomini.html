@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Fragancias que Enamoran- Esentia</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- html2pdf.js para generar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .catalogo-container {
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .producto-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            transition: all 0.3s ease;
+        }
+        
+        .producto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .imagen-container {
+            position: relative;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        
+        .imagen-container img {
+            transition: transform 0.5s ease;
+        }
+        
+        .producto-card:hover .imagen-container img {
+            transform: scale(1.05);
+        }
+        
+        .stock-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(34, 197, 94, 0.95);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+        
+        .precio-badge {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            color: white;
+            padding: 30px 12px 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            z-index: 10;
+        }
+        
+        /* ==============================
+           🧭 MENÚ DE NAVEGACIÓN 
+           ============================== */
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid transparent;
+        }
+        
+        /* Botón Facebook - Azul con glassmorphism */
+        .nav-btn.facebook {
+            background: rgba(24, 119, 242, 0.15);
+            color: #1877f2;
+            border-color: rgba(24, 119, 242, 0.3);
+        }
+        .nav-btn.facebook:hover {
+            background: rgba(24, 119, 242, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(24, 119, 242, 0.25);
+            color: #1656b2;
+        }
+        
+        /* Botón Catálogo - Dorado/Verde (brand colors) */
+        .nav-btn.catalogo {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(34, 197, 94, 0.2));
+            color: #6c4ba3;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+        .nav-btn.catalogo:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.35), rgba(34, 197, 94, 0.35));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 75, 163, 0.2);
+            color: #5a3d8a;
+        }
+        
+        /* Botón WhatsApp - Verde */
+        .nav-btn.whatsapp {
+            background: rgba(37, 211, 102, 0.15);
+            color: #16a34a;
+            border-color: rgba(37, 211, 102, 0.3);
+        }
+        .nav-btn.whatsapp:hover {
+            background: rgba(37, 211, 102, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.25);
+            color: #15803d;
+        }
+        
+        /* ==============================
+           📱 RESPONSIVE & PRINT
+           ============================== */
+        @media (max-width: 768px) {
+            .nav-menu {
+                justify-content: center;
+            }
+            .nav-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            .nav-btn span {
+                display: none; /* Ocultar texto en móvil, solo ícono */
+            }
+            .nav-btn i {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media print {
+            body { background: white; }
+            .no-print { display: none !important; }
+            .catalogo-container { box-shadow: none; }
+            .producto-card { 
+                border: 1px solid #e5e7eb; 
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+        
+        .btn-action {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Estado de conexión */
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .connection-status.connected { background: #dcfce7; color: #166534; }
+        .connection-status.disconnected { background: #fee2e2; color: #991b1b; }
+        .connection-status.loading { background: #fef3c7; color: #92400e; }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Estado de conexión a Firestore -->
+    <div id="connection-status" class="connection-status loading no-print">
+        <span class="status-dot"></span>
+        <span id="connection-text">Conectando...</span>
+    </div>
+
+    <!-- ==============================
+         🧭 MENÚ DE NAVEGACIÓN PRINCIPAL
+         ============================== -->
+    <nav class="no-print max-w-7xl mx-auto mb-6">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/20 shadow-lg">
+            
+            <!-- Logo / Título -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#22C55E] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                    EWE
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800" style="font-family: 'Adelia', serif;">Esentia</h1>
+                    <p class="text-xs text-gray-500">Fragancias que Enamoran</p>
+                </div>
+            </div>
+            
+            <!-- Botones de navegación -->
+            <div class="nav-menu">
+                <a href="https://www.facebook.com/profile.php?id=61579078480913" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="nav-btn facebook"
+                   title="Visítanos en Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                    <span>Facebook</span>
+                </a>
+                
+                <a href="https://wil1979.github.io/esentia-factura/catalogo.html" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="nav-btn catalogo"
+                   title="Ir al catálogo de compras">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span>Catálogo Compras</span>
+                </a>
+                
+                <a href="https://wa.me/50672952454" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="nav-btn whatsapp"
+                   title="Contáctanos por WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+            
+            <!-- Acciones PDF/Imprimir -->
+            <div class="flex gap-2">
+                <button onclick="descargarPDF()" class="btn-action text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 text-sm">
+                    <i class="fas fa-file-pdf"></i>
+                    <span class="hidden sm:inline">PDF</span>
+                </button>
+                
+                <button onclick="imprimirCatalogo()" class="bg-gray-800 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 text-sm hover:bg-gray-700 transition-all">
+                    <i class="fas fa-print"></i>
+                    <span class="hidden sm:inline">Imprimir</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loader -->
+    <div id="loader" class="no-print max-w-7xl mx-auto text-center py-20">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800"></div>
+        <p class="mt-4 text-gray-600">Cargando productos desde Firestore...</p>
+        <p id="loader-detail" class="text-sm text-gray-400 mt-2"></p>
+    </div>
+
+    <!-- Catálogo -->
+    <div id="catalogo-wrapper" class="max-w-7xl mx-auto catalogo-container rounded-2xl p-8 md:p-12 hidden">
+        <!-- Header del catálogo (visible en PDF) -->
+        <div class="text-center mb-10 border-b-2 border-gray-100 pb-6">
+            <h2 class="text-3xl font-bold text-gray-800" style="font-family: 'Playfair Display', serif;">
+                Catálogo de Productos Esentia
+            </h2>
+            <p class="text-gray-500 mt-2 text-sm">Productos disponibles • Actualizado: <span id="fecha-actualizacion"></span></p>
+        </div>
+
+        <!-- Contador de productos -->
+        <div class="mb-6 text-center">
+            <span id="contador-productos" class="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium"></span>
+        </div>
+
+        <!-- Grid de productos -->
+        <div id="grid-productos" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <!-- Los productos se insertan aquí dinámicamente -->
+        </div>
+
+        <!-- Footer del catálogo -->
+        <div class="mt-12 pt-6 border-t border-gray-200 text-center text-gray-400 text-sm">
+            <p>Esentia - Productos para el hogar, oficina y autos.</p>
+            <p class="mt-1">
+                <a href="https://wa.me/50672952454" target="_blank" class="text-green-600 hover:text-green-700 font-medium">
+                    <i class="fab fa-whatsapp"></i> WhatsApp 506 7295-2454
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Template para producto -->
+    <template id="template-producto">
+        <div class="producto-card bg-white rounded-xl overflow-hidden shadow-md border border-gray-100">
+            <div class="imagen-container aspect-square relative">
+                <img src="" alt="" class="w-full h-full object-cover">
+                <span class="stock-badge">✓ <span class="stock-cantidad-badge"></span></span>
+                <span class="precio-badge">₡<span class="precio-valor"></span></span>
+            </div>
+            <div class="p-4">
+                <h3 class="nombre-producto font-semibold text-gray-800 text-sm leading-tight line-clamp-2 min-h-[40px]"></h3>
+            </div>
+        </div>
+    </template>
+
+    <!-- ============================== -->
+    <!-- 🔥 FIREBASE SDK (Modular v10+) -->
+    <!-- ============================== -->
+    <script type="module">
+        // Importar funciones necesarias de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        // ==============================
+        // ⚙️ CONFIGURACIÓN DE FIREBASE
+        // ==============================
+        const firebaseConfig = {
+      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+      authDomain: "esentiacreditos-8345f.firebaseapp.com",
+      projectId: "esentiacreditos-8345f",
+      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+      messagingSenderId: "888658236080",
+      appId: "1:888658236080:web:506e5e2085b5a452dba175"
+    };
+
+
+        // ==============================
+        // 📦 VARIABLES GLOBALES
+        // ==============================
+        let db;
+        let productos = [];
+        let stockData = {};
+        let productosFiltrados = [];
+        let unsubscribeStock = null;
+        
+        const URL_PRODUCTOS = "https://wil1979.github.io/esentia-factura/productos_esentia.json";
+        const COLECCION_STOCK = "stock";
+
+        // ==============================
+        // 🚀 INICIALIZACIÓN
+        // ==============================
+        document.addEventListener("DOMContentLoaded", async () => {
+            actualizarFechaActualizacion();
+            
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                actualizarEstadoConexion("connected", "Conectado a Firestore");
+                
+                console.log("✅ Firebase inicializado");
+                await cargarDatosCompletos();
+                
+            } catch (error) {
+                console.error("❌ Error inicializando Firebase:", error);
+                actualizarEstadoConexion("disconnected", "Error de conexión");
+                mostrarErrorCarga("No se pudo conectar a Firestore. Verifica la configuración.");
+            }
+        });
+
+        // ==============================
+        // 📡 ESTADO DE CONEXIÓN
+        // ==============================
+        function actualizarEstadoConexion(estado, texto) {
+            const statusEl = document.getElementById("connection-status");
+            const textEl = document.getElementById("connection-text");
+            statusEl.className = `connection-status ${estado} no-print`;
+            textEl.textContent = texto;
+        }
+
+        function actualizarFechaActualizacion() {
+            const now = new Date();
+            document.getElementById("fecha-actualizacion").textContent = 
+                now.toLocaleDateString("es-CR", { 
+                    day: '2-digit', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+        }
+
+        // ==============================
+        // 📦 CARGAR DATOS COMPLETOS
+        // ==============================
+        async function cargarDatosCompletos() {
+            const loaderDetail = document.getElementById("loader-detail");
+            
+            try {
+                loaderDetail.textContent = "Cargando catálogo de productos...";
+                await cargarProductosDesdeJSON();
+                
+                loaderDetail.textContent = "Sincronizando stock en tiempo real...";
+                suscribirAStockEnTiempoReal();
+                
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+                mostrarErrorCarga("Error sincronizando datos. Intenta recargar la página.");
+            }
+        }
+
+        // ==============================
+        // 📋 CARGAR PRODUCTOS DESDE JSON
+        // ==============================
+        async function cargarProductosDesdeJSON() {
+            try {
+                const resp = await fetch(URL_PRODUCTOS);
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                
+                const datosPorTipo = await resp.json();
+                
+                productos = [];
+                for (const tipo in datosPorTipo) {
+                    if (Array.isArray(datosPorTipo[tipo])) {
+                        datosPorTipo[tipo].forEach(producto => {
+                            productos.push({
+                                ...producto,
+                                tipo: tipo,
+                                nombreNormalizado: normalizarNombre(producto.nombre)
+                            });
+                        });
+                    }
+                }
+                
+                console.log(`✅ Productos cargados: ${productos.length}`);
+                return true;
+                
+            } catch (error) {
+                console.error("❌ Error cargando productos JSON:", error);
+                throw error;
+            }
+        }
+
+        // ==============================
+        // 🔄 SUSCRIBIR A STOCK EN TIEMPO REAL
+        // ==============================
+        function suscribirAStockEnTiempoReal() {
+            try {
+                unsubscribeStock = onSnapshot(
+                    collection(db, COLECCION_STOCK),
+                    (snapshot) => {
+                        stockData = {};
+                        
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const key = data.nombreNormalizado || 
+                                       normalizarNombre(data.nombre) || 
+                                       doc.id;
+                            
+                            stockData[key] = {
+                                cantidad: data.cantidad ?? data.stock ?? 0,
+                                disponible: data.disponible ?? true,
+                                ultimaActualizacion: data.ultimaActualizacion ?? new Date()
+                            };
+                        });
+                        
+                        console.log(`✅ Stock sincronizado: ${Object.keys(stockData).length} items`);
+                        actualizarEstadoConexion("connected", `Stock actualizado`);
+                        
+                        filtrarYRenderizar();
+                        actualizarFechaActualizacion();
+                        
+                    },
+                    (error) => {
+                        console.error("❌ Error en suscripción a stock:", error);
+                        actualizarEstadoConexion("disconnected", "Error sincronizando stock");
+                        cargarStockUnicaVez();
+                    }
+                );
+                
+            } catch (error) {
+                console.error("Error configurando suscripción:", error);
+                cargarStockUnicaVez();
+            }
+        }
+
+        async function cargarStockUnicaVez() {
+            try {
+                const snapshot = await getDocs(collection(db, COLECCION_STOCK));
+                stockData = {};
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const key = data.nombreNormalizado || 
+                               normalizarNombre(data.nombre) || 
+                               doc.id;
+                    stockData[key] = {
+                        cantidad: data.cantidad ?? data.stock ?? 0,
+                        disponible: data.disponible ?? true
+                    };
+                });
+                
+                console.log(`✅ Stock cargado (modo estático): ${Object.keys(stockData).length} items`);
+                filtrarYRenderizar();
+                
+            } catch (error) {
+                console.error("❌ Error cargando stock estático:", error);
+                mostrarErrorCarga("No se pudo cargar el inventario. Verifica permisos de Firestore.");
+            }
+        }
+
+        // ==============================
+        // 🔍 FILTRAR Y RENDERIZAR
+        // ==============================
+        function filtrarYRenderizar() {
+            productosFiltrados = productos.filter(p => {
+                const stockInfo = stockData[p.nombreNormalizado];
+                const cantidad = stockInfo?.cantidad ?? p.stock ?? 0;
+                const disponible = stockInfo?.disponible ?? p.disponible ?? true;
+                return disponible && cantidad > 0;
+            });
+            
+            renderizarCatalogo();
+        }
+
+        // ==============================
+        // 🎨 RENDERIZAR CATÁLOGO
+        // ==============================
+        function renderizarCatalogo() {
+            const grid = document.getElementById("grid-productos");
+            const template = document.getElementById("template-producto");
+            const contador = document.getElementById("contador-productos");
+            const loader = document.getElementById("loader");
+            const wrapper = document.getElementById("catalogo-wrapper");
+            
+            loader.style.display = "none";
+            wrapper.classList.remove("hidden");
+            
+            const total = productosFiltrados.length;
+            contador.textContent = `${total} producto${total !== 1 ? 's' : ''} disponible${total !== 1 ? 's' : ''}`;
+
+            if (total === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-16 text-gray-500">
+                        <div class="text-6xl mb-4">📭</div>
+                        <p class="text-xl font-medium">No hay productos en stock actualmente</p>
+                        <p class="text-sm mt-2">Los productos aparecerán aquí cuando se actualice el inventario</p>
+                        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-700 transition">
+                            Recargar página
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = "";
+
+            productosFiltrados.forEach((producto, index) => {
+                const clone = template.content.cloneNode(true);
+                const card = clone.querySelector(".producto-card");
+                
+                // IMAGEN
+                const img = clone.querySelector("img");
+                img.src = producto.imagen || "https://via.placeholder.com/300x300/f8f9fa/666?text=Esentia";
+                img.alt = producto.nombre;
+                img.onerror = function() {
+                    this.src = "https://via.placeholder.com/300x300/e2e8f0/64748b?text=Sin+imagen";
+                };
+                
+                // NOMBRE
+                clone.querySelector(".nombre-producto").textContent = producto.nombre;
+                
+                // PRECIO
+                const precio = producto.precioOferta || producto.precio || 0;
+                clone.querySelector(".precio-valor").textContent = 
+                    new Intl.NumberFormat("es-CR").format(precio);
+                
+                // STOCK
+                const stockInfo = stockData[producto.nombreNormalizado];
+                const cantidad = stockInfo?.cantidad ?? producto.stock ?? 0;
+                const stockBadge = clone.querySelector(".stock-cantidad-badge");
+                
+                if (cantidad >= 10) {
+                    stockBadge.textContent = `${cantidad} disp.`;
+                } else if (cantidad >= 5) {
+                    stockBadge.textContent = `${cantidad} unid.`;
+                } else {
+                    stockBadge.textContent = `¡${cantidad}!`;
+                    clone.querySelector(".stock-badge").style.background = "rgba(249, 115, 22, 0.95)";
+                }
+                
+                // ANIMACIÓN
+                card.style.animationDelay = `${index * 0.03}s`;
+                card.classList.add("fade-in");
+                
+                grid.appendChild(clone);
+            });
+        }
+
+        // ==============================
+        // 🔧 UTILIDADES
+        // ==============================
+        function normalizarNombre(nombre) {
+            if (!nombre) return "";
+            return nombre
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9\s]/g, "")
+                .trim()
+                .replace(/\s+/g, "_");
+        }
+
+        function mostrarErrorCarga(mensaje) {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("catalogo-wrapper").classList.remove("hidden");
+            const grid = document.getElementById("grid-productos");
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-12 text-red-600">
+                    <p class="text-lg font-semibold">⚠️ ${mensaje}</p>
+                    <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm hover:bg-red-200 transition">
+                        Intentar de nuevo
+                    </button>
+                </div>
+            `;
+            document.getElementById("contador-productos").textContent = "0 productos";
+        }
+
+        // ==============================
+        // 📄 DESCARGAR PDF
+        // ==============================
+        window.descargarPDF = function() {
+            const element = document.getElementById("catalogo-wrapper");
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `catalogo-esentia-${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, useCORS: true, logging: false, allowTaint: true
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: '.producto-card' }
+            };
+
+            const btn = document.querySelector(".btn-action");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Generando...`;
+            btn.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error("Error PDF:", err);
+                alert("Error al generar PDF. Intenta de nuevo.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        // ==============================
+        // 🖨️ IMPRIMIR
+        // ==============================
+        window.imprimirCatalogo = function() {
+            window.print();
+        }
+
+        // ==============================
+        // 🧹 LIMPIEZA AL CERRAR
+        // ==============================
+        window.addEventListener("beforeunload", () => {
+            if (unsubscribeStock) {
+                unsubscribeStock();
+                console.log("🔌 Suscripción a Firestore cerrada");
+            }
+        });
+    </script>
+</body>
+</html>

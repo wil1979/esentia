@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esentia — Generador de Etiquetas Circulares (300 DPI DTF)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    :root { --bg: #f8f9fa; --panel: #ffffff; --primary: #2563eb; --text: #1f2937; --border: #e5e7eb; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+    h1 { margin-bottom: 10px; font-size: 1.5rem; }
+    .app-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1100px; width: 100%; background: var(--panel); padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .controls { display: flex; flex-direction: column; gap: 12px; max-height: 90vh; overflow-y: auto; padding-right: 10px; }
+    .group { background: #f9fafb; padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
+    .group h3 { margin: 0 0 10px; font-size: 0.95rem; color: #4b5563; display: flex; justify-content: space-between; align-items: center; }
+    .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
+    .row label { font-size: 0.85rem; min-width: 95px; color: #4b5563; }
+    input[type="text"], input[type="number"], input[type="color"], select { padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; flex: 1; background: #fff; }
+    input[type="range"] { flex: 1; cursor: pointer; }
+    .checkbox-row { display: flex; align-items: center; margin-bottom: 6px; }
+    .checkbox-row label { font-size: 0.85rem; cursor: pointer; }
+    .preview-panel { display: flex; flex-direction: column; align-items: center; gap: 10px; position: sticky; top: 20px; }
+    canvas { border: 1px solid var(--border); border-radius: 8px; background: #eee; max-width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .btn { background: var(--primary); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; margin-top: 5px; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn.secondary { background: #6b7280; }
+    .btn.success { background: #10b981; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; }
+    .info { font-size: 0.8rem; color: #6b7280; background: #f3f4f6; padding: 8px; border-radius: 6px; line-height: 1.4; }
+    .angle-control { background: #ffffff; padding: 8px; border-radius: 6px; margin-top: 5px; border: 1px dashed var(--border); }
+    .val-display { font-size: 0.75rem; font-weight: bold; color: var(--primary); width: 35px; text-align: right; display: inline-block; }
+    @media (max-width: 800px) { .app-container { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Esentia — Generador de Etiquetas Circulares (300 DPI DTF)</h1>
+  <div class="app-container">
+    <div class="controls">
+      <div class="info">
+        ✓ <b>DPI:</b> 300 | Base: 1.75" = 525px | Bleed: 2mm | Exportación: 573×573px
+      </div>
+
+      <div class="group">
+        <h3>🔲 Visibilidad</h3>
+        <div class="checkbox-row"><input type="checkbox" id="showImg1" checked><label for="showImg1">Imagen 1 (Fondo)</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showImg2"><label for="showImg2">Imagen 2 (Capa extra)</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showBrand" checked><label for="showBrand">Marca (Arriba)</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showName" checked><label for="showName">Nombre (Circular)</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showSlogan" checked><label for="showSlogan">Slogan (Circular)</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showBottom" checked><label for="showBottom">Texto Inferior</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showQR" checked><label for="showQR">Código QR</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="showCutMarks"><label for="showCutMarks">Marcas de corte</label></div>
+      </div>
+
+      <div class="group">
+        <h3>🖼️ Imagen 1 (Fondo)</h3>
+        <input type="file" id="imgUpload1" accept="image/*" style="width: 100%; box-sizing: border-box;">
+        <div class="angle-control">
+          <div class="row"><label>Escala (%):</label><input type="range" id="img1Scale" min="10" max="200" value="100" oninput="document.getElementById('valImg1Scale').innerText=this.value"><span id="valImg1Scale" class="val-display">100</span></div>
+          <div class="row"><label>Rotación (°):</label><input type="range" id="img1Rot" min="-180" max="180" value="0" oninput="document.getElementById('valImg1Rot').innerText=this.value"><span id="valImg1Rot" class="val-display">0</span></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>🖼️ Imagen 2 (Extra / Logo)</h3>
+        <input type="file" id="imgUpload2" accept="image/*" style="width: 100%; box-sizing: border-box;">
+        <div class="angle-control">
+          <div class="row"><label>Escala (%):</label><input type="range" id="img2Scale" min="10" max="200" value="100" oninput="document.getElementById('valImg2Scale').innerText=this.value"><span id="valImg2Scale" class="val-display">100</span></div>
+          <div class="row"><label>Rotación (°):</label><input type="range" id="img2Rot" min="-180" max="180" value="0" oninput="document.getElementById('valImg2Rot').innerText=this.value"><span id="valImg2Rot" class="val-display">0</span></div>
+          <div class="row"><label>Offset X:</label><input type="range" id="img2OffX" min="-200" max="200" value="0" oninput="document.getElementById('valImg2OffX').innerText=this.value"><span id="valImg2OffX" class="val-display">0</span></div>
+          <div class="row"><label>Offset Y:</label><input type="range" id="img2OffY" min="-200" max="200" value="0" oninput="document.getElementById('valImg2OffY').innerText=this.value"><span id="valImg2OffY" class="val-display">0</span></div>
+          <div class="row"><label>Opacidad:</label><input type="range" id="img2Alpha" min="0" max="100" value="100" oninput="document.getElementById('valImg2Alpha').innerText=this.value"><span id="valImg2Alpha" class="val-display">100</span></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>📝 Marca (Arriba)</h3>
+        <div class="row"><label>Texto:</label><input type="text" id="brandText" value="ESENCIA"></div>
+        <div class="row"><label>Tamaño:</label><input type="number" id="brandSize" value="16" min="8" max="40"></div>
+        <div class="row"><label>Color:</label><input type="color" id="brandColor" value="#000000"></div>
+        <div class="row"><label>Offset V:</label><input type="number" id="brandOffY" value="60" min="-100" max="200"></div>
+      </div>
+
+      <div class="group">
+        <h3>🔤 Nombre Circular</h3>
+        <div class="row"><label>Texto:</label><input type="text" id="nameText" value="PERFUME PREMIUM"></div>
+        <div class="row"><label>Tamaño:</label><input type="number" id="nameSize" value="18" min="8" max="36"></div>
+        <div class="row"><label>Color:</label><input type="color" id="nameColor" value="#111827"></div>
+        <div class="row"><label>Radio:</label><input type="number" id="nameRadius" value="210" min="150" max="280"></div>
+        <div class="angle-control">
+          <div class="row"><label>Rotación (°):</label><input type="range" id="nameRot" min="-180" max="180" value="-90" oninput="document.getElementById('valNameRot').innerText=this.value"><span id="valNameRot" class="val-display">-90</span></div>
+          <div class="row"><label>Cobertura (°):</label><input type="range" id="nameSweep" min="10" max="360" value="120" oninput="document.getElementById('valNameSweep').innerText=this.value"><span id="valNameSweep" class="val-display">120</span></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>💬 Slogan Circular</h3>
+        <div class="row"><label>Texto:</label><input type="text" id="sloganText" value="LUJO Y FRESCURA"></div>
+        <div class="row"><label>Tamaño:</label><input type="number" id="sloganSize" value="14" min="8" max="32"></div>
+        <div class="row"><label>Color:</label><input type="color" id="sloganColor" value="#4b5563"></div>
+        <div class="row"><label>Radio:</label><input type="number" id="sloganRadius" value="235" min="150" max="280"></div>
+        <div class="angle-control">
+          <div class="checkbox-row"><input type="checkbox" id="sloganInvert"><label for="sloganInvert">Invertir (Lectura exterior)</label></div>
+          <div class="row"><label>Rotación (°):</label><input type="range" id="sloganRot" min="-180" max="180" value="90" oninput="document.getElementById('valSloganRot').innerText=this.value"><span id="valSloganRot" class="val-display">90</span></div>
+          <div class="row"><label>Cobertura (°):</label><input type="range" id="sloganSweep" min="10" max="360" value="120" oninput="document.getElementById('valSloganSweep').innerText=this.value"><span id="valSloganSweep" class="val-display">120</span></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>📌 Texto Inferior</h3>
+        <div class="row"><label>Texto:</label><input type="text" id="bottomText" value="100ml • Hecho a mano"></div>
+        <div class="row"><label>Tamaño:</label><input type="number" id="bottomSize" value="14" min="8" max="30"></div>
+        <div class="row"><label>Color:</label><input type="color" id="bottomColor" value="#374151"></div>
+        <div class="row"><label>Offset V:</label><input type="number" id="bottomOffY" value="220" min="0" max="500"></div>
+      </div>
+
+      <div class="group">
+        <h3>🔗 QR Personalizado</h3>
+        <div class="row"><label>URL/Texto:</label><input type="text" id="qrData" value="https://mi-tienda.com"></div>
+        <div class="row"><label>Tamaño:</label><input type="number" id="qrSize" value="90" min="50" max="150"></div>
+        <div class="row"><label>Offset V:</label><input type="number" id="qrOffY" value="180" min="0" max="500"></div>
+      </div>
+    </div>
+
+    <div class="preview-panel">
+      <h3>Vista Previa (525×525 px)</h3>
+      <canvas id="canvas" width="525" height="525"></canvas>
+      <div class="btn-row">
+        <button class="btn" id="btnPreview">🔄 Actualizar</button>
+        <button class="btn secondary" id="btnPNG">📥 PNG (300 DPI)</button>
+        <button class="btn secondary" id="btnZIP">📦 ZIP</button>
+        <button class="btn success" id="btnPDF">📄 PDF</button>
+      </div>
+      <p class="info">Exportación: <b>573×573 px @ 300 DPI</b> (con 2mm bleed) lista para DTF.</p>
+    </div>
+  </div>
+
+  <script>
+    const BASE_SIZE = 525;
+    const ACTUAL_FINAL = 573; 
+    const CX = BASE_SIZE / 2;
+    const CY = BASE_SIZE / 2;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let uploadedImg1 = null;
+    let uploadedImg2 = null;
+    let qrImageCache = null;
+
+    // Cargar imágenes
+    function handleImgUpload(inputId, targetVarName) {
+      document.getElementById(inputId).addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => { 
+            if(targetVarName === 'img1') uploadedImg1 = img; 
+            else uploadedImg2 = img; 
+            draw(); 
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    handleImgUpload('imgUpload1', 'img1');
+    handleImgUpload('imgUpload2', 'img2');
+
+    // Generar QR de forma asíncrona segura y cacheada
+    function updateQR() {
+      const url = document.getElementById('qrData').value;
+      const size = parseInt(document.getElementById('qrSize').value);
+      if (!url) { qrImageCache = null; draw(); return; }
+      
+      const tempDiv = document.createElement('div');
+      tempDiv.style.position = 'fixed'; tempDiv.style.left = '-9999px';
+      document.body.appendChild(tempDiv);
+      
+      try {
+        new QRCode(tempDiv, { text: url, width: size, height: size, correctLevel: 2 });
+        setTimeout(() => {
+          const generated = tempDiv.querySelector('canvas') || tempDiv.querySelector('img');
+          if (generated) {
+            const img = new Image();
+            img.onload = () => { qrImageCache = img; draw(); };
+            img.src = generated.toDataURL ? generated.toDataURL() : generated.src;
+          }
+          document.body.removeChild(tempDiv);
+        }, 50);
+      } catch(e) { document.body.removeChild(tempDiv); }
+    }
+
+    function drawCircularText(ctx, text, radius, fontSize, color, startAngleDeg, sweepAngleDeg, invert = false) {
+      if (!text || text.length === 0) return;
+      ctx.save();
+      ctx.translate(CX, CY);
+      ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const startAngle = startAngleDeg * (Math.PI / 180);
+      const step = (sweepAngleDeg * (Math.PI / 180)) / (sweepAngleDeg >= 359 ? text.length : Math.max(text.length - 1, 1));
+
+      for (let i = 0; i < text.length; i++) {
+        let angle = startAngle + step * i;
+        ctx.save();
+        ctx.rotate(angle);
+        if (invert) ctx.rotate(Math.PI);
+        ctx.translate(0, -radius);
+        ctx.fillText(text[i], 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    function drawImageTransformed(ctx, img, offX, offY, scale, rotDeg, alpha = 1) {
+      if (!img) return;
+      ctx.save();
+      ctx.translate(CX + offX, CY + offY);
+      ctx.rotate(rotDeg * Math.PI / 180);
+      ctx.scale(scale / 100, scale / 100);
+      ctx.globalAlpha = alpha;
+      const canvasSide = BASE_SIZE;
+      const ratio = img.width / img.height;
+      let w, h;
+      if (ratio > 1) { w = canvasSide; h = canvasSide / ratio; }
+      else { h = canvasSide; w = canvasSide * ratio; }
+      ctx.drawImage(img, -w/2, -h/2, w, h);
+      ctx.restore();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, BASE_SIZE, BASE_SIZE);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, BASE_SIZE, BASE_SIZE);
+
+      // 1. Imagen Fondo
+      if (document.getElementById('showImg1').checked && uploadedImg1) {
+        ctx.save();
+        ctx.beginPath(); ctx.arc(CX, CY, CX - 5, 0, Math.PI * 2); ctx.clip();
+        drawImageTransformed(ctx, uploadedImg1, 0, 0, 
+          parseInt(document.getElementById('img1Scale').value), 
+          parseInt(document.getElementById('img1Rot').value));
+        ctx.restore();
+      }
+
+      // 2. Imagen Extra
+      if (document.getElementById('showImg2').checked && uploadedImg2) {
+        drawImageTransformed(ctx, uploadedImg2,
+          parseInt(document.getElementById('img2OffX').value),
+          parseInt(document.getElementById('img2OffY').value),
+          parseInt(document.getElementById('img2Scale').value),
+          parseInt(document.getElementById('img2Rot').value),
+          parseInt(document.getElementById('img2Alpha').value) / 100);
+      }
+
+      // 3. Textos
+      if (document.getElementById('showBrand').checked) {
+        ctx.fillStyle = document.getElementById('brandColor').value;
+        ctx.font = `bold ${document.getElementById('brandSize').value}px system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(document.getElementById('brandText').value, CX, parseInt(document.getElementById('brandOffY').value));
+      }
+
+      if (document.getElementById('showName').checked) {
+        drawCircularText(ctx, document.getElementById('nameText').value, 
+          parseInt(document.getElementById('nameRadius').value), parseInt(document.getElementById('nameSize').value), 
+          document.getElementById('nameColor').value, parseInt(document.getElementById('nameRot').value), 
+          parseInt(document.getElementById('nameSweep').value));
+      }
+
+      if (document.getElementById('showSlogan').checked) {
+        drawCircularText(ctx, document.getElementById('sloganText').value, 
+          parseInt(document.getElementById('sloganRadius').value), parseInt(document.getElementById('sloganSize').value), 
+          document.getElementById('sloganColor').value, parseInt(document.getElementById('sloganRot').value), 
+          parseInt(document.getElementById('sloganSweep').value), document.getElementById('sloganInvert').checked);
+      }
+
+      if (document.getElementById('showBottom').checked) {
+        ctx.fillStyle = document.getElementById('bottomColor').value;
+        ctx.font = `${document.getElementById('bottomSize').value}px system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(document.getElementById('bottomText').value, CX, parseInt(document.getElementById('bottomOffY').value));
+      }
+
+      // 4. QR (Cacheado)
+      if (document.getElementById('showQR').checked && qrImageCache) {
+        const size = parseInt(document.getElementById('qrSize').value);
+        const offY = parseInt(document.getElementById('qrOffY').value);
+        ctx.drawImage(qrImageCache, CX - size/2, offY, size, size);
+      }
+
+      // 5. Marcas de corte
+      if (document.getElementById('showCutMarks').checked) {
+        ctx.strokeStyle = '#ff0000'; ctx.lineWidth = 1;
+        const markLen = 15; const offset = BASE_SIZE / 2;
+        ctx.beginPath();
+        ctx.moveTo(offset - markLen, offset); ctx.lineTo(offset + markLen, offset);
+        ctx.moveTo(offset, offset - markLen); ctx.lineTo(offset, offset + markLen);
+        [[15,15],[BASE_SIZE-15,15],[15,BASE_SIZE-15],[BASE_SIZE-15,BASE_SIZE-15]].forEach(([x,y]) => {
+          ctx.moveTo(x-8,y); ctx.lineTo(x+8,y);
+          ctx.moveTo(x,y-8); ctx.lineTo(x,y+8);
+        });
+        ctx.stroke();
+      }
+    }
+
+    function getHighResCanvas() {
+      const hiCanvas = document.createElement('canvas');
+      hiCanvas.width = ACTUAL_FINAL; hiCanvas.height = ACTUAL_FINAL;
+      const hiCtx = hiCanvas.getContext('2d');
+      hiCtx.scale(ACTUAL_FINAL / BASE_SIZE, ACTUAL_FINAL / BASE_SIZE);
+      hiCtx.drawImage(canvas, 0, 0);
+      return hiCanvas;
+    }
+
+    // Event Listeners
+    document.querySelectorAll('input').forEach(el => {
+      el.addEventListener('input', () => { if(el.id.includes('qr') || el.id === 'qrData') updateQR(); else draw(); });
+      el.addEventListener('change', () => { if(el.id.includes('qr') || el.id === 'qrData') updateQR(); else draw(); });
+    });
+    
+    document.getElementById('btnPreview').addEventListener('click', draw);
+
+    document.getElementById('btnPNG').addEventListener('click', () => {
+      const hi = getHighResCanvas();
+      hi.toBlob(blob => saveAs(blob, 'etiqueta_300dpi.png'));
+    });
+    document.getElementById('btnZIP').addEventListener('click', () => {
+      const zip = new JSZip(); const hi = getHighResCanvas();
+      hi.toBlob(blob => { zip.file('etiqueta_573x573_300dpi.png', blob); zip.generateAsync({type:"blob"}).then(c => saveAs(c, 'etiquetas.zip')); });
+    });
+    document.getElementById('btnPDF').addEventListener('click', () => {
+      const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4');
+      pdf.addImage(getHighResCanvas().toDataURL('image/png'), 'PNG', (210-44.45)/2, 10, 44.45, 44.45);
+      pdf.save('etiqueta_circular.pdf');
+    });
+
+    draw(); updateQR();
+  </script>
+</body>
+</html>
