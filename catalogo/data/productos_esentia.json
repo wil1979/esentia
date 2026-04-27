@@ -1,0 +1,2329 @@
+{
+   "Ofertas": [
+     {
+  "id": 130,
+  "nombre": "3 for 2 Special Deal",
+  "nombreOriginal": "Promo 3x2",
+  "precioOriginal":7500,
+  "precioOferta": 6000,
+  "imagen": "https://scontent.fsjo10-1.fna.fbcdn.net/v/t39.30808-6/665356986_122158926614969282_298835869725864394_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=7b2446&_nc_ohc=uoVpNVxFlDMQ7kNvwFMgH1h&_nc_oc=AdoWF0BXYRVdVrCsbEvnnHGCk2nB0b4mX47yb2b7zI_zU70bpqpckzOAnbNuJWqewlo&_nc_zt=23&_nc_ht=scontent.fsjo10-1.fna&_nc_gid=TItN8ueFmAxYcEAsaxKXpw&_nc_ss=7a3a8&oh=00_Af12Ry2whAavSOn4lPlHfW6sI2m4Vq2bpCUcTEz_rNWroQ&oe=69DBD61C",
+  "info": "Promoción especial donde llevas 3 aromas por el precio de 2. Ideal para probar diferentes fragancias o aprovechar al máximo tu compra.",
+  "beneficios": "Ahorro inmediato, mayor variedad de aromas y excelente opción para regalar o surtir espacios.",
+  "usoRecomendado": "Aplicable a toda la línea de aromas disponibles. Perfecto para clientes que desean variedad y economía.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-17",
+  "variantes": [
+    { "nombre": "Promo 3x2 (25 ml)", "precio": 6000 }
+  ]
+}
+  ], 
+
+  "Linea_Aromas_Difusores": [
+     {
+  "id": 126,
+  "nombre": "Cherry Bubble Bliss",
+  "nombreOriginal": "Cereza y Chicle",
+  "precioOriginal": 0,
+  "precioOferta": 1800,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cherry-bubble-bliss.png",
+  "info": "Aroma frutal dulce y divertido que combina la jugosidad de la cereza con el toque azucarado del chicle.",
+  "beneficios": "Despierta el buen humor, aporta energía alegre y crea un ambiente juvenil y vibrante.",
+  "usoRecomendado": "Habitaciones juveniles, áreas sociales, tiendas y espacios que buscan un aroma dulce y llamativo.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "30 ml", "precio": 2000 }
+   
+  ]
+}
+  ], 
+
+  "Difusores": [
+     {
+      "id": 131,
+  "nombre": "AromaSticks – Difusor de Vidrio con Varitas",
+  "nombreOriginal": "Difusor Vidrio Varitas",
+  "precioOriginal": 7500,
+  "precioOferta": 6000,
+  "imagen": "images/difusorvaritas.png",
+  "info": "Difusor de vidrio elegante con varitas de ratán para dispersar aromas de forma natural y continua.",
+  "beneficios": "Mantiene el ambiente perfumado durante semanas sin necesidad de electricidad ni calor. Aporta decoración y bienestar.",
+  "usoRecomendado": "Perfecto para salas, oficinas y baños donde se busque un aroma constante y discreto.",
+  "disponible": true,
+  "calificacion": 4.6,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-17",
+  "variantes": [    
+    { "nombre": "AromaSticks 50ml",  "precio": 4500 }
+  ]
+},
+    {
+      "id": 1,
+      "nombre": "Difusor de Auto Cuadrado",
+      "nombreOriginal": "Ambientador Auto + Aroma a escoger",
+      "precioOriginal": 0,
+      "precioOferta": 1500,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/difusorcuadrado.png",
+      "info": "AROMATERAPIA: Estimula creatividad y concentración. Recomendado para viajes largos.",
+      "beneficios": "Mejora el estado de ánimo durante trayectos largos",
+      "usoRecomendado": "Ideal para automóviles y transporte personal.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-10-07",
+      "variantes": [
+       { "nombre": "8 ml", "precio": 1500 }
+      
+      ]
+    },
+    {
+      "id": 118,
+      "nombre": "MiniMist Difusor Esencial",
+      "nombreOriginal": "Difusor Pequeño + Aroma a escoger ",
+      "precioOriginal": 0,
+      "precioOferta": 5500,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/difusorcuadrado.png",
+      "info": "AROMATERAPIA: Estimula creatividad y concentración. Recomendado para el hogar u oficinas.",
+      "beneficios": "Mejora el estado de ánimo",
+      "usoRecomendado": "Ideal para Dormitorios y Oficinas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-10-07",
+      "variantes": [
+     
+       { "nombre": "8 ml", "precio": 1500 }
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "Difusor de Auto Navidad",
+      "nombreOriginal": "Ambientador Auto + Aroma a escoger",
+      "precioOriginal": 0,
+      "precioOferta": 1500,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/difusornavidad.png",
+      "info": "AROMATERAPIA: Estimula creatividad y concentración. Recomendado para viajes largos.",
+      "beneficios": "Mejora el estado de ánimo durante trayectos largos",
+      "usoRecomendado": "Ideal para automóviles y transporte personal.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-10-07",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 }
+      
+      ]
+    },
+    {
+      "id": 5,
+      "nombre": "AromaDrive – Difusor de Auto Calavera 8 ml",
+      "nombreOriginal": "Ambientador Auto + Aroma a escoger",
+      "precioOriginal": 0,
+      "precioOferta": 2000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/difusorcalavera.png",
+      "info": "AROMATERAPIA: Estimula creatividad y concentración. Recomendado para viajes largos.",
+      "beneficios": "Mejora el estado de ánimo durante trayectos largos",
+      "usoRecomendado": "Ideal para automóviles y transporte personal.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-10-07",
+      "variantes": [
+       
+        { "nombre": "8 ml", "precio": 2000 }
+      ]
+    },
+    {
+      "id": 6,
+      "nombre": "AromaDrive – Difusor de Auto KittyBloom 8 ml",
+      "nombreOriginal": "Ambientador Auto + Aroma a escoger",
+      "precioOriginal": 0,
+      "precioOferta": 1500,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/difusorKittyBloom.png",
+      "info": "AROMATERAPIA: Estimula creatividad y concentración. Recomendado para viajes largos.",
+      "beneficios": "Mejora el estado de ánimo durante trayectos largos",
+      "usoRecomendado": "Ideal para automóviles y transporte personal.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-10-07",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 }
+       
+      ]
+    }
+  ],
+  "frutal": [
+    {
+      "id": 3,
+      "nombre": "Pear Bliss",
+      "nombreOriginal": "pera",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/pear-bliss.png",
+      "info": "Aroma frutal fresco y delicadamente dulce inspirado en pera madura y jugosa.",
+      "beneficios": "Aporta sensación de frescura, bienestar y ligereza emocional.",
+      "usoRecomendado": "Dormitorios, salas, oficinas y espacios que buscan un aroma suave y agradable.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-08-01",
+      "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 7,
+      "nombre": "Fruit Summer",
+      "nombreOriginal": "Frutal Verano",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/fruit-summer.png",
+      "info": "Aroma frutal fresco y ligero, ideal para climas cálidos.",
+      "beneficios": "Refresca el ambiente y transmite sensación de verano permanente.",
+      "usoRecomendado": "Dormitorios, salas y espacios abiertos.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-06-01",
+      "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 11,
+      "nombre": "Fresh Watermelon – Sandía",
+      "nombreOriginal": "Sandía",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/sandia.png",
+      "info": "Aroma frutal, jugoso y refrescante que evoca días de verano.",
+      "beneficios": "Refresca el ambiente, transmite alegría y genera una sensación revitalizante.",
+      "usoRecomendado": "Ideal para cocinas, comedores y áreas sociales en climas cálidos.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 13,
+      "nombre": "Sweet Cherry – Cereza Intensa",
+      "nombreOriginal": "Cherry",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cherry.png",
+      "info": "Aroma dulce, jugoso y vibrante inspirado en cerezas maduras.",
+      "beneficios": "Alegra el ambiente, estimula emociones positivas y crea una atmósfera acogedora.",
+      "usoRecomendado": "Recomendado para salas, comedores y espacios juveniles.",
+      "disponible": true,
+      "calificacion": 4.3,
+     "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+   
+      {
+  "id": 122,
+  "nombre": "Passion Mint Breeze",
+  "nombreOriginal": "Maracuyá y Menta",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/passion-mint-breeze.png",
+  "info": "Aroma frutal fresco y vibrante que fusiona la dulzura tropical del maracuyá con la frescura revitalizante de la menta.",
+  "beneficios": "Aporta energía positiva, frescura ambiental y una sensación estimulante y alegre.",
+  "usoRecomendado": "Salas, oficinas, áreas sociales y espacios que buscan un aroma fresco y dinámico.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+    {
+      "id": 14,
+      "nombre": "Passion Glow – Maracuyá",
+      "nombreOriginal": "Maracuyá",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/maracuya.png",
+      "info": "Aroma tropical, exótico y energizante, ideal para revitalizar los sentidos.",
+      "beneficios": "Aumenta la vitalidad, reduce la tensión y crea un ambiente alegre.",
+      "usoRecomendado": "Perfecto para cocinas, salas y áreas sociales.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 15,
+      "nombre": "Sweet Bubble – Chicle",
+      "nombreOriginal": "Chicle",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/chicle.png",
+      "info": "Aroma juvenil, dulce y divertido inspirado en el clásico chicle de frutas.",
+      "beneficios": "Estimula la alegría, despierta recuerdos agradables y genera un ambiente dinámico.",
+      "usoRecomendado": "Perfecto para habitaciones juveniles, tiendas y espacios creativos.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 16,
+      "nombre": "Fresh Kiwi – Energía Frutal",
+      "nombreOriginal": "Kiwi",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/kiwi.png",
+      "info": "Aroma fresco, ácido y jugoso que evoca vitalidad tropical.",
+      "beneficios": "Refresca el ambiente, estimula la energía positiva y despierta los sentidos.",
+      "usoRecomendado": "Ideal para cocinas, comedores y espacios juveniles.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 24,
+      "nombre": "Peach Harmony",
+      "nombreOriginal": "Melocotón",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/melocoton.png",
+      "info": "Aroma dulce y jugoso, perfecto para ambientes cálidos.",
+      "beneficios": "Crea una atmósfera acogedora. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Cocinas y comedores.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 28,
+      "nombre": "Fresh Apple",
+      "nombreOriginal": "Manzana",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/manzana.png",
+      "info": "Fragancia fresca y crujiente, como una manzana recién cortada.",
+      "beneficios": "Revitaliza el ambiente y alegra el día.",
+      "usoRecomendado": "Cocinas y oficinas.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 33,
+      "nombre": "Strawberry Joy",
+      "nombreOriginal": "Fresa",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/fresa.png",
+      "info": "Aroma jugoso y alegre, perfecto para espacios juveniles.",
+      "beneficios": "Estimula la felicidad y energía positiva.",
+      "usoRecomendado": "Habitaciones infantiles y cocinas.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 46,
+      "nombre": "Golden Apricot",
+      "nombreOriginal": "Damasco",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/damasco.png",
+      "info": "Aroma frutal maduro con notas cálidas y dulces.",
+      "beneficios": "Aporta calidez y confort emocional. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 47,
+      "nombre": "Tropical Peach Mango",
+      "nombreOriginal": "Durazno y Mango",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/durazno-mango.png",
+      "info": "Mezcla tropical jugosa y vibrante.",
+      "beneficios": "Energiza y alegra el ambiente. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Cocinas y áreas sociales.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 48,
+      "nombre": "Sweet Peach",
+      "nombreOriginal": "Durazno Dulce",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/durazno-dulce.png",
+      "info": "Aroma suave y meloso, como durazno recién pelado.",
+      "beneficios": "Transmite dulzura y tranquilidad. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y salas.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 50,
+      "nombre": "Green Peach",
+      "nombreOriginal": "Durazno Verde",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/durazno-verde.png",
+      "info": "Aroma frutal verde y ligeramente ácido, muy refrescante.",
+      "beneficios": "Despierta los sentidos y purifica el aire.",
+      "usoRecomendado": "Cocinas y oficinas.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 54,
+      "nombre": "Green Apple",
+      "nombreOriginal": "Manzana Verde",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/manzana-verde.png",
+      "info": "Aroma crujiente y ácido, lleno de vitalidad.",
+      "beneficios": "Revitaliza y limpia emocionalmente. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Oficinas y cocinas.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 69,
+      "nombre": "Pineapple Paradise",
+      "nombreOriginal": "Piña Colada",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/pina-colada.png",
+      "info": "Aroma tropical dulce, como vacaciones en la playa.",
+      "beneficios": "Transporta a estados de alegría y descanso.",
+      "usoRecomendado": "Salas y áreas sociales.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 70,
+      "nombre": "Grapefruit Vitality",
+      "nombreOriginal": "Toronja",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/toronja.png",
+      "info": "AROMATERAPIA: Cítrico amargo-dulce, desintoxica emocionalmente.",
+      "beneficios": "Estimula la eliminación y el optimismo.",
+      "usoRecomendado": "Baños y oficinas.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 72,
+      "nombre": "Berry Fusion",
+      "nombreOriginal": "Bayas",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/bayas.png",
+      "info": "Mezcla de frutos rojos maduros y jugosos.",
+      "beneficios": "Energiza y embellece el ambiente. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Cocinas y comedores.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 74,
+      "nombre": "Red Berries Mix",
+      "nombreOriginal": "frutosrojos",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/frutosrojos.png",
+      "info": "Mezcla intensa de frambuesa, fresa, mora y arándano.",
+      "beneficios": "Estimula sentidos y alegría. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Cocinas y salas juveniles.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 76,
+      "nombre": "Caramel Apple",
+      "nombreOriginal": "Tasty Apple",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/tasty-apple.png",
+      "info": "Aroma intenso de manzana caramelizada.",
+      "beneficios": "Estimula el apetito y alegra el ambiente.",
+      "usoRecomendado": "Cocinas y panaderías.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "floral": [
+    {
+      "id": 4,
+      "nombre": "Floral Fresh",
+      "nombreOriginal": "Floral Fresco",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/floral-fresh.png",
+      "info": "Aroma floral fresco con notas ligeras y limpias que evocan flores recién cortadas.",
+      "beneficios": "Refresca el ambiente y aporta sensación de limpieza y equilibrio.",
+      "usoRecomendado": "Baños, dormitorios y espacios de uso diario.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-08-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+  "id": 9,
+  "nombre": "Night Caress",
+  "nombreOriginal": "frutos nocturnos",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/night-caress.png",
+  "info": "Aroma frutal profundo y envolvente con notas dulces y sensuales, ideal para momentos nocturnos de calma e intimidad.",
+  "beneficios": "Favorece la relajación, reduce el estrés y crea una atmósfera acogedora y reconfortante.",
+  "usoRecomendado": "Dormitorios, salas, spas y espacios destinados al descanso y la desconexión.",
+  "disponible": true,
+  "calificacion": 4.8,
+  "esNuevo": true,
+  "fechaLanzamiento": "2025-08-01",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+{
+  "id": 10,
+  "nombre": "Crystal Embrace",
+  "nombreOriginal": "Abrazo de Cristal",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/crystal-embrace.png",
+  "info": "Aroma floral fresco y cristalino que envuelve el ambiente con una sensación de pureza, elegancia y suavidad.",
+  "beneficios": "Promueve calma, claridad mental y una atmósfera equilibrada y armoniosa.",
+  "usoRecomendado": "Dormitorios, salas, baños y espacios que buscan un aroma limpio, relajante y sofisticado.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+    {
+      "id": 17,
+      "nombre": "Floral Bliss – Jazmín",
+      "nombreOriginal": "Jazmín",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/jazmin.png",
+      "info": "Aroma dulce y floral, ideal para relajación y bienestar emocional.",
+      "beneficios": "Calma la mente y reduce el estrés.",
+      "usoRecomendado": "Dormitorios y áreas de descanso.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 19,
+      "nombre": "Bloom Essence",
+      "nombreOriginal": "Floral",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/floral.png",
+      "info": "Mezcla aromática floral equilibrada y delicada.",
+      "beneficios": "Eleva el ánimo y embellece el ambiente.",
+      "usoRecomendado": "Salas y recibidores.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 20,
+      "nombre": "Romantic Rose",
+      "nombreOriginal": "Rosa",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/rosa.png",
+      "info": "Aroma clásico y romántico, perfecto para momentos especiales.",
+      "beneficios": "Promueve la armonía emocional. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y baños.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 23,
+      "nombre": "Pure Magnolia",
+      "nombreOriginal": "Magnolia",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/magnolia.png",
+      "info": "Aroma suave y elegante, evoca frescura primaveral.",
+      "beneficios": "Refina el ambiente y mejora el estado de ánimo.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 26,
+      "nombre": "Soft Violet",
+      "nombreOriginal": "Violeta",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/violeta.png",
+      "info": "Aroma suave y nostálgico, evoca ternura y calma.",
+      "beneficios": "Reduce la tensión emocional. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios infantiles o de adultos sensibles.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 27,
+      "nombre": "Classic Potpourri",
+      "nombreOriginal": "Popurri",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/popurri.png",
+      "info": "Mezcla clásica de flores secas y especias aromáticas.",
+      "beneficios": "Fragancia cálida y duradera. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Entradas y closets.",
+      "disponible": true,
+      "calificacion": 3.9,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 37,
+      "nombre": "Silky Gardenia",
+      "nombreOriginal": "Gardenia",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/gardenia.png",
+      "info": "Aroma exótico y sedoso, muy apreciado en perfumería.",
+      "beneficios": "Promueve la sensualidad y la paz interior.",
+      "usoRecomendado": "Dormitorios y spas.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 55,
+      "nombre": "Floral Symphony",
+      "nombreOriginal": "Bouquet Floral",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/bouquet-floral.png",
+      "info": "Mezcla refinada de flores naturales, elegante y duradera.",
+      "beneficios": "Embellece el ambiente con sofisticación. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y recepciones.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 58,
+      "nombre": "Eco Cherry Blossom",
+      "nombreOriginal": "Eco-Cereza Floral",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/eco-cereza-floral.png",
+      "info": "Fragancia ecológica con notas de cereza y flores silvestres.",
+      "beneficios": "Suaviza el ambiente y eleva el ánimo.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 71,
+      "nombre": "Modern Floral",
+      "nombreOriginal": "New Floral",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/new-floral.png",
+      "info": "Fragancia moderna y ligera con acordes florales actualizados.",
+      "beneficios": "Refina el ambiente con estilo contemporáneo.",
+      "usoRecomendado": "Oficinas y salas modernas.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 111,
+      "nombre": "Paradise Bloom",
+      "nombreOriginal": "Flores del Paraíso",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paradise-bloom.png",
+      "info": "Aroma floral fresco y luminoso que combina flores blancas y notas suaves, evocando un paraíso natural lleno de pureza y armonía.",
+      "beneficios": "Refresca el ambiente, eleva el ánimo y transmite sensación de limpieza, equilibrio y bienestar.",
+      "usoRecomendado": "Dormitorios, baños, salas y espacios que buscan una atmósfera fresca y relajante.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-12-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 112,
+      "nombre": "Paradise Bloom Sweet",
+      "nombreOriginal": "Flores del Paraíso Dulce",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paradise-bloom-sweet.png",
+      "info": "Aroma floral dulce con notas de jazmín, rosa y un toque avainillado que envuelve los sentidos.",
+      "beneficios": "Genera sensación de armonía, romanticismo y bienestar emocional.",
+      "usoRecomendado": "Dormitorios, salas y espacios de descanso.",
+      "disponible": true,
+      "calificacion": 4.8,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-12-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "amaderado": [
+    {
+      "id": 25,
+      "nombre": "Sacred Sandalwood",
+      "nombreOriginal": "Sándalo",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/sandalo.png",
+      "info": "AROMATERAPIA: Profundo y maderoso, ideal para meditación.",
+      "beneficios": "Centra la mente y promueve la introspección.",
+      "usoRecomendado": "Espacios de yoga y relajación.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 31,
+      "nombre": "Forest Pine",
+      "nombreOriginal": "Pino",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/pino.png",
+      "info": "AROMATERAPIA: Fresco y forestal, conecta con la naturaleza.",
+      "beneficios": "Purifica el aire y revitaliza el espíritu.",
+      "usoRecomendado": "Baños y áreas de trabajo.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 51,
+      "nombre": "Grounding Cedar",
+      "nombreOriginal": "Cedro",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cedro.png",
+      "info": "AROMATERAPIA: Maderoso y terroso, promueve estabilidad emocional.",
+      "beneficios": "Ancla la mente y reduce la ansiedad.",
+      "usoRecomendado": "Estudios y espacios de trabajo.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 114,
+      "nombre": "Paradise Woods",
+      "nombreOriginal": "Paraíso Amaderado",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paradise-woods.png",
+      "info": "Aroma amaderado con notas de sándalo, cedro y toques terrosos que transmiten sofisticación.",
+      "beneficios": "Brinda sensación de estabilidad, calma y enfoque.",
+      "usoRecomendado": "Oficinas, estudios y salas elegantes.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-09-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "citrico": [
+    {
+  "id": 124,
+  "nombre": "Mango Mandarin Zest",
+  "nombreOriginal": "Mango y Mandarina",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/mango-mandarin-zest.png",
+  "info": "Aroma frutal cítrico y tropical que combina la dulzura jugosa del mango con la frescura chispeante de la mandarina.",
+  "beneficios": "Estimula el buen ánimo, aporta vitalidad y llena el ambiente de energía positiva.",
+  "usoRecomendado": "Salas, cocinas, áreas sociales y espacios que buscan un aroma alegre y refrescante.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+
+    {
+      "id": 34,
+      "nombre": "Citrus Energy – Naranja",
+      "nombreOriginal": "Naranja",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/naranja.png",
+      "info": "AROMATERAPIA: Cítrico y energizante, mejora el ánimo.",
+      "beneficios": "Reduce la fatiga mental y emocional.",
+      "usoRecomendado": "Oficinas y cocinas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 35,
+      "nombre": "Lemon Spark",
+      "nombreOriginal": "Limón",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/limon.png",
+      "info": "AROMATERAPIA: Fresco y purificante, ideal para limpieza energética.",
+      "beneficios": "Despeja la mente y desinfecta el ambiente.",
+      "usoRecomendado": "Cocinas y baños.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 67,
+      "nombre": "Sweet Tangerine",
+      "nombreOriginal": "Mandarina",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/mandarina.png",
+      "info": "AROMATERAPIA: Cítrico dulce, ideal para niños y ánimo bajo.",
+      "beneficios": "Alegra y calma la hiperactividad. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Habitaciones infantiles.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 113,
+      "nombre": "Paradise Citrus",
+      "nombreOriginal": "Paraíso Cítrico",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paradise-citrus.png",
+      "info": "Aroma vibrante de cítricos frescos con notas de naranja, limón y mandarina.",
+      "beneficios": "Aporta energía, claridad mental y sensación de limpieza.",
+      "usoRecomendado": "Cocinas, oficinas y espacios activos durante el día.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-06-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+  "id": 120,
+  "nombre": "Lemongrass Fresh",
+  "nombreOriginal": "lemongrass",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/lemongrass-fresh.png",
+  "info": "Aroma cítrico y herbal, fresco y revitalizante inspirado en lemongrass natural recién cortado.",
+  "beneficios": "Estimula la energía, mejora el estado de ánimo y ayuda a reducir el estrés y la fatiga mental.",
+  "usoRecomendado": "Cocinas, oficinas, salas, estudios y espacios que buscan frescura y claridad.",
+  "disponible": true,
+  "calificacion": 4.7,
+  "esNuevo": true,
+  "fechaLanzamiento": "2025-08-01",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+}
+  ],
+  "dulcesEspecias": [
+    {
+      "id": 8,
+      "nombre": "Vanilla Cocoa Bliss",
+      "nombreOriginal": "Vainilla & Chocolate",
+      "precioOriginal": 0,
+      "precioOferta": 3500,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/vanilla-cocoa-bliss.png",
+      "info": "Aroma dulce y cremoso que combina vainilla suave con notas profundas de chocolate.",
+      "beneficios": "Genera sensación de confort, calidez y placer sensorial.",
+      "usoRecomendado": "Salas, dormitorios y espacios acogedores, ideal para la noche.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-09-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 29,
+      "nombre": "Cozy Cinnamon",
+      "nombreOriginal": "Canela",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/canela.png",
+      "info": "Aroma cálido y especiado, ideal en épocas frías.",
+      "beneficios": "Estimula y da sensación de hogar.",
+      "usoRecomendado": "Cocinas y salas en invierno.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 32,
+      "nombre": "Sweet Comfort – Vainilla",
+      "nombreOriginal": "Vainilla",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/vainilla.png",
+      "info": "Aroma dulce y reconfortante, como postre casero.",
+      "beneficios": "Genera sensación de bienestar y comodidad.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+  "id": 127,
+  "nombre": "Creamy Vanilla Dream",
+  "nombreOriginal": "Vainilla Cremosa",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/creamy-vanilla-dream.png",
+  "info": "Aroma dulce y envolvente con notas suaves de vainilla cremosa que aportan calidez y elegancia al ambiente.",
+  "beneficios": "Genera sensación de confort, tranquilidad y bienestar emocional.",
+  "usoRecomendado": "Dormitorios, salas, boutiques y espacios donde se busca un ambiente acogedor y sofisticado.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+
+    {
+      "id": 43,
+      "nombre": "Sweet Almond",
+      "nombreOriginal": "Almendra",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/almendra.png",
+      "info": "Aroma dulce y cremoso, similar a la vainilla pero más suave.",
+      "beneficios": "Nutre emocionalmente y calma la ansiedad.",
+      "usoRecomendado": "Dormitorios y áreas de descanso.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 56,
+      "nombre": "Melon Vanilla Delight",
+      "nombreOriginal": "Melón y Vainilla",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/melonvainilla.png",
+      "info": "Combinación fresca y dulce, perfecta para días cálidos.",
+      "beneficios": "Equilibra energía y comodidad. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 57,
+      "nombre": "Apple Cinnamon Bliss",
+      "nombreOriginal": "Manzana Canela",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/manzana-canela.png",
+      "info": "Mezcla cálida de manzana horneada con canela.",
+      "beneficios": "Evoca hogar, amor y nostalgia. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Cocinas y salas en invierno.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 65,
+      "nombre": "Choco Bliss",
+      "nombreOriginal": "Chocolate",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/chocolate.png",
+      "info": "Aroma rico y envolvente, como chocolate caliente.",
+      "beneficios": "Estimula la serotonina y el bienestar.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 66,
+      "nombre": "ChocoMint Twist",
+      "nombreOriginal": "Chocolate & Menta",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/chocomenta.png",
+      "info": "Combinacion que no puede faltar.",
+      "beneficios": "Estimula la serotonina y el bienestar.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 75,
+      "nombre": "Coco Cookies Delight",
+      "nombreOriginal": "Coco & Cookies",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/coco-cookies.png",
+      "info": "Combinación dulce de coco tostado y galletas recién horneadas.",
+      "beneficios": "Evoca hogar, amor y comodidad. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Cocinas y salas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 77,
+      "nombre": "Gingerbread Joy",
+      "nombreOriginal": "Ginger Bread",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/ginger-bread.png",
+      "info": "Aroma navideño de jengibre, miel y especias.",
+      "beneficios": "Calienta el corazón y evoca tradición.",
+      "usoRecomendado": "Cocinas y salas en diciembre.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 78,
+      "nombre": "Lemon Cake Bliss",
+      "nombreOriginal": "Lemon Cake",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/lemon-cake.png",
+      "info": "Postre aromático: limón y bizcocho dulce.",
+      "beneficios": "Alegra y estimula el buen humor.",
+      "usoRecomendado": "Cocinas y comedores.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 79,
+      "nombre": "Vanilla Musk Essence",
+      "nombreOriginal": "Vainilla Musk",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/vainilla-musk.png",
+      "info": "Base ambarada con vainilla suave, sensual y duradera.",
+      "beneficios": "Seduce y calma con elegancia. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y áreas íntimas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 80,
+      "nombre": "ChocoAlmond Fusion",
+      "nombreOriginal": "Chocolate/Almendra",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/chocolate-almendra.png",
+      "info": "Combinación gourmet de chocolate oscuro y almendra tostada.",
+      "beneficios": "Induce al placer y bienestar emocional.",
+      "usoRecomendado": "Salas y dormitorios.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+  "id": 125,
+  "nombre": "Roasted Coffee Essence",
+  "nombreOriginal": "Café",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/roasted-coffee-essence.png",
+  "info": "Aroma cálido e intenso de café recién tostado que envuelve el espacio con notas profundas y reconfortantes.",
+  "beneficios": "Estimula la concentración, despierta los sentidos y crea una atmósfera acogedora y energizante.",
+  "usoRecomendado": "Cocinas, cafeterías, oficinas y espacios donde se busca un ambiente cálido y estimulante.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+    {
+      "id": 81,
+      "nombre": "Hazelnut Comfort",
+      "nombreOriginal": "Avellana",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/avellana.png",
+      "info": "Aroma tostado y cremoso, ideal para ambientes cálidos.",
+      "beneficios": "Nutre emocionalmente y reconforta. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y cafeterías.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "aromaterapia": [
+    {
+      "id": 12,
+      "nombre": "Zen Bamboo",
+      "nombreOriginal": "Bambú",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/bambu.png",
+      "info": "AROMATERAPIA: Refrescante y natural, ayuda a purificar el ambiente.",
+      "beneficios": "Relaja y armoniza los espacios. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Oficinas y salas de espera.",
+      "disponible": false,
+      "calificacion": 3.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+  "id": 123,
+  "nombre": "Eucalyptus Mint Harmony",
+  "nombreOriginal": "Menta y Eucalipto",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/eucalyptus-mint-harmony.png",
+  "info": "Aroma herbal fresco y revitalizante que combina la pureza del eucalipto con la frescura estimulante de la menta.",
+  "beneficios": "Ayuda a despejar la mente, mejorar la respiración y crear una sensación de bienestar y energía renovada.",
+  "usoRecomendado": "Baños, oficinas, salas, áreas de descanso y espacios tipo spa.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+    {
+  "id": 128,
+  "nombre": "Rosemary Vital Essence",
+  "nombreOriginal": "Romero",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/rosemary-vital-essence.png",
+  "info": "Aroma herbal fresco e intenso con notas naturales de romero que aportan pureza y energía al ambiente.",
+  "beneficios": "Favorece la concentración, estimula la claridad mental y crea una sensación de renovación.",
+  "usoRecomendado": "Oficinas, áreas de estudio, salas y espacios donde se busca frescura y enfoque.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-17",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+},
+    {
+      "id": 21,
+      "nombre": "Fresh Breathe – Eucalipto",
+      "nombreOriginal": "Eucalipto",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/eucalipto.png",
+      "info": "AROMATERAPIA: Fresco y limpio, ideal para respirar mejor.",
+      "beneficios": "Despeja vías respiratorias y purifica el aire.",
+      "usoRecomendado": "Baños y áreas de salud.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 22,
+      "nombre": "CalmDream – Lavanda",
+      "nombreOriginal": "Lavanda",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/lavanda.png",
+      "info": "AROMATERAPIA: Relajante y equilibrante, reduce el estrés.",
+      "beneficios": "Ayuda a dormir mejor y calma la ansiedad.",
+      "usoRecomendado": "Dormitorios y zonas de relajación.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 30,
+      "nombre": "Clear Mind – Ciprés",
+      "nombreOriginal": "Ciprés",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cipres.png",
+      "info": "AROMATERAPIA: Fresco y balsámico, inspira claridad mental.",
+      "beneficios": "Ayuda a liberar emociones retenidas. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Estudios y áreas de concentración.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 41,
+      "nombre": "FreshMint",
+      "nombreOriginal": "Menta",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/menta.png",
+      "info": "AROMATERAPIA: Fresca y estimulante, despierta los sentidos.",
+      "beneficios": "Mejora la concentración y alivia dolores leves.",
+      "usoRecomendado": "Oficinas y estudios.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 42,
+      "nombre": "Exotic Ylang",
+      "nombreOriginal": "Ylang Ylang",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/ylang-ylang.png",
+      "info": "AROMATERAPIA: Exótico y floral intenso, usado en perfumes de lujo.",
+      "beneficios": "Equilibra emociones y aumenta la atracción positiva.",
+      "usoRecomendado": "Dormitorios y meditación.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 45,
+      "nombre": "Sacred Incense",
+      "nombreOriginal": "Incienso",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/incienso.png",
+      "info": "Aroma profundo y espiritual, usado en rituales y meditación.",
+      "beneficios": "Purifica energías y centra la mente.",
+      "usoRecomendado": "Espacios de oración y yoga.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 52,
+      "nombre": "Balance Geranium",
+      "nombreOriginal": "Geranio",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/geranio.png",
+      "info": "AROMATERAPIA: Floral equilibrado, ideal para armonizar emociones.",
+      "beneficios": "Regula el estado de ánimo y reduce la ira.",
+      "usoRecomendado": "Dormitorios y baños.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 53,
+      "nombre": "Sacred Myrrh",
+      "nombreOriginal": "Mirra",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/mirra.png",
+      "info": "AROMATERAPIA: Resinosa y sagrada, usada en rituales antiguos.",
+      "beneficios": "Profundiza la meditación y protege energéticamente.",
+      "usoRecomendado": "Espacios espirituales.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 84,
+      "nombre": "Zen Meditation",
+      "nombreOriginal": "Meditación Zen",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/meditacion-zen.png",
+      "info": "Mezcla de sándalo, incienso y bambú para la paz interior.",
+      "beneficios": "Centra la mente y profundiza la meditación.",
+      "usoRecomendado": "Espacios de yoga y relajación.",
+      "disponible": true,
+      "calificacion": 5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "esencialesPuros": [
+    {
+      "id": 98,
+      "nombre": "Essential Pure Lavanda",
+      "nombreOriginal": "Especial Lavanda",
+      "precioOriginal": 0,
+      "precioOferta": 0,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/esencial-lavanda.png",
+      "info": "ACEITE ESENCIAL PURO: 100% natural, ideal para difusores y masajes.",
+      "beneficios": "Relaja profundamente y mejora el sueño.",
+      "usoRecomendado": "Difusores, almohadas y baños.",
+      "disponible": true,
+      "calificacion": 4.8,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 99,
+      "nombre": "Essential Pure Cedar",
+      "nombreOriginal": "Especial Cedro",
+      "precioOriginal": 0,
+      "precioOferta": 0,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/esencial-cedro.png",
+      "info": "ACEITE ESENCIAL PURO: Maderoso y anclante, ideal para meditación.",
+      "beneficios": "Estabiliza emociones y reduce el miedo.",
+      "usoRecomendado": "Difusores y terapias emocionales.",
+      "disponible": true,
+      "calificacion": 5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 100,
+      "nombre": "Essential Pure Eucalyptus",
+      "nombreOriginal": "Especial Eucalipto",
+      "precioOriginal": 0,
+      "precioOferta": 0,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/esencial-eucalipto.png",
+      "info": "ACEITE ESENCIAL PURO: Respiratorio y purificante.",
+      "beneficios": "Despeja congestión y fortalece defensas. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Baños y difusores en invierno.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 101,
+      "nombre": "Essential Pure Lemon",
+      "nombreOriginal": "Especial Limón",
+      "precioOriginal": 0,
+      "precioOferta": 0,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/esencial-limon.png",
+      "info": "ACEITE ESENCIAL PURO: Energizante y desintoxicante.",
+      "beneficios": "Limpia emocionalmente y mejora el ánimo.",
+      "usoRecomendado": "Cocinas y áreas de trabajo.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 102,
+      "nombre": "Essential Pure Orange",
+      "nombreOriginal": "Especial Naranja",
+      "precioOriginal": 0,
+      "precioOferta": 0,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/esencial-naranja.png",
+      "info": "ACEITE ESENCIAL PURO: Cítrico y alegre, ideal para difusores.",
+      "beneficios": "Estimula la felicidad y elimina la tristeza.",
+      "usoRecomendado": "Salas y oficinas.",
+      "disponible": true,
+      "calificacion": 5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "navidenos": [
+    {
+      "id": 18,
+      "nombre": "Eggnog Delight",
+      "nombreOriginal": "Rompope Especial",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/rompopeespecial.png",
+      "info": "Aroma cremoso y dulce inspirado en el tradicional rompope, con notas cálidas y festivas que envuelven cualquier espacio.",
+      "beneficios": "Aporta sensación de confort, nostalgia y calidez, ideal para crear ambientes acogedores durante la temporada festiva.",
+      "usoRecomendado": "Salas, comedores y espacios familiares durante reuniones navideñas o noches tranquilas.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-12-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 103,
+      "nombre": "Festive Delights",
+      "nombreOriginal": "Cesta navideña",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cesta_navidena.png",
+      "info": "Una selección exquisita de sabores y aromas navideños, ideal para regalar o disfrutar en familia.",
+      "beneficios": "Crea un ambiente cálido y acogedor. Perfecta para celebrar la temporada con alegría y tradición.",
+      "usoRecomendado": "Salas, comedores y espacios de reunión navideña.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 104,
+      "nombre": "Fantasy Christmas",
+      "nombreOriginal": "fantasia Navidad",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/navidad.png",
+      "info": "Mezcla festiva de canela, naranja y especias navideñas.",
+      "beneficios": "Evoca alegría, nostalgia y espíritu de fiesta.",
+      "usoRecomendado": "Salas y comedores en diciembre.",
+      "disponible": true,
+      "calificacion": 5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 105,
+      "nombre": "Cranberry Christmas",
+      "nombreOriginal": "Cranberry Navidad",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cranberry-christmas.png",
+      "info": "Fragancia dulce y festiva con frutos rojos, caramelo, almizcle y ámbar. Ideal para envolver tu hogar en magia navideña.",
+      "beneficios": "Evoca alegría, nostalgia y calidez familiar. Perfecta para celebrar en compañía.",
+      "usoRecomendado": "Salas, comedores y entradas durante la temporada navideña.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-04",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 106,
+      "nombre": "Winter Glow",
+      "nombreOriginal": "Winter",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/winter-glow.png",
+      "info": "Mezcla sofisticada de granada, mandarina, manzana glaseada, sándalo, almizcle y vainilla. Una explosión cálida y dulce del invierno moderno.",
+      "beneficios": "Equilibra lo frutal con lo cremoso, creando un ambiente acogedor y elegante.",
+      "usoRecomendado": "Salas, dormitorios y espacios de recepción en invierno.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-04",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 107,
+      "nombre": "Frozen Forest",
+      "nombreOriginal": "Frozen",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/frozen-forest.png",
+      "info": "Aroma fresco y boscoso con pino blanco, jengibre especiado y cedro terroso. Como un paseo invernal por un bosque nevado.",
+      "beneficios": "Purifica el ambiente y despierta los sentidos con un toque cálido de especias.",
+      "usoRecomendado": "Baños, estudios y áreas de meditación en temporada fría.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-04",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 108,
+      "nombre": "Christmas Pine",
+      "nombreOriginal": "Pino Navideño",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/christmas-pine.png",
+      "info": "El clásico aroma del pino fresco, como un árbol recién cortado en plena Navidad.",
+      "beneficios": "Trae la esencia del bosque a tu hogar. Refresca y conecta con la tradición navideña.",
+      "usoRecomendado": "Salas y entradas donde se encuentra el árbol de Navidad.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-04",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 109,
+      "nombre": "Festive Cypress",
+      "nombreOriginal": "Cipres Navidad",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/festive-cypress.png",
+      "info": "Aroma balsámico y limpio del ciprés, con un toque navideño que inspira calma y claridad.",
+      "beneficios": "Libera tensiones emocionales y aporta serenidad en medio del bullicio festivo.",
+      "usoRecomendado": "Estudios, dormitorios y espacios de reflexión durante diciembre.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-04",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 110,
+      "nombre": "Vanilla Noel",
+      "nombreOriginal": "Vainilla Navidad",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/vanilla-noel.png",
+      "info": "Vainilla cremosa envuelta en notas cálidas de ámbar y almizcle. El abrazo olfativo de la Navidad.",
+      "beneficios": "Genera confort, seguridad y nostalgia. Ideal para noches de paz y reuniones íntimas.",
+      "usoRecomendado": "Dormitorios, salas y cocinas durante la temporada invernal.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-04",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 115,
+      "nombre": "Paradise Noël",
+      "nombreOriginal": "Paraíso Navideño",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paradise-noel.png",
+      "info": "Aroma cálido con notas especiadas, toques de pino y dulzura suave que evocan la magia navideña.",
+      "beneficios": "Genera ambientes acogedores, festivos y llenos de nostalgia.",
+      "usoRecomendado": "Salas, comedores y espacios familiares durante diciembre.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-15",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 116,
+      "nombre": "Paradise Noël",
+      "nombreOriginal": "Paraíso Navideño",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paradise-noel.png",
+      "info": "Aroma cálido con notas especiadas, toques de pino y dulzura suave que evocan la magia navideña.",
+      "beneficios": "Genera ambientes acogedores, festivos y llenos de nostalgia.",
+      "usoRecomendado": "Salas, comedores y espacios familiares durante diciembre.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-11-15",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+  "id": 121,
+  "nombre": "Gingerbread Delight",
+  "nombreOriginal": "Delicia de Pan de Jengibre",
+  "precioOriginal": 0,
+  "precioOferta": 3000,
+  "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/gingerbread-delight.png",
+  "info": "Aroma dulce y especiado inspirado en el tradicional pan de jengibre, con notas cálidas que evocan hogar y temporada festiva.",
+  "beneficios": "Genera sensación de confort, calidez emocional y un ambiente acogedor y alegre.",
+  "usoRecomendado": "Salas, cocinas, cafeterías y espacios donde se desee un aroma cálido, dulce y reconfortante.",
+  "disponible": true,
+  "calificacion": 5,
+  "esNuevo": true,
+  "fechaLanzamiento": "2026-02-09",
+  "variantes": [
+    { "nombre": "8 ml", "precio": 1500 },
+    { "nombre": "30 ml", "precio": 3000 },
+    { "nombre": "120 ml", "precio": 7000 }
+  ]
+}
+
+
+  ],
+  "ciudades": [
+    {
+      "id": 86,
+      "nombre": "Urban Buenos Aires",
+      "nombreOriginal": "Buenos Aires",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/buenos-aires.png",
+      "info": "Aroma urbano y elegante, con notas de cuero y tabaco suave.",
+      "beneficios": "Transmite sofisticación y carácter. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y estudios modernos.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 87,
+      "nombre": "Glam Hollywood",
+      "nombreOriginal": "Hollywood",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/hollywood.png",
+      "info": "Fragancia glamorosa con jazmín, vainilla y bergamota.",
+      "beneficios": "Inspira confianza y brillo personal. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y vestidores.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 88,
+      "nombre": "Viva Brazil",
+      "nombreOriginal": "Brazil",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/brazil.png",
+      "info": "Aroma tropical con notas de coco, piña y flores del Amazonas.",
+      "beneficios": "Transmite alegría y energía vital. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Áreas sociales y piscinas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 89,
+      "nombre": "Sacred Peru",
+      "nombreOriginal": "Perú",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/peru.png",
+      "info": "Mezcla con incienso, palo santo y frutas andinas.",
+      "beneficios": "Purifica y conecta con lo ancestral.",
+      "usoRecomendado": "Espacios espirituales.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 90,
+      "nombre": "Dynamic New York",
+      "nombreOriginal": "New York",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/new-york.png",
+      "info": "Fragancia urbana con café, cuero y madera tostada.",
+      "beneficios": "Estimula la ambición y el dinamismo.",
+      "usoRecomendado": "Oficinas y estudios.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 91,
+      "nombre": "Sunny Madrid",
+      "nombreOriginal": "Madrid",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/madrid.png",
+      "info": "Aroma mediterráneo con naranja, romero y miel.",
+      "beneficios": "Equilibra y vitaliza con elegancia. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y terrazas.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 92,
+      "nombre": "Mystic Prague",
+      "nombreOriginal": "Praga",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/praga.png",
+      "info": "Fragancia mística con mirra, sándalo y vino tinto.",
+      "beneficios": "Profundiza la introspección y creatividad. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Estudios y bibliotecas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 93,
+      "nombre": "Romantic Paris",
+      "nombreOriginal": "París",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/paris.png",
+      "info": "Elegancia francesa: rosa, jazmín y almizcle blanco.",
+      "beneficios": "Refina el ambiente con romanticismo. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y vestidores.",
+      "disponible": true,
+      "calificacion": 5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 94,
+      "nombre": "Sacred Jerusalem",
+      "nombreOriginal": "Jerusalén",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/jerusalen.png",
+      "info": "Aroma sagrado con mirra, incienso y olivo.",
+      "beneficios": "Eleva el espíritu y purifica emocionalmente.",
+      "usoRecomendado": "Espacios de oración y reflexión.",
+      "disponible": true,
+      "calificacion": 4.8,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 95,
+      "nombre": "Sunny Miami",
+      "nombreOriginal": "Miami",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/miami.png",
+      "info": "Fragancia playera con coco, limón y sal marina.",
+      "beneficios": "Transmite libertad y diversión. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Áreas sociales y piscinas.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 96,
+      "nombre": "Exotic Thailand",
+      "nombreOriginal": "Tailandia",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/tailandia.png",
+      "info": "Aroma exótico con jazmín, lima y hierbabuena.",
+      "beneficios": "Refresca y estimula los sentidos. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Baños y spas.",
+      "disponible": true,
+      "calificacion": 4.5,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 97,
+      "nombre": "Alpine Switzerland",
+      "nombreOriginal": "Suiza",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/suiza.png",
+      "info": "Fragancia pura con pino alpino, nieve y miel silvestre.",
+      "beneficios": "Transmite paz, limpieza y fortaleza. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y estudios.",
+      "disponible": true,
+      "calificacion": 4.6,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ],
+  "otros": [
+    {
+      "id": 36,
+      "nombre": "Elegant Bouquet",
+      "nombreOriginal": "Bouquet",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/bouquet.png",
+      "info": "Mezcla floral equilibrada, elegante y sofisticada.",
+      "beneficios": "Refina cualquier espacio con gracia. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Salas y recepciones.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 38,
+      "nombre": "Tropical Coconut",
+      "nombreOriginal": "Coco",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/coco.png",
+      "info": "Aroma tropical y cremoso, evoca vacaciones playeras.",
+      "beneficios": "Relaja y transporta a lugares cálidos.",
+      "usoRecomendado": "Baños y áreas de spa.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 39,
+      "nombre": "CocoMint Breeze",
+      "nombreOriginal": "Coco-menta",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cocomenta.png",
+      "info": "Aroma tropical y cremoso, evoca vacaciones playeras.",
+      "beneficios": "Relaja y transporta a lugares cálidos.",
+      "usoRecomendado": "Baños y áreas de spa.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 40,
+      "nombre": "CocoVanilla Dream",
+      "nombreOriginal": "Coco-Vainilla",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/cocovainilla.png",
+      "info": "Aroma tropical y cremoso, evoca vacaciones playeras.",
+      "beneficios": "Relaja y transporta a lugares cálidos.",
+      "usoRecomendado": "Baños y áreas de spa.",
+      "disponible": true,
+      "calificacion": 4.1,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 44,
+      "nombre": "Tender Baby",
+      "nombreOriginal": "Baby",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/baby.png",
+      "info": "Fragancia suave y limpia, ideal para bebés y niños.",
+      "beneficios": "Tranquiliza y protege el ambiente infantil.",
+      "usoRecomendado": "Habitaciones de bebés.",
+      "disponible": true,
+      "calificacion": 4.8,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 49,
+      "nombre": "Aqua Oasis",
+      "nombreOriginal": "Oasis",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/oasis.png",
+      "info": "Fragancia fresca y acuática, como un refugio en el desierto.",
+      "beneficios": "Refresca el ambiente y calma el estrés.",
+      "usoRecomendado": "Baños y zonas de relajación.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 64,
+      "nombre": "White Bouquet",
+      "nombreOriginal": "Bouquet Blanc",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/bouquet-blanc.png",
+      "info": "Fragancia blanca y limpia, como ropa recién lavada con esencia floral.",
+      "beneficios": "Transmite pureza y orden. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y closets.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 68,
+      "nombre": "Ocean Breeze",
+      "nombreOriginal": "Océano",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/oceano.png",
+      "info": "Fragancia acuática y salada, como una brisa marina.",
+      "beneficios": "Refresca y libera tensiones. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Baños y áreas de spa.",
+      "disponible": true,
+      "calificacion": 4.2,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 73,
+      "nombre": "Citronella Fresh",
+      "nombreOriginal": "Citronela",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/citronela.png",
+      "info": "AROMATERAPIA: Fresca y repelente natural de insectos.",
+      "beneficios": "Protege y purifica el aire en exteriores.",
+      "usoRecomendado": "Terrazas y jardines.",
+      "disponible": true,
+      "calificacion": 4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 82,
+      "nombre": "Vital Energy",
+      "nombreOriginal": "Energía",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/energia.png",
+      "info": "Fragancia dinámica con cítricos y notas verdes.",
+      "beneficios": "Revitaliza y mejora el enfoque. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Oficinas y gimnasios.",
+      "disponible": true,
+      "calificacion": 4.3,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 83,
+      "nombre": "Freedom Breeze",
+      "nombreOriginal": "Libertad",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/libertad.png",
+      "info": "Aroma fresco y abierto, como el viento en la montaña.",
+      "beneficios": "Libera emociones y expande la mente.",
+      "usoRecomendado": "Estudios y áreas de meditación.",
+      "disponible": true,
+      "calificacion": 4.4,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 85,
+      "nombre": "Seduction Essence",
+      "nombreOriginal": "Seducción",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/seduccion.png",
+      "info": "Fragancia intensa con vainilla, sándalo y flores exóticas.",
+      "beneficios": "Aumenta la atracción y confianza. Mejora tu bienestar con cada uso.",
+      "usoRecomendado": "Dormitorios y veladas románticas.",
+      "disponible": true,
+      "calificacion": 4.8,
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    },
+    {
+      "id": 117,
+      "nombre": "Marine Breeze",
+      "nombreOriginal": "Brisa Marina",
+      "precioOriginal": 0,
+      "precioOferta": 3000,
+      "imagen": "https://wil1979.github.io/esentia-factura/etiqueta/marine-breeze.png",
+      "info": "Aroma fresco y limpio inspirado en la brisa del mar, con notas acuáticas y florales suaves.",
+      "beneficios": "Aporta sensación de frescura, libertad y limpieza profunda del ambiente.",
+      "usoRecomendado": "Dormitorios, baños y espacios que buscan frescura continua.",
+      "disponible": true,
+      "calificacion": 5,
+      "esNuevo": true,
+      "fechaLanzamiento": "2025-07-01",
+      "variantes": [
+        { "nombre": "8 ml", "precio": 1500 },
+        { "nombre": "30 ml", "precio": 3000 },
+        { "nombre": "120 ml", "precio": 7000 }
+      ]
+    }
+  ]
+}

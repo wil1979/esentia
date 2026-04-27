@@ -1,0 +1,814 @@
+[
+  {
+    "id": "pl1",
+    "nombre": "Esencias - 120ml con tapa",
+    "tipo": "Limpieza",
+    "precio": 7000,
+    "categoria": "Esencias",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 7000}, {"nombre": "Bambú", "precio": 7000}, {"nombre": "Bebé", "precio": 7000}, {"nombre": "Canela", "precio": 7000}, {"nombre": "Cherry", "precio": 7000}, {"nombre": "Chicle", "precio": 7000}, {"nombre": "Ciprés", "precio": 7000}, {"nombre": "Coco", "precio": 7000}, {"nombre": "Eucalipto", "precio": 7000}, {"nombre": "Fantasía navideña", "precio": 7000}, {"nombre": "Floral", "precio": 7000}, {"nombre": "Fresa", "precio": 7000}, {"nombre": "Fresco amanecer", "precio": 7000}, {"nombre": "Frutal", "precio": 7000}, {"nombre": "Herbal", "precio": 7000}, {"nombre": "Kiwi", "precio": 7000}, {"nombre": "Lavanda", "precio": 7000}, {"nombre": "Limón", "precio": 7000}, {"nombre": "Manzana", "precio": 7000}, {"nombre": "Manzana Canela", "precio": 7000}, {"nombre": "Manzana verde", "precio": 7000}, {"nombre": "Maracuyá", "precio": 7000}, {"nombre": "Melocotón", "precio": 7000}, {"nombre": "Menta", "precio": 7000}, {"nombre": "Naranja", "precio": 7000}, {"nombre": "Pepino", "precio": 7000}, {"nombre": "Primavera", "precio": 7000}, {"nombre": "Sábila", "precio": 7000}, {"nombre": "Sandía", "precio": 7000}, {"nombre": "Suave abril", "precio": 7000}, {"nombre": "Vainilla", "precio": 7000}, {"nombre": "Violeta", "precio": 7000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3100,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl2",
+    "nombre": "Esencias - 120ml con rociador",
+    "tipo": "Limpieza",
+    "precio": 7000,
+    "categoria": "Esencias",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 7000}, {"nombre": "Bambú", "precio": 7000}, {"nombre": "Bebé", "precio": 7000}, {"nombre": "Canela", "precio": 7000}, {"nombre": "Cherry", "precio": 7000}, {"nombre": "Chicle", "precio": 7000}, {"nombre": "Ciprés", "precio": 7000}, {"nombre": "Coco", "precio": 7000}, {"nombre": "Eucalipto", "precio": 7000}, {"nombre": "Fantasía navideña", "precio": 7000}, {"nombre": "Floral", "precio": 7000}, {"nombre": "Fresa", "precio": 7000}, {"nombre": "Fresco amanecer", "precio": 7000}, {"nombre": "Frutal", "precio": 7000}, {"nombre": "Herbal", "precio": 7000}, {"nombre": "Kiwi", "precio": 7000}, {"nombre": "Lavanda", "precio": 7000}, {"nombre": "Limón", "precio": 7000}, {"nombre": "Manzana", "precio": 7000}, {"nombre": "Manzana Canela", "precio": 7000}, {"nombre": "Manzana verde", "precio": 7000}, {"nombre": "Maracuyá", "precio": 7000}, {"nombre": "Melocotón", "precio": 7000}, {"nombre": "Menta", "precio": 7000}, {"nombre": "Naranja", "precio": 7000}, {"nombre": "Pepino", "precio": 7000}, {"nombre": "Primavera", "precio": 7000}, {"nombre": "Sábila", "precio": 7000}, {"nombre": "Sandía", "precio": 7000}, {"nombre": "Suave abril", "precio": 7000}, {"nombre": "Vainilla", "precio": 7000}, {"nombre": "Violeta", "precio": 7000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3200,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl3",
+    "nombre": "Esencias - 50ml con tapa",
+    "tipo": "Limpieza",
+    "precio": 5000,
+    "categoria": "Esencias",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 5000}, {"nombre": "Bambú", "precio": 5000}, {"nombre": "Bebé", "precio": 5000}, {"nombre": "Canela", "precio": 5000}, {"nombre": "Cherry", "precio": 5000}, {"nombre": "Chicle", "precio": 5000}, {"nombre": "Ciprés", "precio": 5000}, {"nombre": "Coco", "precio": 5000}, {"nombre": "Eucalipto", "precio": 5000}, {"nombre": "Fantasía navideña", "precio": 5000}, {"nombre": "Floral", "precio": 5000}, {"nombre": "Fresa", "precio": 5000}, {"nombre": "Fresco amanecer", "precio": 5000}, {"nombre": "Frutal", "precio": 5000}, {"nombre": "Herbal", "precio": 5000}, {"nombre": "Kiwi", "precio": 5000}, {"nombre": "Lavanda", "precio": 5000}, {"nombre": "Limón", "precio": 5000}, {"nombre": "Manzana", "precio": 5000}, {"nombre": "Manzana Canela", "precio": 5000}, {"nombre": "Manzana verde", "precio": 5000}, {"nombre": "Maracuyá", "precio": 5000}, {"nombre": "Melocotón", "precio": 5000}, {"nombre": "Menta", "precio": 5000}, {"nombre": "Naranja", "precio": 5000}, {"nombre": "Pepino", "precio": 5000}, {"nombre": "Primavera", "precio": 5000}, {"nombre": "Sábila", "precio": 5000}, {"nombre": "Sandía", "precio": 5000}, {"nombre": "Suave abril", "precio": 5000}, {"nombre": "Vainilla", "precio": 5000}, {"nombre": "Violeta", "precio": 5000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 1800,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl4",
+    "nombre": "Esencias - 30ml con tapa",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Esencias",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 4000}, {"nombre": "Bambú", "precio": 4000}, {"nombre": "Bebé", "precio": 4000}, {"nombre": "Canela", "precio": 4000}, {"nombre": "Cherry", "precio": 4000}, {"nombre": "Chicle", "precio": 4000}, {"nombre": "Ciprés", "precio": 4000}, {"nombre": "Coco", "precio": 4000}, {"nombre": "Eucalipto", "precio": 4000}, {"nombre": "Fantasía navideña", "precio": 4000}, {"nombre": "Floral", "precio": 4000}, {"nombre": "Fresa", "precio": 4000}, {"nombre": "Fresco amanecer", "precio": 4000}, {"nombre": "Frutal", "precio": 4000}, {"nombre": "Herbal", "precio": 4000}, {"nombre": "Kiwi", "precio": 4000}, {"nombre": "Lavanda", "precio": 4000}, {"nombre": "Limón", "precio": 4000}, {"nombre": "Manzana", "precio": 4000}, {"nombre": "Manzana Canela", "precio": 4000}, {"nombre": "Manzana verde", "precio": 4000}, {"nombre": "Maracuyá", "precio": 4000}, {"nombre": "Melocotón", "precio": 4000}, {"nombre": "Menta", "precio": 4000}, {"nombre": "Naranja", "precio": 4000}, {"nombre": "Pepino", "precio": 4000}, {"nombre": "Primavera", "precio": 4000}, {"nombre": "Sábila", "precio": 4000}, {"nombre": "Sandía", "precio": 4000}, {"nombre": "Suave abril", "precio": 4000}, {"nombre": "Vainilla", "precio": 4000}, {"nombre": "Violeta", "precio": 4000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 1300,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl5",
+    "nombre": "Detergente líquido - Galón",
+    "tipo": "Limpieza",
+    "precio": 4500,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 4500}, {"nombre": "Bambú", "precio": 4500}, {"nombre": "Bebé", "precio": 4500}, {"nombre": "Canela", "precio": 4500}, {"nombre": "Cherry", "precio": 4500}, {"nombre": "Chicle", "precio": 4500}, {"nombre": "Ciprés", "precio": 4500}, {"nombre": "Coco", "precio": 4500}, {"nombre": "Eucalipto", "precio": 4500}, {"nombre": "Fantasía navideña", "precio": 4500}, {"nombre": "Floral", "precio": 4500}, {"nombre": "Fresa", "precio": 4500}, {"nombre": "Fresco amanecer", "precio": 4500}, {"nombre": "Frutal", "precio": 4500}, {"nombre": "Herbal", "precio": 4500}, {"nombre": "Kiwi", "precio": 4500}, {"nombre": "Lavanda", "precio": 4500}, {"nombre": "Limón", "precio": 4500}, {"nombre": "Manzana", "precio": 4500}, {"nombre": "Manzana Canela", "precio": 4500}, {"nombre": "Manzana verde", "precio": 4500}, {"nombre": "Maracuyá", "precio": 4500}, {"nombre": "Melocotón", "precio": 4500}, {"nombre": "Menta", "precio": 4500}, {"nombre": "Pepino", "precio": 4500}, {"nombre": "Pera", "precio": 4500}, {"nombre": "Primaveral", "precio": 4500}, {"nombre": "Sábila", "precio": 4500}, {"nombre": "Sandía", "precio": 4500}, {"nombre": "Suave abril", "precio": 4500}, {"nombre": "Vainilla", "precio": 4500}, {"nombre": "Violeta", "precio": 4500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 4000,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl6",
+    "nombre": "Detergente líquido - 1/2 Galón",
+    "tipo": "Limpieza",
+    "precio": 2700,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2700}, {"nombre": "Bambú", "precio": 2700}, {"nombre": "Bebé", "precio": 2700}, {"nombre": "Canela", "precio": 2700}, {"nombre": "Cherry", "precio": 2700}, {"nombre": "Chicle", "precio": 2700}, {"nombre": "Ciprés", "precio": 2700}, {"nombre": "Coco", "precio": 2700}, {"nombre": "Eucalipto", "precio": 2700}, {"nombre": "Fantasía navideña", "precio": 2700}, {"nombre": "Floral", "precio": 2700}, {"nombre": "Fresa", "precio": 2700}, {"nombre": "Fresco amanecer", "precio": 2700}, {"nombre": "Frutal", "precio": 2700}, {"nombre": "Herbal", "precio": 2700}, {"nombre": "Kiwi", "precio": 2700}, {"nombre": "Lavanda", "precio": 2700}, {"nombre": "Limón", "precio": 2700}, {"nombre": "Manzana", "precio": 2700}, {"nombre": "Manzana Canela", "precio": 2700}, {"nombre": "Manzana verde", "precio": 2700}, {"nombre": "Maracuyá", "precio": 2700}, {"nombre": "Melocotón", "precio": 2700}, {"nombre": "Menta", "precio": 2700}, {"nombre": "Pepino", "precio": 2700}, {"nombre": "Pera", "precio": 2700}, {"nombre": "Primaveral", "precio": 2700}, {"nombre": "Sábila", "precio": 2700}, {"nombre": "Sandía", "precio": 2700}, {"nombre": "Suave abril", "precio": 2700}, {"nombre": "Vainilla", "precio": 2700}, {"nombre": "Violeta", "precio": 2700}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2300,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl7",
+    "nombre": "Detergente líquido - Litro",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2500}, {"nombre": "Bambú", "precio": 2500}, {"nombre": "Bebé", "precio": 2500}, {"nombre": "Canela", "precio": 2500}, {"nombre": "Cherry", "precio": 2500}, {"nombre": "Chicle", "precio": 2500}, {"nombre": "Ciprés", "precio": 2500}, {"nombre": "Coco", "precio": 2500}, {"nombre": "Eucalipto", "precio": 2500}, {"nombre": "Fantasía navideña", "precio": 2500}, {"nombre": "Floral", "precio": 2500}, {"nombre": "Fresa", "precio": 2500}, {"nombre": "Fresco amanecer", "precio": 2500}, {"nombre": "Frutal", "precio": 2500}, {"nombre": "Herbal", "precio": 2500}, {"nombre": "Kiwi", "precio": 2500}, {"nombre": "Lavanda", "precio": 2500}, {"nombre": "Limón", "precio": 2500}, {"nombre": "Manzana", "precio": 2500}, {"nombre": "Manzana Canela", "precio": 2500}, {"nombre": "Manzana verde", "precio": 2500}, {"nombre": "Maracuyá", "precio": 2500}, {"nombre": "Melocotón", "precio": 2500}, {"nombre": "Menta", "precio": 2500}, {"nombre": "Pepino", "precio": 2500}, {"nombre": "Pera", "precio": 2500}, {"nombre": "Primaveral", "precio": 2500}, {"nombre": "Sábila", "precio": 2500}, {"nombre": "Sandía", "precio": 2500}, {"nombre": "Suave abril", "precio": 2500}, {"nombre": "Vainilla", "precio": 2500}, {"nombre": "Violeta", "precio": 2500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 2200,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl8",
+    "nombre": "Detergente Polvo - 3 kilos",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 4000}, {"nombre": "Bambú", "precio": 4000}, {"nombre": "Bebé", "precio": 4000}, {"nombre": "Canela", "precio": 4000}, {"nombre": "Cherry", "precio": 4000}, {"nombre": "Chicle", "precio": 4000}, {"nombre": "Ciprés", "precio": 4000}, {"nombre": "Coco", "precio": 4000}, {"nombre": "Eucalipto", "precio": 4000}, {"nombre": "Fantasía navideña", "precio": 4000}, {"nombre": "Floral", "precio": 4000}, {"nombre": "Fresa", "precio": 4000}, {"nombre": "Fresco amanecer", "precio": 4000}, {"nombre": "Frutal", "precio": 4000}, {"nombre": "Herbal", "precio": 4000}, {"nombre": "Kiwi", "precio": 4000}, {"nombre": "Lavanda", "precio": 4000}, {"nombre": "Limón", "precio": 4000}, {"nombre": "Manzana", "precio": 4000}, {"nombre": "Manzana Canela", "precio": 4000}, {"nombre": "Manzana verde", "precio": 4000}, {"nombre": "Maracuyá", "precio": 4000}, {"nombre": "Melocotón", "precio": 4000}, {"nombre": "Menta", "precio": 4000}, {"nombre": "Pepino", "precio": 4000}, {"nombre": "Pera", "precio": 4000}, {"nombre": "Primaveral", "precio": 4000}, {"nombre": "Sábila", "precio": 4000}, {"nombre": "Sandía", "precio": 4000}, {"nombre": "Suave abril", "precio": 4000}, {"nombre": "Vainilla", "precio": 4000}, {"nombre": "Violeta", "precio": 4000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3400,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl9",
+    "nombre": "Suavizante para telas - Galón",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 4000}, {"nombre": "Bambú", "precio": 4000}, {"nombre": "Bebé", "precio": 4000}, {"nombre": "Canela", "precio": 4000}, {"nombre": "Cherry", "precio": 4000}, {"nombre": "Chicle", "precio": 4000}, {"nombre": "Ciprés", "precio": 4000}, {"nombre": "Coco", "precio": 4000}, {"nombre": "Eucalipto", "precio": 4000}, {"nombre": "Fantasía navideña", "precio": 4000}, {"nombre": "Floral", "precio": 4000}, {"nombre": "Fresa", "precio": 4000}, {"nombre": "Fresco amanecer", "precio": 4000}, {"nombre": "Frutal", "precio": 4000}, {"nombre": "Herbal", "precio": 4000}, {"nombre": "Kiwi", "precio": 4000}, {"nombre": "Lavanda", "precio": 4000}, {"nombre": "Limón", "precio": 4000}, {"nombre": "Manzana", "precio": 4000}, {"nombre": "Manzana Canela", "precio": 4000}, {"nombre": "Manzana verde", "precio": 4000}, {"nombre": "Maracuyá", "precio": 4000}, {"nombre": "Melocotón", "precio": 4000}, {"nombre": "Menta", "precio": 4000}, {"nombre": "Pepino", "precio": 4000}, {"nombre": "Pera", "precio": 4000}, {"nombre": "Primaveral", "precio": 4000}, {"nombre": "Sábila", "precio": 4000}, {"nombre": "Sandía", "precio": 4000}, {"nombre": "Suave abril", "precio": 4000}, {"nombre": "Vainilla", "precio": 4000}, {"nombre": "Violeta", "precio": 4000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3300,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl10",
+    "nombre": "Suavizante para telas - 1/2 Galón",
+    "tipo": "Limpieza",
+    "precio": 2600,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2600}, {"nombre": "Bambú", "precio": 2600}, {"nombre": "Bebé", "precio": 2600}, {"nombre": "Canela", "precio": 2600}, {"nombre": "Cherry", "precio": 2600}, {"nombre": "Chicle", "precio": 2600}, {"nombre": "Ciprés", "precio": 2600}, {"nombre": "Coco", "precio": 2600}, {"nombre": "Eucalipto", "precio": 2600}, {"nombre": "Fantasía navideña", "precio": 2600}, {"nombre": "Floral", "precio": 2600}, {"nombre": "Fresa", "precio": 2600}, {"nombre": "Fresco amanecer", "precio": 2600}, {"nombre": "Frutal", "precio": 2600}, {"nombre": "Herbal", "precio": 2600}, {"nombre": "Kiwi", "precio": 2600}, {"nombre": "Lavanda", "precio": 2600}, {"nombre": "Limón", "precio": 2600}, {"nombre": "Manzana", "precio": 2600}, {"nombre": "Manzana Canela", "precio": 2600}, {"nombre": "Manzana verde", "precio": 2600}, {"nombre": "Maracuyá", "precio": 2600}, {"nombre": "Melocotón", "precio": 2600}, {"nombre": "Menta", "precio": 2600}, {"nombre": "Pepino", "precio": 2600}, {"nombre": "Pera", "precio": 2600}, {"nombre": "Primaveral", "precio": 2600}, {"nombre": "Sábila", "precio": 2600}, {"nombre": "Sandía", "precio": 2600}, {"nombre": "Suave abril", "precio": 2600}, {"nombre": "Vainilla", "precio": 2600}, {"nombre": "Violeta", "precio": 2600}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl11",
+    "nombre": "Suavizante para telas - Litro",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Detergentes",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2500}, {"nombre": "Bambú", "precio": 2500}, {"nombre": "Bebé", "precio": 2500}, {"nombre": "Canela", "precio": 2500}, {"nombre": "Cherry", "precio": 2500}, {"nombre": "Chicle", "precio": 2500}, {"nombre": "Ciprés", "precio": 2500}, {"nombre": "Coco", "precio": 2500}, {"nombre": "Eucalipto", "precio": 2500}, {"nombre": "Fantasía navideña", "precio": 2500}, {"nombre": "Floral", "precio": 2500}, {"nombre": "Fresa", "precio": 2500}, {"nombre": "Fresco amanecer", "precio": 2500}, {"nombre": "Frutal", "precio": 2500}, {"nombre": "Herbal", "precio": 2500}, {"nombre": "Kiwi", "precio": 2500}, {"nombre": "Lavanda", "precio": 2500}, {"nombre": "Limón", "precio": 2500}, {"nombre": "Manzana", "precio": 2500}, {"nombre": "Manzana Canela", "precio": 2500}, {"nombre": "Manzana verde", "precio": 2500}, {"nombre": "Maracuyá", "precio": 2500}, {"nombre": "Melocotón", "precio": 2500}, {"nombre": "Menta", "precio": 2500}, {"nombre": "Pepino", "precio": 2500}, {"nombre": "Pera", "precio": 2500}, {"nombre": "Primaveral", "precio": 2500}, {"nombre": "Sábila", "precio": 2500}, {"nombre": "Sandía", "precio": 2500}, {"nombre": "Suave abril", "precio": 2500}, {"nombre": "Vainilla", "precio": 2500}, {"nombre": "Violeta", "precio": 2500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 2000,
+    "imagen": "images/limpieza/detergente.png"
+  },
+  {
+    "id": "pl12",
+    "nombre": "Jabón para manos - Galón",
+    "tipo": "Limpieza",
+    "precio": 4500,
+    "categoria": "Jabones",
+    "variantes": [
+      {"nombre": "Bambú", "precio": 4500}, {"nombre": "Bebé", "precio": 4500}, {"nombre": "Canela", "precio": 4500}, {"nombre": "Cherry", "precio": 4500}, {"nombre": "Chicle", "precio": 4500}, {"nombre": "Ciprés", "precio": 4500}, {"nombre": "Coco", "precio": 4500}, {"nombre": "Eucalipto", "precio": 4500}, {"nombre": "Fantasía navideña", "precio": 4500}, {"nombre": "Floral", "precio": 4500}, {"nombre": "Fresa", "precio": 4500}, {"nombre": "Fresco amanecer", "precio": 4500}, {"nombre": "Frutal", "precio": 4500}, {"nombre": "Herbal", "precio": 4500}, {"nombre": "Kiwi", "precio": 4500}, {"nombre": "Lavanda", "precio": 4500}, {"nombre": "Limón", "precio": 4500}, {"nombre": "Manzana", "precio": 4500}, {"nombre": "Manzana Canela", "precio": 4500}, {"nombre": "Manzana verde", "precio": 4500}, {"nombre": "Maracuyá", "precio": 4500}, {"nombre": "Melocotón", "precio": 4500}, {"nombre": "Menta", "precio": 4500}, {"nombre": "Pepino", "precio": 4500}, {"nombre": "Pera", "precio": 4500}, {"nombre": "Primaveral", "precio": 4500}, {"nombre": "Sábila", "precio": 4500}, {"nombre": "Sandía", "precio": 4500}, {"nombre": "Suave abril", "precio": 4500}, {"nombre": "Vainilla", "precio": 4500}, {"nombre": "Violeta", "precio": 4500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3500,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl13",
+    "nombre": "Jabón para manos - 1/2 Galón",
+    "tipo": "Limpieza",
+    "precio": 2600,
+    "categoria": "Jabones",
+    "variantes": [
+      {"nombre": "Bambú", "precio": 2600}, {"nombre": "Bebé", "precio": 2600}, {"nombre": "Canela", "precio": 2600}, {"nombre": "Cherry", "precio": 2600}, {"nombre": "Chicle", "precio": 2600}, {"nombre": "Ciprés", "precio": 2600}, {"nombre": "Coco", "precio": 2600}, {"nombre": "Eucalipto", "precio": 2600}, {"nombre": "Fantasía navideña", "precio": 2600}, {"nombre": "Floral", "precio": 2600}, {"nombre": "Fresa", "precio": 2600}, {"nombre": "Fresco amanecer", "precio": 2600}, {"nombre": "Frutal", "precio": 2600}, {"nombre": "Herbal", "precio": 2600}, {"nombre": "Kiwi", "precio": 2600}, {"nombre": "Lavanda", "precio": 2600}, {"nombre": "Limón", "precio": 2600}, {"nombre": "Manzana", "precio": 2600}, {"nombre": "Manzana Canela", "precio": 2600}, {"nombre": "Manzana verde", "precio": 2600}, {"nombre": "Maracuyá", "precio": 2600}, {"nombre": "Melocotón", "precio": 2600}, {"nombre": "Menta", "precio": 2600}, {"nombre": "Pepino", "precio": 2600}, {"nombre": "Pera", "precio": 2600}, {"nombre": "Primaveral", "precio": 2600}, {"nombre": "Sábila", "precio": 2600}, {"nombre": "Sandía", "precio": 2600}, {"nombre": "Suave abril", "precio": 2600}, {"nombre": "Vainilla", "precio": 2600}, {"nombre": "Violeta", "precio": 2600}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl14",
+    "nombre": "Jabón para manos - Litro",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Jabones",
+    "variantes": [
+      {"nombre": "Bambú", "precio": 2500}, {"nombre": "Bebé", "precio": 2500}, {"nombre": "Canela", "precio": 2500}, {"nombre": "Cherry", "precio": 2500}, {"nombre": "Chicle", "precio": 2500}, {"nombre": "Ciprés", "precio": 2500}, {"nombre": "Coco", "precio": 2500}, {"nombre": "Eucalipto", "precio": 2500}, {"nombre": "Fantasía navideña", "precio": 2500}, {"nombre": "Floral", "precio": 2500}, {"nombre": "Fresa", "precio": 2500}, {"nombre": "Fresco amanecer", "precio": 2500}, {"nombre": "Frutal", "precio": 2500}, {"nombre": "Herbal", "precio": 2500}, {"nombre": "Kiwi", "precio": 2500}, {"nombre": "Lavanda", "precio": 2500}, {"nombre": "Limón", "precio": 2500}, {"nombre": "Manzana", "precio": 2500}, {"nombre": "Manzana Canela", "precio": 2500}, {"nombre": "Manzana verde", "precio": 2500}, {"nombre": "Maracuyá", "precio": 2500}, {"nombre": "Melocotón", "precio": 2500}, {"nombre": "Menta", "precio": 2500}, {"nombre": "Pepino", "precio": 2500}, {"nombre": "Pera", "precio": 2500}, {"nombre": "Primaveral", "precio": 2500}, {"nombre": "Sábila", "precio": 2500}, {"nombre": "Sandía", "precio": 2500}, {"nombre": "Suave abril", "precio": 2500}, {"nombre": "Vainilla", "precio": 2500}, {"nombre": "Violeta", "precio": 2500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2000,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl15",
+    "nombre": "Jabón para manos - 500ml con dosificador",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Jabones",
+    "variantes": [
+      {"nombre": "Bambú", "precio": 2500}, {"nombre": "Bebé", "precio": 2500}, {"nombre": "Canela", "precio": 2500}, {"nombre": "Cherry", "precio": 2500}, {"nombre": "Chicle", "precio": 2500}, {"nombre": "Ciprés", "precio": 2500}, {"nombre": "Coco", "precio": 2500}, {"nombre": "Eucalipto", "precio": 2500}, {"nombre": "Fantasía navideña", "precio": 2500}, {"nombre": "Floral", "precio": 2500}, {"nombre": "Fresa", "precio": 2500}, {"nombre": "Fresco amanecer", "precio": 2500}, {"nombre": "Frutal", "precio": 2500}, {"nombre": "Herbal", "precio": 2500}, {"nombre": "Kiwi", "precio": 2500}, {"nombre": "Lavanda", "precio": 2500}, {"nombre": "Limón", "precio": 2500}, {"nombre": "Manzana", "precio": 2500}, {"nombre": "Manzana Canela", "precio": 2500}, {"nombre": "Manzana verde", "precio": 2500}, {"nombre": "Maracuyá", "precio": 2500}, {"nombre": "Melocotón", "precio": 2500}, {"nombre": "Menta", "precio": 2500}, {"nombre": "Pepino", "precio": 2500}, {"nombre": "Pera", "precio": 2500}, {"nombre": "Primaveral", "precio": 2500}, {"nombre": "Sábila", "precio": 2500}, {"nombre": "Sandía", "precio": 2500}, {"nombre": "Suave abril", "precio": 2500}, {"nombre": "Vainilla", "precio": 2500}, {"nombre": "Violeta", "precio": 2500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2200,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl16",
+    "nombre": "Jabón para manos - 240 ml con dosificador",
+    "tipo": "Limpieza",
+    "precio": 1500,
+    "categoria": "Jabones",
+    "variantes": [
+      {"nombre": "Bambú", "precio": 1500}, {"nombre": "Bebé", "precio": 1500}, {"nombre": "Canela", "precio": 1500}, {"nombre": "Cherry", "precio": 1500}, {"nombre": "Chicle", "precio": 1500}, {"nombre": "Ciprés", "precio": 1500}, {"nombre": "Coco", "precio": 1500}, {"nombre": "Eucalipto", "precio": 1500}, {"nombre": "Fantasía navideña", "precio": 1500}, {"nombre": "Floral", "precio": 1500}, {"nombre": "Fresa", "precio": 1500}, {"nombre": "Fresco amanecer", "precio": 1500}, {"nombre": "Frutal", "precio": 1500}, {"nombre": "Herbal", "precio": 1500}, {"nombre": "Kiwi", "precio": 1500}, {"nombre": "Lavanda", "precio": 1500}, {"nombre": "Limón", "precio": 1500}, {"nombre": "Manzana", "precio": 1500}, {"nombre": "Manzana Canela", "precio": 1500}, {"nombre": "Manzana verde", "precio": 1500}, {"nombre": "Maracuyá", "precio": 1500}, {"nombre": "Melocotón", "precio": 1500}, {"nombre": "Menta", "precio": 1500}, {"nombre": "Pepino", "precio": 1500}, {"nombre": "Pera", "precio": 1500}, {"nombre": "Primaveral", "precio": 1500}, {"nombre": "Sábila", "precio": 1500}, {"nombre": "Sandía", "precio": 1500}, {"nombre": "Suave abril", "precio": 1500}, {"nombre": "Vainilla", "precio": 1500}, {"nombre": "Violeta", "precio": 1500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 1200,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl17",
+    "nombre": "Desinfectante - Galón",
+    "tipo": "Limpieza",
+    "precio": 1500,
+    "categoria": "Desinfectantes",
+    "variantes": [
+      {"nombre": "Canela", "precio": 1500}, {"nombre": "Ciprés", "precio": 1500}, {"nombre": "Floral", "precio": 1500}, {"nombre": "Frutal", "precio": 1500}, {"nombre": "Lavanda", "precio": 1500}, {"nombre": "Limón", "precio": 1500}, {"nombre": "Manzana", "precio": 1500}, {"nombre": "Maracuyá", "precio": 1500}, {"nombre": "Suave abril", "precio": 1500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 1100,
+    "imagen": "images/limpieza/desinfectante.png"
+  },
+  {
+    "id": "pl18",
+    "nombre": "Limpiador Sanitizante Amonio Cuaternario - Galón",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Sanitizantes",
+    "variantes": [
+      {"nombre": "Limón", "precio": 4000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3000,
+    "imagen": "images/limpieza/amonio.png"
+  },
+  {
+    "id": "pl19",
+    "nombre": "Limpiador Sanitizante Amonio Cuaternario - 1/2 Galón",
+    "tipo": "Limpieza",
+    "precio": 2600,
+    "categoria": "Sanitizantes",
+    "variantes": [
+      {"nombre": "Limón", "precio": 2600}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/amonio.png"
+  },
+  {
+    "id": "pl20",
+    "nombre": "Limpiador Sanitizante Amonio Cuaternario - Litro",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Sanitizantes",
+    "variantes": [
+      {"nombre": "Limón", "precio": 2500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2000,
+    "imagen": "images/limpieza/amonio.png"
+  },
+  {
+    "id": "pl21",
+    "nombre": "Controlador de olores - Galón",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Controladores",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 4000}, {"nombre": "Bambú", "precio": 4000}, {"nombre": "Bebé", "precio": 4000}, {"nombre": "Cherry", "precio": 4000}, {"nombre": "Chicle", "precio": 4000}, {"nombre": "Eucalipto", "precio": 4000}, {"nombre": "Herbal", "precio": 4000}, {"nombre": "Melocotón", "precio": 4000}, {"nombre": "Kiwi", "precio": 4000}, {"nombre": "Menta", "precio": 4000}, {"nombre": "Vainilla", "precio": 4000}, {"nombre": "Violeta", "precio": 4000}, {"nombre": "Lavanda", "precio": 4000}, {"nombre": "Limón", "precio": 4000}, {"nombre": "Manzana verde", "precio": 4000}, {"nombre": "Pera", "precio": 4000}, {"nombre": "Primaveral", "precio": 4000}, {"nombre": "Pepino", "precio": 4000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3000,
+    "imagen": "images/limpieza/controlador.png"
+  },
+  {
+    "id": "pl22",
+    "nombre": "Controlador de olores - 1/2 Galón",
+    "tipo": "Limpieza",
+    "precio": 2600,
+    "categoria": "Controladores",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2600}, {"nombre": "Bambú", "precio": 2600}, {"nombre": "Bebé", "precio": 2600}, {"nombre": "Cherry", "precio": 2600}, {"nombre": "Chicle", "precio": 2600}, {"nombre": "Eucalipto", "precio": 2600}, {"nombre": "Herbal", "precio": 2600}, {"nombre": "Melocotón", "precio": 2600}, {"nombre": "Kiwi", "precio": 2600}, {"nombre": "Menta", "precio": 2600}, {"nombre": "Vainilla", "precio": 2600}, {"nombre": "Violeta", "precio": 2600}, {"nombre": "Lavanda", "precio": 2600}, {"nombre": "Limón", "precio": 2600}, {"nombre": "Manzana verde", "precio": 2600}, {"nombre": "Pera", "precio": 2600}, {"nombre": "Primaveral", "precio": 2600}, {"nombre": "Pepino", "precio": 2600}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/controlador.png"
+  },
+  {
+    "id": "pl23",
+    "nombre": "Controlador de olores - Litro con atomizador",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Controladores",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2500}, {"nombre": "Bambú", "precio": 2500}, {"nombre": "Bebé", "precio": 2500}, {"nombre": "Cherry", "precio": 2500}, {"nombre": "Chicle", "precio": 2500}, {"nombre": "Eucalipto", "precio": 2500}, {"nombre": "Herbal", "precio": 2500}, {"nombre": "Melocotón", "precio": 2500}, {"nombre": "Kiwi", "precio": 2500}, {"nombre": "Menta", "precio": 2500}, {"nombre": "Vainilla", "precio": 2500}, {"nombre": "Violeta", "precio": 2500}, {"nombre": "Lavanda", "precio": 2500}, {"nombre": "Limón", "precio": 2500}, {"nombre": "Manzana verde", "precio": 2500}, {"nombre": "Pera", "precio": 2500}, {"nombre": "Primaveral", "precio": 2500}, {"nombre": "Pepino", "precio": 2500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 1900,
+    "imagen": "images/limpieza/controlador.png"
+  },
+  {
+    "id": "pl24",
+    "nombre": "Controlador de olores - Litro sin atomizador",
+    "tipo": "Limpieza",
+    "precio": 2100,
+    "categoria": "Controladores",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 2100}, {"nombre": "Bambú", "precio": 2100}, {"nombre": "Bebé", "precio": 2100}, {"nombre": "Cherry", "precio": 2100}, {"nombre": "Chicle", "precio": 2100}, {"nombre": "Eucalipto", "precio": 2100}, {"nombre": "Herbal", "precio": 2100}, {"nombre": "Melocotón", "precio": 2100}, {"nombre": "Kiwi", "precio": 2100}, {"nombre": "Menta", "precio": 2100}, {"nombre": "Vainilla", "precio": 2100}, {"nombre": "Violeta", "precio": 2100}, {"nombre": "Lavanda", "precio": 2100}, {"nombre": "Limón", "precio": 2100}, {"nombre": "Manzana verde", "precio": 2100}, {"nombre": "Pera", "precio": 2100}, {"nombre": "Primaveral", "precio": 2100}, {"nombre": "Pepino", "precio": 2100}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 1600,
+    "imagen": "images/limpieza/controlador.png"
+  },
+  {
+    "id": "pl25",
+    "nombre": "Controlador de olores - 240 ml con rociador",
+    "tipo": "Limpieza",
+    "precio": 1700,
+    "categoria": "Controladores",
+    "variantes": [
+      {"nombre": "Ariel", "precio": 1700}, {"nombre": "Bambú", "precio": 1700}, {"nombre": "Bebé", "precio": 1700}, {"nombre": "Cherry", "precio": 1700}, {"nombre": "Chicle", "precio": 1700}, {"nombre": "Eucalipto", "precio": 1700}, {"nombre": "Herbal", "precio": 1700}, {"nombre": "Melocotón", "precio": 1700}, {"nombre": "Kiwi", "precio": 1700}, {"nombre": "Menta", "precio": 1700}, {"nombre": "Vainilla", "precio": 1700}, {"nombre": "Violeta", "precio": 1700}, {"nombre": "Lavanda", "precio": 1700}, {"nombre": "Limón", "precio": 1700}, {"nombre": "Manzana verde", "precio": 1700}, {"nombre": "Pera", "precio": 1700}, {"nombre": "Primaveral", "precio": 1700}, {"nombre": "Pepino", "precio": 1700}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 1400,
+    "imagen": "images/limpieza/controlador.png"
+  },
+  {
+    "id": "pl26",
+    "nombre": "Neutralizador para  Malos olores de Mascotas - Galon ",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Controladores",
+    "variantes": [
+      {"nombre": "Fresco amanecer", "precio": 4000}, {"nombre": "Pepino", "precio": 4000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3000,
+    "imagen": "images/limpieza/mascotas.png"
+  },
+  {
+    "id": "pl27",
+    "nombre": "Abrillantador para cerámica y porcelanato - Galón",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Abrillantadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 4000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3000,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl28",
+    "nombre": "Abrillantador para muebles y superficies - Galón",
+    "tipo": "Limpieza",
+    "precio": 9200,
+    "categoria": "Abrillantadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 9200}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 8100,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl29",
+    "nombre": "Abrillantador para muebles y superficies - 1/2 Galón",
+    "tipo": "Limpieza",
+    "precio": 4800,
+    "categoria": "Abrillantadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 4800}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 4200,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl30",
+    "nombre": "Abrillantador para muebles y superficies - Litro",
+    "tipo": "Limpieza",
+    "precio": 3000,
+    "categoria": "Abrillantadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 3000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2500,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl31",
+    "nombre": "Abrillantador para muebles y superficies - 240 ml con rociador",
+    "tipo": "Limpieza",
+    "precio": 2000,
+    "categoria": "Abrillantadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 2000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 1500,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl32",
+    "nombre": "Alcohol en gel - Galón",
+    "tipo": "Limpieza",
+    "precio": 8000,
+    "categoria": "Alcoholes",
+    "variantes": [
+      {"nombre": "Única", "precio": 8000}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 6900,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl33",
+    "nombre": "Alcohol líquido - Litro con atomizador",
+    "tipo": "Limpieza",
+    "precio": 3500,
+    "categoria": "Alcoholes",
+    "variantes": [
+      {"nombre": "Única", "precio": 3500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3000,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl34",
+    "nombre": "Lavaplatos líquido - Galón",
+    "tipo": "Limpieza",
+    "precio": 4300,
+    "categoria": "Lavaplatos",
+    "variantes": [
+      {"nombre": "Limón", "precio": 4300}, {"nombre": "Pepino", "precio": 4300}, {"nombre": "Naranja", "precio": 4300}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3900,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl35",
+    "nombre": "Lavaplatos crema - Kilo",
+    "tipo": "Limpieza",
+    "precio": 1100,
+    "categoria": "Lavaplatos",
+    "variantes": [
+      {"nombre": "Limón", "precio": 1100}, {"nombre": "Pepino", "precio": 1100}, {"nombre": "Naranja", "precio": 1100}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 900,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl36",
+    "nombre": "Limpiador multiuso - Galón",
+    "tipo": "Limpieza",
+    "precio": 3400,
+    "categoria": "Limpiadores",
+    "variantes": [
+      {"nombre": "Naranja", "precio": 3400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2800,
+    "imagen": "images/limpieza/limpieza/default.png"
+  },
+  {
+    "id": "pl37",
+    "nombre": "Limpiador de baños - Galón",
+    "tipo": "Limpieza",
+    "precio": 3800,
+    "categoria": "Limpiadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 3800}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3200,
+    "imagen": "images/limpieza/baños.png"
+  },
+  {
+    "id": "pl38",
+    "nombre": "Limpiador de vidrios - Galón",
+    "tipo": "Limpieza",
+    "precio": 3200,
+    "categoria": "Limpiadores",
+    "variantes": [
+      {"nombre": "Única", "precio": 3200}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2600,
+    "imagen": "images/limpieza/vidrios.png"
+  },
+  {
+    "id": "pl39",
+    "nombre": "Shampoo para carro - Galón",
+    "tipo": "Limpieza",
+    "precio": 4400,
+    "categoria": "Vehículos",
+    "variantes": [
+      {"nombre": "Manzana", "precio": 4400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 4000,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl40",
+    "nombre": "Compuesto de citronela - Galón",
+    "tipo": "Limpieza",
+    "precio": 4000,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Citronela", "precio": 4000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3200,
+    "imagen": "images/limpieza/citronela.png"
+  },
+  {
+    "id": "pl41",
+    "nombre": "Cloro 12% - Galón",
+    "tipo": "Limpieza",
+    "precio": 3600,
+    "categoria": "Cloros",
+    "variantes": [
+      {"nombre": "Única", "precio": 3600}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 3000,
+    "imagen": "images/limpieza/cloro.png"
+  },
+  {
+    "id": "pl42",
+    "nombre": "Cloro 6% - Galón",
+    "tipo": "Limpieza",
+    "precio": 2300,
+    "categoria": "Cloros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2300}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 1900,
+    "imagen": "images/limpieza/cloro.png"
+  },
+  {
+    "id": "pl43",
+    "nombre": "Cloro 3.5% - Galón",
+    "tipo": "Limpieza",
+    "precio": 1500,
+    "categoria": "Cloros",
+    "variantes": [
+      {"nombre": "Única", "precio": 1500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 1000,
+    "imagen": "images/limpieza/cloro.png"
+  },
+  {
+    "id": "pl44",
+    "nombre": "Pastilla de cloro - 1 unidad",
+    "tipo": "Limpieza",
+    "precio": 2000,
+    "categoria": "Cloros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2000}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 1800,
+    "imagen": "images/limpieza/cloro.png"
+  },
+  {
+    "id": "pl45",
+    "nombre": "Sustituto de cloro - Galón",
+    "tipo": "Limpieza",
+    "precio": 2800,
+    "categoria": "Cloros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2800}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2400,
+    "imagen": "images/limpieza/cloros/sustituto_cloro_galon.png"
+  },
+  {
+    "id": "pl46",
+    "nombre": "Vinagre - Galón",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Cloros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2500}
+    ],
+    "stock": 50,
+    "activo": true,
+    "precioCompra": 2000,
+    "imagen": "images/limpieza/default.png"
+  },
+  {
+    "id": "pl47",
+    "nombre": "Bolsa jardín basura - Rollo 25 unidades",
+    "tipo": "Limpieza",
+    "precio": 4900,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 4900}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 4500,
+    "imagen": "images/limpieza/limpieza/bolsa_jardin_basura_rollo_25u.png"
+  },
+  {
+    "id": "pl48",
+    "nombre": "Bolsa grande basura - Rollo 50 unidades",
+    "tipo": "Limpieza",
+    "precio": 4900,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 4900}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 4500,
+    "imagen": "images/limpieza/limpieza/bolsa_grande_basura_rollo_50u.png"
+  },
+  {
+    "id": "pl49",
+    "nombre": "Bolsa mediana basura - Rollo 100 unidades",
+    "tipo": "Limpieza",
+    "precio": 3800,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 3800}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 3500,
+    "imagen": "images/limpieza/limpieza/bolsa_mediana_basura_rollo_100u.png"
+  },
+  {
+    "id": "pl50",
+    "nombre": "Bolsa pequeña basura - Rollo 100 unidades",
+    "tipo": "Limpieza",
+    "precio": 2500,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2500}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2300,
+    "imagen": "images/limpieza/limpieza/bolsa_pequena_basura_rollo_100u.png"
+  },
+  {
+    "id": "pl51",
+    "nombre": "Bolsas kilo color manigueta 12 x 25",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsas_kilo_manigueta_12x25.png"
+  },
+  {
+    "id": "pl52",
+    "nombre": "Bolsas kilo color manigueta 17 x 35",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsas_kilo_manigueta_17x35.png"
+  },
+  {
+    "id": "pl53",
+    "nombre": "Bolsa kilo color manigueta 10 x 20",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsa_kilo_manigueta_10x20.png"
+  },
+  {
+    "id": "pl54",
+    "nombre": "Bolsa Kilo color manigueta 7 x 14",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsa_kilo_manigueta_7x14.png"
+  },
+  {
+    "id": "pl55",
+    "nombre": "Bolsa kilo color manigueta 8 x 16",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsa_kilo_manigueta_8x16.png"
+  },
+  {
+    "id": "pl56",
+    "nombre": "Bolsa kilo negra jardín - 5 unidades",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsa_kilo_negra_jardin_5u.png"
+  },
+  {
+    "id": "pl57",
+    "nombre": "Bolsa kilo negra 24 x 40",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsa_kilo_negra_24x40.png"
+  },
+  {
+    "id": "pl58",
+    "nombre": "Bolsa kilo negra 30 x 40",
+    "tipo": "Limpieza",
+    "precio": 2400,
+    "categoria": "Otros",
+    "variantes": [
+      {"nombre": "Única", "precio": 2400}
+    ],
+    "stock": 0,
+    "activo": false,
+    "precioCompra": 2100,
+    "imagen": "images/limpieza/limpieza/bolsa_kilo_negra_30x40.png"
+  }
+]

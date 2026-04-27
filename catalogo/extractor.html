@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔍 Extractor Estructura Firestore</title>
+  <style>
+    :root { --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --accent: #38bdf8; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 2rem; max-width: 900px; margin: auto; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent); }
+    textarea { width: 100%; height: 60px; background: var(--card); color: var(--text); border: 1px solid #334155; padding: 10px; border-radius: 8px; font-family: monospace; resize: vertical; }
+    button { background: var(--accent); color: #0f172a; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    button:hover { opacity: 0.9; }
+    button:disabled { opacity: 0.5; cursor: wait; }
+    pre { background: #0b1120; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-top: 1rem; font-size: 0.85rem; line-height: 1.4; }
+    .status { margin-top: 10px; font-size: 0.9rem; color: #94a3b8; }
+    .copy-btn { background: #334155; margin-left: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Extractor de Estructura Firestore</h1>
+  <p>Ingresa los nombres de las colecciones (separadas por coma):</p>
+  <textarea id="collections">clientesBD, stock, facturas, promociones, registroVisitas, notificaciones</textarea>
+  <button id="btnExtract" onclick="extractSchema()">📥 Extraer Estructura</button>
+  <button class="copy-btn" onclick="copyOutput()">📋 Copiar Resultado</button>
+  <div class="status" id="status">Listo para extraer...</div>
+  <pre id="output"></pre>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
+      authDomain: "esentiacreditos-8345f.firebaseapp.com",
+      projectId: "esentiacreditos-8345f",
+      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
+      messagingSenderId: "888658236080",
+      appId: "1:888658236080:web:506e5e2085b5a452dba175"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.extractSchema = async function() {
+      const btn = document.getElementById('btnExtract');
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+      
+      btn.disabled = true;
+      status.textContent = '⏳ Conectando y analizando...';
+      output.textContent = '';
+
+      const cols = document.getElementById('collections').value.split(',').map(c => c.trim()).filter(Boolean);
+      const schema = {};
+
+      for (const col of cols) {
+        try {
+          const snap = await getDocs(collection(db, col));
+          if (snap.empty) {
+            schema[col] = { total: 0, note: "Colección vacía" };
+            continue;
+          }
+          const sample = snap.docs[0].data();
+          schema[col] = {
+            totalDocs: snap.size,
+            fields: analyzeFields(sample)
+          };
+        } catch (e) {
+          schema[col] = { error: e.code || e.message, hint: "Verifica reglas de lectura en Firebase" };
+        }
+      }
+
+      output.textContent = JSON.stringify(schema, null, 2);
+      status.textContent = '✅ Extracción completa. Revisa el resultado abajo.';
+      btn.disabled = false;
+    }
+
+    function analyzeFields(obj, depth = 0) {
+      if (depth > 2) return "{...} (nivel >2)";
+      if (obj === null || obj === undefined) return "null";
+      if (Array.isArray(obj)) {
+        if (obj.length === 0) return "array[]";
+        return `array<${analyzeFields(obj[0], depth+1)}>`;
+      }
+      if (obj?.toDate && typeof obj.toDate === 'function') return "Timestamp";
+      if (typeof obj === 'object') {
+        const keys = Object.keys(obj);
+        if (keys.length === 0) return "{}";
+        const nested = keys.reduce((acc, k, i) => {
+          if (i < 4) acc[k] = analyzeFields(obj[k], depth+1);
+          return acc;
+        }, {});
+        return keys.length > 4 ? { ...nested, "...": "y más campos" } : nested;
+      }
+      if (typeof obj === 'string') return obj.length > 25 ? `"${obj.slice(0,25)}..."` : `"${obj}"`;
+      return obj;
+    }
+
+    window.copyOutput = function() {
+      const text = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(text).then(() => alert('✅ Copiado al portapapeles'));
+    }
+  </script>
+</body>
+</html>

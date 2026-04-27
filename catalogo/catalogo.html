@@ -1,465 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Esentia | Esencias Premium</title>
-  <link rel="icon" href="https://wil1979.github.io/esentia-factura/images/logo.png" sizes="192x192" />
-  <!-- Preconnect a GitHub para faster fetch -->
-  <link rel="preconnect" href="https://wil1979.github.io">
-  <link rel="dns-prefetch" href="https://wil1979.github.io">
+  <link rel="icon" href="https://wil1979.github.io/esentia-factura/images/logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="esentia-optimizado.css">
+  <!-- PWA Config -->
+  <link rel="manifest" href="/manifest.json">
 
-<!-- Preload del JSON de productos -->
-<link rel="preload" href="https://wil1979.github.io/esentia-factura/productos_esentia.json" as="fetch" crossorigin>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="esentia.css">
 </head>
-
 <body>
-  <!-- Header -->
+
+  <!-- HEADER -->
   <header class="header">
     <div class="header-content">
       <div class="header-left">
-        <img src="https://wil1979.github.io/esentia-factura/images/logo.png" alt="Esentia" class="logo">
+        <img src="https://wil1979.github.io/esentia-factura/images/logo.png" alt="Esentia Logo" class="logo">
         <div class="brand-text">
-            <h1 style="font-family: 'adelia', cursive;">Esentia</h1>
-            <style>
-            @font-face {
-              font-family: 'adelia';
-              src: url('https://fonts.cdnfonts.com/s/16286/ADELIA.otf') format('opentype');
-              font-weight: normal;
-              font-style: normal;
-            }
-            </style>
-          <p>Fragancias que Enamoran</p>
+          <!-- <h1>Esentia</h1> 
+          <p>Fragancias que Enamoran</p>-->
         </div>
       </div>
       <div class="header-right">
         <div id="panelUsuario" class="user-panel" style="display:none;">
-          <span id="nombreUsuario"></span>
-          <button onclick="abrirHistorial()" class="btn-historial" title="Ver historial">📋 Historial</button>
-          <button onclick="cerrarSesion()" class="btn-cerrar-sesion">Salir</button>
+          <span id="nombreUsuario">Usuario</span>
+          <button onclick="AuthManager.logout()">Salir</button>
+          <button id="btnHistorial">📋 Historial</button>        
+
         </div>
-        <button id="btnLogin" onclick="abrirLoginRegistro()" class="btn-login">Iniciar sesión</button>
-        <button id="btnAdminVelas" onclick="window.location.href='admin-velas.html'" style="display:none;">🕯️ Admin</button>
-      </div>
-    <!-- Menú Admin Dropdown -->
-<div class="admin-dropdown" style="display:none;" id="adminDropdownContainer">
-    <button id="btnAdminVelas" class="btn-admin-main" onclick="toggleAdminMenu()">
-        🕯️ Admin <span class="dropdown-arrow">▼</span>
-    </button>
-    
-    <div id="adminMenu" class="admin-menu-content" style="display:none;">
-        <!-- Sección: Visitas -->
-        <div class="admin-menu-section">
-            <div class="admin-section-title">👁️ Tráfico</div>
-            <button onclick="mostrarPanelVisitasAdmin()">
-                <span class="icon">👁️</span> Ver Visitas Recientes
-            </button>
-            <button onclick="mostrarEstadisticas()">
-                <span class="icon">📊</span> Estadísticas del Sitio
-            </button>
+        <button id="btnLogin" class="btn-login">Iniciar sesión</button>
+        
+        
+        <div id="adminDropdownContainer" class="admin-dropdown" style="display:none;">
+          <button id="btnToggleAdmin" class="btn-admin">🕯️ Admin ▼</button>
+          <div id="adminMenu" class="admin-menu">
+
+            <button data-admin-action="invoice">🧾 Facturación</button>
+            <button data-admin-action="facturacion">🧾 Facturación 2.0</button>
+            <button data-admin-action="editFactura">📝 Editor Facturas</button>
+            <button data-admin-action="historialCompras">📦 Historial Compras</button>
+            <button data-admin-action="impresion">🖨️ Imprimir/Exportar</button>
+
+            <button data-admin-action="cobros">💰 Cobros / Abonos</button>
+            <button data-admin-action="pedidos">📦 Pedidos Pendientes</button>
+
+            <button data-admin-action="clientesAdmin">👥 Gestión Clientes</button>
+            <button data-admin-action="userAdmin">👥 Gestión Usuarios</button>
+            <button data-admin-action="loyaltyAdmin">🏆 Puntos Lealtad</button>
+
+            <button data-admin-action="backup">💾 Respaldo</button>         <!-- ✅ NUEVO -->
+                     
+            <button data-admin-action="proformas">📄 Proformas Compra</button>
+            <button data-admin-action="compras">📦 Compras Proveedores</button>
+            <button data-admin-action="inventory">📦 Inventario</button>
+            <button data-admin-action="stockAlert">⚠️ Stock Crítico</button> <!-- ✅ NUEVO -->
+
+            <button data-admin-action="visits">👁️ Visitas</button>
+            <button data-admin-action="promos">🎁 Promociones</button>             
+             
+            <button data-admin-action="notify">🔔 Notificación</button>
+            <button data-admin-action="stats">📊 Estadísticas</button>
+            <button data-admin-action="dashboard">📊 Dashboard</button>
             
+          </div>
         </div>
-        
-    
-        <!-- Sección: Pedidos -->
-        <div class="admin-menu-section">
-            <div class="admin-section-title">🛒 Pedidos</div>
-            <button onclick="verPedidosPendientes()">
-                <span class="icon">⏳</span> Pedidos Pendientes
-            </button>
-            <button onclick="verHistorialCompleto()">
-                <span class="icon">📋</span> Historial Completo
-            </button>
-        </div>
-        
-        <!-- Sección: Marketing -->
-        <div class="admin-menu-section">
-            <div class="admin-section-title">📣 Marketing</div>
-            <button onclick="cargarPromosAdmin();">
-                <span class="icon">🎁</span> Ver Códigos Promo
-            </button>
-            <button onclick="enviarNotificacionMasiva()">
-                <span class="icon">🔔</span> Notificación Masiva
-            </button>
-             <button onclick="generarCodigoPromoAuto()">➕🎁Generar Código</button>
-             <div id="listaPromos"></div>
-
-
-            
-        </div>
-
-
-        <!-- En la sección de Productos del menú admin -->
-<div class="admin-menu-section">
-     <div class="admin-section-title">📦 Facturacion</div>
-        <button onclick="abrirModalFacturacion()" class="btn-submit">
-        🧾 Facturar rápido
-       </button>
-
-    <div class="admin-section-title">📦 Productos</div>
-      <button onclick="gestionarInventario()">
-        <span class="icon">📋</span> Gestionar Inventario
-      </button>
-    <button onclick="verProductosAgotados()">
-        <span class="icon">⚠️</span> Productos Agotados
-    </button>
-    <button onclick="exportarInventario()">
-        <span class="icon">📥</span> Exportar Inventario
-    </button>
-    <button onclick="importarInventario()">
-        <span class="icon">📤</span> Importar CSV
-    </button>
-</div>
-        
-        <!-- Sección: Sistema -->
-        <div class="admin-menu-section">
-            <div class="admin-section-title">⚙️ Sistema</div>
-            <button onclick="limpiarCache()">
-                <span class="icon">🧹</span> Limpiar Caché
-            </button>
-            <button onclick="verLogsErrores()">
-                <span class="icon">🐛</span> Ver Logs de Errores
-            </button>
-            <button onclick="cerrarSesionAdmin()" class="btn-danger">
-                <span class="icon">🚪</span> Salir de Admin
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Panel de Visitas (ya existe, solo asegurarse que esté) -->
-<div id="panelVisitas" class="hidden">
-  <div class="dashboard-container">
-
-    <div class="dashboard-header">
-      <h2>📊 Dashboard de Visitas</h2>
-      <button onclick="cerrarPanelVisitas()">✖</button>
-    </div>
-
-    <div class="dashboard-cards">
-      <div class="card">
-        <h3 id="totalVisitas">0</h3>
-        <p>Total Visitas</p>
-      </div>
-
-      <div class="card">
-        <h3 id="visitantesUnicos">0</h3>
-        <p>Visitantes Únicos</p>
-      </div>
-
-      <div class="card">
-        <h3 id="visitasHoy">0</h3>
-        <p>Visitas Hoy</p>
       </div>
     </div>
-
-    <div class="dashboard-grid">
-      <div>
-        <h3>🏆 Top Visitantes</h3>
-        <div id="topVisitantes"></div>
-      </div>
-
-      <div>
-        <h3>📅 Visitas por Día</h3>
-        <div id="visitasPorDia"></div>
-      </div>
-    </div>
-
-  </div>
-</div>
-<!-- Panel de Estadísticas (NUEVO) -->
-<div id="panelEstadisticas" class="admin-panel hidden">
-    <div class="admin-panel-header">
-        <h3>📊 Estadísticas del Sitio</h3>
-        <button onclick="cerrarPanelEstadisticas()" class="btn-close">×</button>
-    </div>
-    <div id="contenidoEstadisticas" class="admin-panel-content"></div>
-</div>
-      
-    </div>
-<!-- Barra de búsqueda y filtros 
-<input type="text" id="searchInput" placeholder="🔍 Buscar esencias, beneficios..." />
-<button id="btnFiltros" type="button">🎛️ Filtros</button>
-<button id="btnComparador" type="button" style="display:none;">⚖️ (<span id="countComparador">0</span>)</button>
-
- Panel de filtros (inicialmente oculto) -->
-<div id="panelFiltros" style="display:none;">
-    <select id="filtroTipo">
-        <option value="">Todos los tipos</option>
-        <!-- Se llena dinámicamente -->
-    </select>
-    <input type="number" id="filtroPrecioMin" placeholder="Precio mín">
-    <input type="number" id="filtroPrecioMax" placeholder="Precio máx">
-    <button type="button">Aplicar</button>
-    <button type="button">Limpiar</button>
-</div>
-
-<!-- Modal Comparador -->
-<div id="modalComparador" class="modal-carrito" style="display:none;">
-    <div class="modal-content">
-        <span class="close" onclick="cerrarComparador()">&times;</span>
-        <h2>Comparar Productos</h2>
-        <div id="comparadorGrid" class="grid-comparador"></div>
-    </div>
-</div>
-
+   
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Descubre Nuestras Esencias</h2>
-      <p>Aromas premium seleccionados para crear ambientes únicos y memorables</p>
-    </div>
-  </section>
+  
+  <!-- TOOLBAR 
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="🔍 Buscar esencias, beneficios...">
+    <button id="btnFiltros">🎛️ Filtros</button>
+  </div>-->
 
-  <!-- Main Content -->
+  <div id="panelFiltros" style="display:none;">
+    <select id="filtroTipo"><option value="">Todos los tipos</option></select>
+    <input type="number" id="filtroPrecioMin" placeholder="Precio mín">
+    <input type="number" id="filtroPrecioMax" placeholder="Precio máx">
+    <button id="btnAplicarFiltros">Aplicar</button>
+    <button onclick="App.clearFilters()" style="background:#e74c3c;color:white;border:none;">Limpiar</button>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
   <main class="contenedor">
-    <!-- Reemplaza el loader actual por: -->
-<div id="loader">
-    <div class="loader-spinner"></div>
-    <p>Cargando esencias...</p>
-    <p style="font-size:0.8rem;color:#666;margin-top:10px;">
-        ⏳ Esto solo toma unos segundos
-    </p>
-</div>
-    <div id="productos-hogar"></div>
-
-    <div class="acciones-container">
-      <h3>¿Necesitas algo especial?</h3>
-      <button onclick="solicitarAroma()" class="btn-accion btn-primario">🌸 Solicitar aroma personalizado</button>
-      <button onclick="copiarEnlaceRecomendacion()" class="btn-accion btn-secundario">🔗 Compartir catálogo</button>
+    <div id="loader" class="loader">
+      <div class="loader-spinner"></div>
+      <p>Cargando esencias...</p>
     </div>
+    <div id="productos-container" style="display:none;"></div>
   </main>
 
-  <!-- Modal Producto -->
-  <div id="modalProducto" class="modal-carrito">
-    <div class="modal-contenido">
-      <button onclick="cerrarModalProducto()" class="modal-cerrar">×</button>
-      <h2 class="modal-titulo" id="modalProductoNombre"></h2>
-      <img id="modalProductoImagen" src="" alt="Producto" class="producto-detalle-img">
-      <p class="producto-detalle-info" id="modalProductoInfo"></p>
-      <p class="producto-detalle-info" id="modalProductoUso"></p>
-      <div class="producto-detalle-precio" id="modalProductoPrecio"></div>
-      <div id="selectorVariante"></div>
-      <button onclick="agregarAlCarritoDesdeModal()" class="btn-submit">🛒 Agregar al carrito</button>
-    </div>
-  </div>
+  <!-- LEALTAD -->
+  <div id="loyaltyContainer"></div>
 
-  <!-- Modal Carrito -->
-  <div id="modalCarrito" class="modal-carrito">
-    <div class="modal-contenido">
-      <button onclick="cerrarModalCarrito()" class="modal-cerrar">×</button>
-      <h2 class="modal-titulo">Tu Carrito</h2>
-      <ul id="listaCarrito" class="lista-carrito"></ul>
-      <div class="carrito-total" id="totalModal">Total: ₡0</div>
-      <input type="text" id="codigoPremio" placeholder="Código de promoción" class="input-codigo">
-      <button onclick="aplicarCodigoPremio()" class="btn-submit" style="margin-bottom: 10px;">🎁 Aplicar código</button>
-      <button onclick="finalizarPedido()" class="btn-submit" style="background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);">✅ Finalizar por WhatsApp</button>
-    </div>
-  </div>
+  <!-- BOTÓN FLOTANTE CARRITO -->
+  <button id="btnCarrito" class="btn-floating">
+    🛒
+    <span id="contadorCarrito">0</span>
+  </button>
 
-  
-
-  <!-- Modal Login -->
-  <div id="modalLoginRegistro" class="modal-carrito">
-    <div class="modal-contenido">
-      <button onclick="cerrarModalLogin()" class="modal-cerrar">×</button>
-      <h2 class="modal-titulo" style="font-family: 'adelia', cursive;">Bienvenido a Esentia</h2>
-      <style>
-        @font-face {
-          font-family: 'adelia';
-          src: url('https://fonts.cdnfonts.com/s/16286/ADELIA.otf') format('opentype');
-          font-weight: normal;
-          font-style: normal;
-        }
-      </style>
+  <!-- MODAL LOGIN/REGISTRO -->
+  <div id="modalLogin" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="UI.modal('modalLogin','close')">✕</button>
+      <h2>Bienvenido a Esentia</h2>
       <div class="tabs-container">
-        <button class="btn-tab activo" onclick="cambiarTab('login')">Iniciar sesión</button>
-        <button class="btn-tab" onclick="cambiarTab('registro')">Registrarse</button>
+        <button class="btn-tab active" data-tab="login">Iniciar sesión</button>
+        <button class="btn-tab" data-tab="register">Registrarse</button>
       </div>
+      <div id="loginMessage" style="margin-bottom:1rem;color:#e74c3c;text-align:center;"></div>
+      
       <form id="formLogin">
-        <div class="input-group">
-          <input type="text" id="loginCedulaTel" placeholder="Cédula o Teléfono" required>
-        </div>
+        <input type="text" id="loginCedulaTel" placeholder="Cédula o Teléfono" required>
         <button type="submit" class="btn-submit">Entrar</button>
       </form>
-      <form id="formRegistro" style="display:none;">
-        <div class="input-group">
-          <input type="text" id="regCedula" placeholder="Cédula (9 dígitos)" maxlength="9" required>
-          <span id="cedulaStatus" class="input-status"></span>
-        </div>
-        <div class="input-group">
-          <input type="tel" id="regTelefono" placeholder="Teléfono (8 dígitos)" maxlength="8" required>
-        </div>
-        <div class="input-group">
-          <input type="text" id="regNombre" placeholder="Nombre completo" readonly style="background: rgba(108, 75, 163, 0.05);">
-        </div>
-        <button type="submit" id="btnRegistrar" class="btn-submit" disabled>Verificando cédula...</button>
+      
+      <form id="formRegister" style="display:none;">
+        <input type="text" id="regCedula" placeholder="Cédula" required>
+        <input type="tel" id="regTelefono" placeholder="Teléfono (8 dígitos)" required>
+        <button type="submit" class="btn-submit">Registrar & Entrar</button>
       </form>
-      <div id="loginMensaje" class="mensaje-error"></div>
     </div>
   </div>
 
-  <!-- Modal Historial de Compras -->
-  <div id="modalHistorial" class="modal-carrito">
-    <div class="modal-contenido modal-grande">
-      <button onclick="cerrarModalHistorial()" class="modal-cerrar">×</button>
-      <h2 class="modal-titulo">📋 Mi Historial de Compras</h2>
-      <div id="resumenCompras" class="resumen-compras">
-        <div class="stat-card">
-          <div class="stat-numero" id="totalCompras">0</div>
-          <div class="stat-label">Compras realizadas</div>
+   <!-- MODAL CARRITO -->
+  <div id="modalCarrito" class="modal">
+    <div class="modal-content modal-grande">
+      <button class="modal-close" onclick="UI.modal('modalCarrito','close')">✕</button>
+      <h2>Tu Carrito</h2>
+      <ul id="listaCarrito" class="lista-carrito"></ul>
+      
+      <!-- ✅ SECCIÓN DE PROMOCIONES -->
+      <div class="promo-section">
+        <input type="text" id="promoCodeInput" class="promo-input" placeholder="Ingresa tu código promocional">
+        <button id="btnApplyPromo" class="btn-promo">Aplicar</button>
+      </div>
+      <div id="promoMessage" style="text-align:center; margin: 0.5rem 0; font-size: 0.9rem; min-height: 1.5em; color: var(--text-muted);"></div>
+
+      <div class="cart-totals">
+        <div id="subtotalRow" class="cart-row"><span>Subtotal:</span><span id="subtotalModal">₡0</span></div>
+        <div id="discountRow" class="cart-row discount-row" style="display:none;"><span>Descuento:</span><span id="discountModal">-₡0</span></div>
+        <div id="totalModal" class="cart-total-row"><span>Total:</span><span>₡0</span></div>
+      </div>
+      
+
+      <div class="canal-envio-selector" style="margin:1rem 0; padding:1rem; background:#f8f6ff; border-radius:12px;">
+        <label style="font-weight:600; display:block; margin-bottom:0.5rem;">📤 Enviar pedido por:</label>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <label class="canal-opt"><input type="radio" name="canalEnvio" value="whatsapp" checked> 📱 WhatsApp</label>
+        <label class="canal-opt"><input type="radio" name="canalEnvio" value="email"> 📧 Correo</label>
+        <label class="canal-opt"><input type="radio" name="canalEnvio" value="sms"> 💬 SMS</label>
         </div>
-        <div class="stat-card">
-          <div class="stat-numero" id="totalGastado">₡0</div>
-          <div class="stat-label">Total en compras</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-numero" id="ultimaCompra">-</div>
-          <div class="stat-label">Última compra</div>
-        </div>
-      </div>
-      <div id="listaHistorial" class="lista-historial">
-        <div class="loading-historial">Cargando tu historial...</div>
-      </div>
+        <small id="canalNota" style="color:#666; margin-top:0.5rem; display:block;">Se abrirá tu app predeterminada con el pedido listo.</small>
+        </div>  
+
+      <button id="btnCheckout" class="btn-checkout">✅ Finalizar Pedido</button>
     </div>
   </div>
 
-  <!-- Botón Carrito -->
-  <button id="botonCarrito" onclick="abrirModalCarrito()">🛒<span id="contadorCarrito">0</span></button>
-
-  <!-- Toast -->
-  <div id="toast" class="toast"></div>
-
-  <!-- Tarjeta Lealtad -->
-  <div class="lealtad-container" id="lealtadContainer">
-    <div class="tarjeta-lealtad" id="tarjetaLealtad">
-      <div class="tarjeta-lealtad-header">
-        <h3>💳 Mi Lealtad</h3>
-        <button onclick="cerrarTarjetaLealtad()" class="btn-cerrar-tarjeta">×</button>
-      </div>
-      <div class="cliente-info">
-        <p>Cliente: <strong id="nombreClienteLealtad">-</strong></p>
-        <p>Sellos: <strong id="sellsActualesLealtad">0</strong> / <strong id="sellsObjetivoLealtad">6</strong></p>
-      </div>
-      <div class="sellos-container">
-        <div class="sellos-titulo">Progreso</div>
-        <div class="sellos-grid" id="sellsGrid"></div>
-        <div class="progreso-lealtad" id="progresoLealtad">Completa 6 sellos para tu regalo</div>
-      </div>
-      <div id="estadoPremioLealtad"></div>
+  <!-- MODAL BIENVENIDA / PRIMERA COMPRA -->
+<div id="modalBienvenida" class="modal">
+  <div class="modal-content modal-bienvenida">
+    <button class="modal-close" onclick="UI.modal('modalBienvenida','close')">✕</button>
+    <div class="bienvenida-icon">🎁</div>
+    <h2>¡Gracias por visitarnos!</h2>
+    <p>Como agradecimiento por tu primera visita, te regalamos un <strong>10% de descuento</strong> en tu primera compra.</p>
+    <div class="codigo-box">
+      <span id="codigoBienvenida">BIENVENIDO10</span>
+      <button onclick="navigator.clipboard.writeText('BIENVENIDO10'); UI.toast('✅ Código copiado', 'success')">📋 Copiar</button>
     </div>
-    <div class="caja-regalo-flotante" id="cajaRegaloFlotante" onclick="abrirTarjetaLealtad()" style="display:none;">🎁</div>
-  </div>
-
-  <!-- Panel Admin -->
-  <div id="panelVisitas" class="glass-visitas hidden">
-    <h3>👁️ Visitas Recientes</h3>
-    <div id="listaVisitas"></div>
-  </div>
-  <!-- ✅ NUEVO: Botón para ver visitas (solo visible para admin) -->
-<button id="btnVerVisitas" style="display:none;" onclick="togglePanelVisitas()" 
-        title="Ver visitas recientes">
-  👁️ Visitas
-</button>
-  <!-- Admin Sheet -->
-  <div id="adminSheetOverlay" class="admin-sheet-overlay" onclick="cerrarAdminSheet(event)">
-    <div class="admin-sheet" onclick="event.stopPropagation()">
-      <div class="admin-sheet-handle"></div>
-      <div class="admin-sheet-title">Acciones Admin</div>
-      <div class="admin-sheet-desc">Herramientas para este producto</div>
-      <button class="admin-sheet-btn" onclick="publicarFacebookOG()">📣 Publicar en Facebook (Vista PRO)</button>
-      <button class="admin-sheet-btn-secondary" onclick="publicarFacebookDirecto()">🔗 Publicar enlace directo</button>
-      <button class="admin-sheet-btn-secondary" onclick="cerrarAdminSheet()">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- Firebase -->
-  <script type="module">
-
-    
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import {  getFirestore, collection, getDocs, getDoc, doc, arrayUnion, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where, orderBy  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDuMNZrLgxBs6CbuPp8j0iyynejt6WCpnQ",
-      authDomain: "esentiacreditos-8345f.firebaseapp.com",
-      projectId: "esentiacreditos-8345f",
-      storageBucket: "esentiacreditos-8345f.firebasestorage.app",
-      messagingSenderId: "888658236080",
-      appId: "1:888658236080:web:506e5e2085b5a452dba175"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const stockCollection = collection(db, "stock");
-
-   window.db = db;
-   window.getDocs = getDocs;
-   window.collection = collection;
-   window.firebaseUtils = { query, where, collection, arrayUnion, getDocs, getDoc, doc, deleteDoc, setDoc, addDoc,updateDoc, serverTimestamp, orderBy };
-
-    let inventario = {};
-    // 🔥 INVENTARIO GLOBAL
-    window.inventario = {};
-    window.inventario = inventario;
-
-  </script>
-
-
- <!-- 1. Cargar el núcleo (Lógica base, Firebase, Auth) -->
-<script src="esentia.js"></script>
-
-<!-- 2. Cargar el módulo de mejoras (Search, UI, Filtros) -->
-<script src="esentia-mejorado.js"></script>
-
-<!-- 3. Cargar el puente de integración (Ver paso 2) -->
-<script src="esentia-integracion.js"></script>
-
-<div id="modalFacturacion" class="modal-carrito" style="display:none;">
-  <div class="modal-contenido modal-grande">
-
-    <button onclick="cerrarModalFacturacion()" class="modal-cerrar">×</button>
-
-    <h2>🧾 Facturación</h2>
-
-    <!-- 👤 Cliente -->
-    <h3>Cliente</h3>
-    <input type="text" id="buscarClienteFact" placeholder="Buscar cliente...">
-    <div id="listaClientesFact"></div>
-
-    <!-- 🛒 Productos -->
-    <h3>Productos</h3>
-    <div id="listaProductosFact"></div>
-
-    <!-- 💸 Descuento -->
-    <h3>Descuento</h3>
-    <input type="number" id="descuentoFact" placeholder="₡0" value="0">
-
-    <!-- 💰 Totales -->
-    <div id="resumenFacturacion">
-      <p>Subtotal: ₡<span id="subtotalFact">0</span></p>
-      <p>Descuento: ₡<span id="descuentoMostrado">0</span></p>
-      <h3>Total: ₡<span id="totalFact">0</span></h3>
-    </div>
-
-    <!-- ⚙️ Método -->
-    <select id="metodoPagoFact">
-      <option>Efectivo</option>
-      <option>SINPE</option>
-      <option>Credito</option>
-    </select>
-
-    <!-- 🚀 Acción -->
-    <button onclick="confirmarFacturacion()" class="btn-submit">
-      ✅ Confirmar Factura
-    </button>
-
+    <p class="small-text">Ingresa el código al finalizar tu pedido en el carrito.</p>
+    <button onclick="UI.modal('modalBienvenida','close')" class="btn-submit">¡Entendido, quiero comprar!</button>
   </div>
 </div>
+
+<!-- MODAL HISTORIAL DE COMPRAS -->
+<div id="modalHistorial" class="modal">
+  <div class="modal-content modal-grande">
+    <button class="modal-close" onclick="UI.modal('modalHistorial','close')">✕</button>
+    <h2>📋 Historial de Compras</h2>
+    <div id="historialContent" class="historial-content">
+      <div style="text-align:center; padding:2rem;">
+        <div class="loader-spinner" style="margin:0 auto 1rem;"></div>
+        <p style="color:var(--text-muted);">Cargando tu historial...</p>
+      </div>
+    </div>
+  </div>
 </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>

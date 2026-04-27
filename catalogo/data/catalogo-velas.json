@@ -1,0 +1,49 @@
+[
+  {
+    "id": "v1",
+    "nombre": "Candle Elena",
+    "tipo": "Velas",
+    "precio": 1500,
+    "categoria": "Aromaterapia",
+    "variantes": [
+      {"nombre": "Pequeña", "precio": 1500},
+      {"nombre": "Mediana", "precio": 3500},
+      {"nombre": "Grande", "precio": 5500}
+    ],
+    "stock": 10,
+    "activo": true,
+    "precioOferta": 1600,
+    "precioOriginal": 3455,
+    "descripcion": "Vela artesanal de soya con aromas naturales",
+    "beneficios": "Relajante, duradera, ecológica",
+    "duracion": "40-60 horas",
+    "peso": "200g",
+    "materiales": "Cera de soya, mecha de algodón",
+    "esNuevo": true,
+    "esBestseller": false,
+    "calificacion": 5,
+    "imagen": "/velas/candle-elena.jpg"
+  },
+  {
+    "id": "v2",
+    "nombre": "Vela Decorativa Lavanda",
+    "tipo": "Velas",
+    "precio": 2200,
+    "categoria": "Decorativas",
+    "variantes": [
+      {"nombre": "Pequeña", "precio": 2200},
+      {"nombre": "Grande", "precio": 4500}
+    ],
+    "stock": 25,
+    "activo": true,
+    "descripcion": "Vela decorativa con aroma a lavanda",
+    "beneficios": "Aromaterapia, decoración elegante",
+    "duracion": "30-45 horas",
+    "peso": "150g",
+    "materiales": "Cera vegetal, esencia natural",
+    "esNuevo": false,
+    "esBestseller": true,
+    "calificacion": 4.8,
+    "imagen": "/velas/lavanda.jpg"
+  }
+]

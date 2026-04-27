@@ -1,0 +1,107 @@
+[
+  {
+    "tipo": "Aromaterapia",
+    "info": {
+      "titulo": "Indicaciones de uso",
+      "indicaciones": [
+        "Agregar de 5 a 10 gotas por cada 100 ml de agua en el difusor.",
+        "Utilizar en espacios ventilados.",
+        "Ideal para sesiones de relajación, meditación o descanso.",
+        "No aplicar directamente sobre la piel sin diluir."
+      ],
+      "advertencias_titulo": "Advertencias",
+      "advertencias": [
+        "No ingerir.",
+        "Evitar contacto directo con los ojos.",
+        "Mantener fuera del alcance de niños y mascotas.",
+        "Suspender uso si presenta irritación."
+      ]
+    }
+  },
+
+  {
+    "tipo": "Candelas",
+    "info": {
+      "titulo": "Modo de uso",
+      "indicaciones": [
+        "Velas perfumadas son objetos de decoración y bienestar.",
+        "No deben ser consumidas.",
+        "No las mantengas encendidas más de 4 horas seguidas.",
+        "Ubicación segura: Coloca la vela en superficies planas."
+      ],
+      "advertencias_titulo": "Advertencias",
+      "advertencias": [
+        "Nunca dejes una vela encendida sin vigilancia.",
+        "Apaga la vela cuando queden menos de 2 cm de cera."
+      ]
+    }
+  },
+  {
+    "tipo": "Aromaterapia",
+    "info": {
+      "titulo": "Uso del Difusor",
+      "indicaciones": ["Agregar 5 gotas", "Usar en espacios ventilados"],
+      "advertencias": ["No ingerir", "Fuera del alcance de niños"]
+    }
+  },
+
+  {
+    "tipo": "Masajes",
+    "info": {
+      "titulo": "Modo de uso",
+      "indicaciones": [
+        "Aplicar una pequeña cantidad sobre la piel limpia.",
+        "Masajear suavemente hasta su absorción.",
+        "Puede utilizarse después del baño o antes de dormir.",
+        "Para mejores resultados usar sobre piel ligeramente húmeda."
+      ],
+      "advertencias_titulo": "Advertencias",
+      "advertencias": [
+        "Uso externo únicamente.",
+        "No aplicar sobre heridas o piel irritada.",
+        "Suspender uso si presenta reacción alérgica.",
+        "Mantener fuera del alcance de niños."
+      ]
+    }
+  },
+
+  {
+    "tipo": "Controlador de Olor",
+    "info": {
+      "titulo": "Forma de aplicación",
+      "indicaciones": [
+        "Rociar directamente en el área deseada.",
+        "Aplicar sobre telas a una distancia mínima de 20 cm.",
+        "Repetir según necesidad.",
+        "Ideal para salas, baños, oficinas y vehículos."
+      ],
+      "advertencias_titulo": "Advertencias",
+      "advertencias": [
+        "Producto inflamable.",
+        "No aplicar directamente sobre alimentos.",
+        "Evitar contacto con ojos y mucosas.",
+        "Mantener en lugar fresco y seco."
+      ]
+    }
+  },
+
+  {
+    "tipo": "Desinfectante",
+    "info": {
+      "titulo": "Instrucciones de uso",
+      "indicaciones": [
+        "Aplicar directamente sobre la superficie.",
+        "Cubrir completamente el área a desinfectar.",
+        "Dejar actuar al menos 5 minutos.",
+        "Retirar con paño limpio si es necesario."
+      ],
+      "advertencias_titulo": "Advertencias",
+      "advertencias": [
+        "No mezclar con otros productos químicos.",
+        "Usar en áreas ventiladas.",
+        "Evitar contacto con ojos y piel sensible.",
+        "Mantener fuera del alcance de niños."
+      ]
+    }
+  }
+]

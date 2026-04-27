@@ -319,21 +319,47 @@ body {
 .stock-bajo { background: rgba(240, 173, 78, 0.1); color: #f0ad4e; }
 .stock-agotado { background: rgba(220, 53, 69, 0.1); color: #dc3545; }
 
+/* 🔥 Reemplaza tu .btn-agregar actual por esta versión */
 .btn-agregar {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+    width: 100%;
+    padding: 14px 12px; /* ↑ Área táctil mínima recomendada (44px) */
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* ✅ Optimizaciones táctiles */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    position: relative;
+    z-index: 1;
+}
+
+/* ✅ Hover SOLO en dispositivos con mouse (evita el "sticky hover" en móvil) */
+@media (hover: hover) {
+    .btn-agregar:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(108, 75, 163, 0.3);
+    }
+}
+
+.btn-agregar:active:not(:disabled) {
+    transform: scale(0.98);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-agregar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .btn-agregar:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108, 75, 163, 0.3); }
@@ -1322,14 +1348,6 @@ body {
     margin-bottom: 20px;
 }
 
-.stat-card {
-    background: linear-gradient(135deg, #6c4ba3, #9b7ebd);
-    color: white;
-    padding: 16px;
-    border-radius: 10px;
-    text-align: center;
-}
-
 .stat-card .number {
     font-size: 1.8rem;
     font-weight: 700;
@@ -1690,4 +1708,475 @@ body {
   background: #6c4ba3;
   color: white;
   transform: scale(1.02);
+}
+/* ==============================
+   🧭 MENÚ DE NAVEGACIÓN - Login
+   ============================== */
+.nav-menu-login {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 12px 0;
+}
+
+.nav-btn-login {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+/* Facebook - Azul glass */
+.nav-btn-login.facebook {
+    background: rgba(24, 119, 242, 0.15);
+    color: #1877f2;
+    border-color: rgba(24, 119, 242, 0.3);
+}
+.nav-btn-login.facebook:hover {
+    background: rgba(24, 119, 242, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.2);
+    color: #1656b2;
+}
+
+/* Catálogo - Dorado/Verde brand */
+.nav-btn-login.catalogo {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(34, 197, 94, 0.2));
+    color: #6c4ba3;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+}
+.nav-btn-login.catalogo:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.35), rgba(34, 197, 94, 0.35));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 75, 163, 0.15);
+    color: #5a3d8a;
+}
+
+/* WhatsApp - Verde */
+.nav-btn-login.whatsapp {
+    background: rgba(37, 211, 102, 0.15);
+    color: #16a34a;
+    border-color: rgba(37, 211, 102, 0.3);
+}
+.nav-btn-login.whatsapp:hover {
+    background: rgba(37, 211, 102, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.2);
+    color: #15803d;
+}
+
+/* Responsive móvil */
+@media (max-width: 480px) {
+    .nav-btn-login span {
+        display: none; /* Solo íconos en móvil */
+    }
+    .nav-btn-login {
+        padding: 10px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        justify-content: center;
+    }
+    .nav-btn-login i {
+        font-size: 1.1rem;
+        margin: 0;
+    }
+}
+
+/* Para impresión: ocultar menú */
+@media print {
+    .nav-menu-login { display: none !important; }
+}
+.nav-menu-login {
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ✅ Añade esto al final de tu CSS para forzar renderizado correcto en móvil */
+@media (max-width: 768px) {
+    .producto-card { 
+        will-change: auto; 
+        transform: none !important; /* Evita que el :hover desplace el layout en móvil */
+    }
+    .modal-carrito {
+        align-items: flex-end; /* Modal se ancla abajo en móvil, más fácil de tap */
+        padding: 0;
+    }
+    .modal-carrito .modal-contenido {
+        border-radius: 24px 24px 0 0;
+        max-height: 85vh;
+        animation: slideUp 0.3s ease;
+    }
+}
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+/* 🔥 Solución definitiva para botón táctil */
+@media (max-width: 768px) {
+    .btn-agregar {
+        touch-action: manipulation; /* Elimina delay de 300ms y zoom */
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    /* Solo aplicar hover si el dispositivo tiene mouse real */
+    @media (hover: hover) {
+        .btn-agregar:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+    }
+    .btn-agregar:active:not(:disabled) {
+        transform: scale(0.98); /* Efecto visual al tocar */
+    }
+}
+/* 🔥 Contenedor de acciones con 4 botones */
+.producto-acciones {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr 1fr; /* 👁️ 🔗 🛒 más ancho para ⚡30ml */
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.btn-detalle, .btn-rapido, .btn-externo, .btn-ver-carrito {
+    padding: 10px 6px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.btn-detalle {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+}
+
+.btn-rapido {
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white;
+    font-size: 0.75rem;
+}
+
+.btn-externo {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+}
+
+.btn-ver-carrito {
+    background: rgba(108, 75, 163, 0.1);
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+/* Hover effects (solo en desktop con mouse) */
+@media (hover: hover) {
+    .btn-detalle:hover, .btn-rapido:hover, .btn-externo:hover { transform: translateY(-2px); }
+    .btn-ver-carrito:hover { background: rgba(108, 75, 163, 0.2); }
+}
+
+/* 🔥 Fix táctil definitivo para móviles */
+@media (max-width: 768px) {
+    .producto-acciones {
+        grid-template-columns: 1fr 1fr; /* 2x2 en móvil */
+        gap: 8px;
+    }
+    .btn-detalle, .btn-rapido, .btn-externo, .btn-ver-carrito {
+        padding: 12px 8px;
+        font-size: 0.85rem;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    .btn-rapido { grid-column: span 2; } /* ⚡30ml más ancho en móvil */
+}
+
+/* Tooltips simples */
+.btn-detalle[title]:hover::after,
+.btn-rapido[title]:hover::after,
+.btn-externo[title]:hover::after,
+.btn-ver-carrito[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.2s forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* 🔥 Contenedor de 4 botones */
+.producto-acciones {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr 1fr;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.btn-detalle, .btn-rapido, .btn-externo, .btn-ver-carrito {
+    padding: 10px 6px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.btn-detalle { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; }
+.btn-rapido { background: linear-gradient(135deg, #25d366, #128c7e); color: white; font-size: 0.75rem; }
+.btn-externo { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+.btn-ver-carrito { background: rgba(108, 75, 163, 0.1); color: var(--primary); font-size: 1.1rem; }
+
+/* Hover solo en desktop */
+@media (hover: hover) {
+    .btn-detalle:hover, .btn-rapido:hover, .btn-externo:hover { transform: translateY(-2px); }
+    .btn-ver-carrito:hover { background: rgba(108, 75, 163, 0.2); }
+}
+
+/* 🔥 Fix táctil móvil */
+@media (max-width: 768px) {
+    .producto-acciones { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn-detalle, .btn-rapido, .btn-externo, .btn-ver-carrito {
+        padding: 12px 8px;
+        font-size: 0.85rem;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    .btn-rapido { grid-column: span 2; } /* Más ancho en móvil */
+}
+/* 🔥 Contenedor de variantes dinámicas */
+.variantes-container {
+    display: flex;
+    gap: 6px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-variante {
+    flex: 1;
+    min-width: 70px;
+    padding: 8px 6px;
+    background: linear-gradient(135deg, rgba(108, 75, 163, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+    border: 1px solid rgba(108, 75, 163, 0.2);
+    border-radius: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.btn-variante small {
+    font-size: 0.7rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.btn-variante:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 75, 163, 0.2);
+}
+
+.btn-variante:hover small {
+    color: white;
+}
+
+/* Botones de acción (👁️ 🔗 🛒) */
+.producto-acciones {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    justify-content: center;
+}
+
+.btn-detalle, .btn-externo, .btn-ver-carrito {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-detalle { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; }
+.btn-externo { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+.btn-ver-carrito { background: rgba(108, 75, 163, 0.1); color: var(--primary); }
+
+.btn-detalle:hover, .btn-externo:hover { transform: translateY(-2px); }
+.btn-ver-carrito:hover { background: rgba(108, 75, 163, 0.2); }
+
+/* 🔥 Responsive móvil */
+@media (max-width: 768px) {
+    .variantes-container {
+        gap: 4px;
+    }
+    
+    .btn-variante {
+        min-width: 60px;
+        padding: 6px 4px;
+        font-size: 0.7rem;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+    
+    .btn-variante small {
+        font-size: 0.65rem;
+    }
+    
+    .producto-acciones {
+        gap: 4px;
+    }
+    
+    .btn-detalle, .btn-externo, .btn-ver-carrito {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Tooltip simple */
+.btn-variante[title]:hover::after,
+.btn-detalle[title]:hover::after,
+.btn-externo[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.2s forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+/* 🔥 Contenedor flexible para N variantes */
+.variantes-container {
+    display: flex;
+    flex-wrap: wrap; /* ✅ Permite saltos de línea si hay 3, 4 o más */
+    gap: 8px;
+    margin: 12px 0;
+    justify-content: center;
+}
+
+.btn-variante {
+    flex: 1 1 calc(50% - 8px); /* ✅ Ocupa 2 por fila por defecto */
+    min-width: 75px;
+    max-width: 140px;
+    padding: 10px 6px;
+    background: linear-gradient(135deg, rgba(108, 75, 163, 0.08) 0%, rgba(212, 175, 55, 0.08) 100%);
+    border: 1px solid rgba(108, 75, 163, 0.2);
+    border-radius: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-variante small {
+    font-size: 0.7rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.btn-variante:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 75, 163, 0.2);
+}
+.btn-variante:hover small { color: white; }
+
+/* Botones de acción */
+.producto-acciones {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    justify-content: center;
+}
+
+.btn-detalle, .btn-externo, .btn-ver-carrito {
+    width: 36px; height: 36px;
+    border: none; border-radius: 10px;
+    cursor: pointer; font-size: 1rem;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-detalle { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; }
+.btn-externo { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+.btn-ver-carrito { background: rgba(108, 75, 163, 0.1); color: var(--primary); }
+.btn-detalle:hover, .btn-externo:hover { transform: translateY(-2px); }
+.btn-ver-carrito:hover { background: rgba(108, 75, 163, 0.2); }
+
+/* 🔥 Móvil: variantes se apilan mejor */
+@media (max-width: 480px) {
+    .btn-variante { flex: 1 1 100%; } /* 1 por fila en móviles pequeños */
+    .producto-acciones { gap: 4px; }
+    .btn-detalle, .btn-externo, .btn-ver-carrito { width: 32px; height: 32px; font-size: 0.9rem; }
 }
